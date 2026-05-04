@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { G, GG, NEWS } from '../constants';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
-import { Scanlines } from './ui';
+import { Scanlines, HudButton } from './ui';
 
 function FeatureCard({ item, visible }) {
   const [hov, setHov] = useState(false);
@@ -20,13 +20,15 @@ function FeatureCard({ item, visible }) {
         ...fadeStyle(visible, 0.1),
       }}
     >
-      {/* Neon top bar */}
-      <div style={{
-        height: 2,
-        background: `linear-gradient(90deg, ${G}, transparent)`,
-        boxShadow: hov ? `0 0 14px ${G}` : 'none',
-        transition: 'box-shadow 0.3s',
-      }} />
+      {/* Full-card HUD corners on hover */}
+      {hov && (
+        <>
+          <div style={{ position: 'absolute', top: 0, left: 0, width: 28, height: 28, borderTop: `2px solid ${G}`, borderLeft: `2px solid ${G}`, zIndex: 10, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', top: 0, right: 0, width: 28, height: 28, borderTop: `2px solid ${G}`, borderRight: `2px solid ${G}`, zIndex: 10, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, width: 28, height: 28, borderBottom: `2px solid ${G}`, borderLeft: `2px solid ${G}`, zIndex: 10, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: 0, right: 0, width: 28, height: 28, borderBottom: `2px solid ${G}`, borderRight: `2px solid ${G}`, zIndex: 10, pointerEvents: 'none' }} />
+        </>
+      )}
 
       {/* Image */}
       <div style={{ position: 'relative', height: 440, overflow: 'hidden' }}>
@@ -34,13 +36,13 @@ function FeatureCard({ item, visible }) {
           position: 'absolute', inset: 0,
           backgroundImage: `url(${item.img})`,
           backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: hov ? 'grayscale(0%) brightness(0.5)' : 'grayscale(40%) brightness(0.32)',
+          filter: hov ? 'brightness(0.85)' : 'brightness(0.65)',
           transform: hov ? 'scale(1.04)' : 'scale(1)',
           transition: 'filter 0.55s ease, transform 0.65s ease',
         }} />
 
-        {/* Gradient overlay */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(5,5,5,1) 0%, rgba(5,5,5,0.55) 45%, transparent 100%)' }} />
+        {/* Gradient overlay — only bottom fade for text legibility */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(5,5,5,0.92) 0%, rgba(5,5,5,0.3) 50%, transparent 100%)' }} />
 
         {/* Scan-line on hover */}
         {hov && (
@@ -52,20 +54,15 @@ function FeatureCard({ item, visible }) {
           }} />
         )}
 
-        {/* HUD corners on hover */}
-        {hov && (
-          <>
-            <div style={{ position: 'absolute', top: 0, left: 0, width: 28, height: 28, borderTop: `2px solid ${G}`, borderLeft: `2px solid ${G}` }} />
-            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 28, height: 28, borderBottom: `2px solid ${G}`, borderRight: `2px solid ${G}` }} />
-          </>
-        )}
-
         {/* Tag badge — top left */}
         <div style={{ position: 'absolute', top: 24, left: 28 }}>
           <span style={{
-            fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.15em',
-            border: `1px solid ${G}`, padding: '5px 14px',
-            background: 'rgba(0,0,0,0.65)',
+            fontFamily: 'monospace', fontSize: 10,
+            color: hov ? G : '#fff',
+            letterSpacing: '0.15em',
+            border: `1px solid ${hov ? G : 'rgba(255,255,255,0.6)'}`,
+            padding: '5px 14px', background: 'rgba(0,0,0,0.65)',
+            transition: 'color 0.3s, border-color 0.3s',
           }}>
             {item.tag}
           </span>
@@ -117,6 +114,7 @@ function NewsCard({ item, index, visible }) {
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
+        position: 'relative',
         background: '#0a0a0a',
         border: hov ? `1px solid ${G}` : '1px solid rgba(255,255,255,0.07)',
         boxShadow: hov ? `0 0 28px ${GG}` : 'none',
@@ -127,13 +125,24 @@ function NewsCard({ item, index, visible }) {
         ...fadeStyle(visible, 0.2 + index * 0.1),
       }}
     >
-      {/* Neon top bar */}
-      <div style={{
-        height: 2,
-        background: `linear-gradient(90deg, ${G}, transparent)`,
-        boxShadow: hov ? `0 0 10px ${G}` : 'none',
-        transition: 'box-shadow 0.3s',
-      }} />
+      {/* HUD corners — always visible */}
+      {[
+        { top: 0, left: 0, borderTop: true, borderLeft: true },
+        { top: 0, right: 0, borderTop: true, borderRight: true },
+        { bottom: 0, left: 0, borderBottom: true, borderLeft: true },
+        { bottom: 0, right: 0, borderBottom: true, borderRight: true },
+      ].map((c, i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          top: c.top, right: c.right, bottom: c.bottom, left: c.left,
+          width: 20, height: 20, zIndex: 10, pointerEvents: 'none',
+          borderTop:    c.borderTop    ? `2px solid ${hov ? G : 'rgba(255,255,255,0.35)'}` : 'none',
+          borderRight:  c.borderRight  ? `2px solid ${hov ? G : 'rgba(255,255,255,0.35)'}` : 'none',
+          borderBottom: c.borderBottom ? `2px solid ${hov ? G : 'rgba(255,255,255,0.35)'}` : 'none',
+          borderLeft:   c.borderLeft   ? `2px solid ${hov ? G : 'rgba(255,255,255,0.35)'}` : 'none',
+          transition: 'border-color 0.3s',
+        }} />
+      ))}
 
       {/* Image (16/9) */}
       <div style={{ position: 'relative', aspectRatio: '16/9', overflow: 'hidden' }}>
@@ -141,8 +150,8 @@ function NewsCard({ item, index, visible }) {
           position: 'absolute', inset: 0,
           backgroundImage: `url(${item.img})`,
           backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: hov ? 'grayscale(0%) brightness(0.6)' : 'grayscale(50%) brightness(0.38)',
-          transform: hov ? 'scale(1.06)' : 'scale(1)',
+          filter: hov ? 'brightness(1)' : 'brightness(0.8)',
+          transform: hov ? 'scale(1.05)' : 'scale(1)',
           transition: 'filter 0.5s ease, transform 0.6s ease',
         }} />
 
@@ -154,14 +163,6 @@ function NewsCard({ item, index, visible }) {
             animation: 'scanAnim 1.5s linear infinite',
             pointerEvents: 'none',
           }} />
-        )}
-
-        {/* HUD corner brackets on hover */}
-        {hov && (
-          <>
-            <div style={{ position: 'absolute', top: 0, left: 0, width: 20, height: 20, borderTop: `2px solid ${G}`, borderLeft: `2px solid ${G}` }} />
-            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 20, height: 20, borderBottom: `2px solid ${G}`, borderRight: `2px solid ${G}` }} />
-          </>
         )}
 
         {/* Counter badge */}
@@ -177,9 +178,12 @@ function NewsCard({ item, index, visible }) {
         {/* Tag + date row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
           <span style={{
-            fontFamily: 'monospace', fontSize: 9, color: G,
-            letterSpacing: '0.14em', border: `1px solid rgba(0,166,62,0.35)`,
+            fontFamily: 'monospace', fontSize: 9,
+            color: hov ? G : '#fff',
+            letterSpacing: '0.14em',
+            border: `1px solid ${hov ? G : 'rgba(255,255,255,0.45)'}`,
             padding: '3px 10px', flexShrink: 0,
+            transition: 'color 0.3s, border-color 0.3s',
           }}>
             {item.tag}
           </span>
@@ -254,17 +258,7 @@ export default function NewsSection() {
               <div className="glitch-text" data-text="INTEL_" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>INTEL_</div>
             </div>
           </div>
-          <button style={{
-            fontFamily: 'monospace', fontWeight: 700, fontSize: 12,
-            letterSpacing: '0.1em', background: 'transparent',
-            border: `1px solid ${G}`, color: G, padding: '12px 28px',
-            cursor: 'pointer', transition: 'background 0.2s',
-          }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,166,62,0.08)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-          >
-            MORE_NEWS
-          </button>
+          <HudButton label="MORE_NEWS" />
         </div>
 
         {/* Featured article — full width */}

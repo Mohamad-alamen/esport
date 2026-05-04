@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { G, GG, CAMPS } from '../constants';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
+import { HudButton } from './ui';
 
 function CampCard({ camp, index, visible }) {
   const [hov, setHov] = useState(false);
@@ -12,22 +13,42 @@ function CampCard({ camp, index, visible }) {
       style={{
         position: 'relative',
         borderRadius: 0,
-        border: hov ? `1px solid ${camp.color}` : '1px solid rgba(255,255,255,0.07)',
-        boxShadow: hov ? `0 0 28px ${camp.color}30` : 'none',
+        border: hov ? `1px solid ${G}` : '1px solid rgba(255,255,255,0.07)',
+        boxShadow: hov ? `0 0 28px ${GG}` : 'none',
         overflow: 'hidden',
         cursor: 'pointer',
-        transition: 'border-color 0.35s, box-shadow 0.35s',
+        transform: hov ? 'translateY(-5px)' : 'translateY(0)',
+        transition: 'border-color 0.35s, box-shadow 0.35s, transform 0.35s cubic-bezier(0.16,1,0.3,1)',
         background: '#0a0a0a',
         ...fadeStyle(visible, index * 0.12),
       }}
     >
+      {/* HUD corners — always visible */}
+      {[
+        { top: 0, left: 0, borderTop: true, borderLeft: true },
+        { top: 0, right: 0, borderTop: true, borderRight: true },
+        { bottom: 0, left: 0, borderBottom: true, borderLeft: true },
+        { bottom: 0, right: 0, borderBottom: true, borderRight: true },
+      ].map((c, i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          top: c.top, right: c.right, bottom: c.bottom, left: c.left,
+          width: 20, height: 20, zIndex: 10, pointerEvents: 'none',
+          borderTop:    c.borderTop    ? `2px solid ${hov ? G : 'rgba(255,255,255,0.35)'}` : 'none',
+          borderRight:  c.borderRight  ? `2px solid ${hov ? G : 'rgba(255,255,255,0.35)'}` : 'none',
+          borderBottom: c.borderBottom ? `2px solid ${hov ? G : 'rgba(255,255,255,0.35)'}` : 'none',
+          borderLeft:   c.borderLeft   ? `2px solid ${hov ? G : 'rgba(255,255,255,0.35)'}` : 'none',
+          transition: 'border-color 0.3s',
+        }} />
+      ))}
+
       {/* Image area — 16/9 */}
       <div style={{ position: 'relative', aspectRatio: '16/9', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute', inset: 0,
           backgroundImage: `url(${camp.img})`,
           backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: hov ? 'grayscale(0%) brightness(0.55)' : 'grayscale(40%) brightness(0.35)',
+          filter: hov ? 'brightness(1)' : 'brightness(0.8)',
           transform: hov ? 'scale(1.05)' : 'scale(1)',
           transition: 'filter 0.5s ease, transform 0.6s ease',
         }} />
@@ -36,7 +57,7 @@ function CampCard({ camp, index, visible }) {
         {hov && (
           <div style={{
             position: 'absolute', left: 0, right: 0, height: '40%',
-            background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.25), transparent)',
+            background: 'linear-gradient(to bottom, transparent, rgba(0,166,62,0.06), transparent)',
             animation: 'scanAnim 1.5s linear infinite',
             pointerEvents: 'none',
           }} />
@@ -49,9 +70,12 @@ function CampCard({ camp, index, visible }) {
           display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
         }}>
           <span style={{
-            fontFamily: 'monospace', fontSize: 10, color: camp.color,
-            letterSpacing: '0.15em', border: `1px solid ${camp.color}`,
+            fontFamily: 'monospace', fontSize: 10,
+            color: hov ? G : '#fff',
+            letterSpacing: '0.15em',
+            border: `1px solid ${hov ? G : 'rgba(255,255,255,0.6)'}`,
             padding: '4px 12px', background: 'rgba(0,0,0,0.55)',
+            transition: 'color 0.3s, border-color 0.3s',
           }}>
             {camp.tag}
           </span>
@@ -62,27 +86,18 @@ function CampCard({ camp, index, visible }) {
             {String(index + 1).padStart(2, '0')} / 03
           </span>
         </div>
-
-        {/* Corner HUD brackets on hover */}
-        {hov && (
-          <>
-            <div style={{ position: 'absolute', top: 0, left: 0, width: 28, height: 28, borderTop: `2px solid ${camp.color}`, borderLeft: `2px solid ${camp.color}` }} />
-            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 28, height: 28, borderBottom: `2px solid ${camp.color}`, borderRight: `2px solid ${camp.color}` }} />
-          </>
-        )}
       </div>
 
       {/* Content area — always visible */}
       <div style={{ padding: '0 24px 24px' }}>
-        {/* Color accent bar */}
+        {/* Accent bar */}
         <div style={{
           height: 2,
           width: hov ? '100%' : '40px',
-          background: camp.color,
-          boxShadow: `0 0 10px ${camp.color}, 0 0 20px ${camp.color}60`,
-          transition: 'width 0.45s ease',
+          background: hov ? G : 'rgba(255,255,255,0.6)',
+          boxShadow: hov ? `0 0 10px ${G}, 0 0 20px ${GG}` : 'none',
+          transition: 'width 0.45s ease, background 0.3s, box-shadow 0.3s',
           margin: '18px 0 16px',
-          animation: hov ? 'none' : 'glowPulse 3s ease-in-out infinite',
         }} />
 
         {/* Title */}
@@ -105,20 +120,8 @@ function CampCard({ camp, index, visible }) {
           {camp.sub}
         </p>
 
-        {/* Enroll button — always visible */}
         <div style={{ marginTop: 16 }}>
-          <button
-            style={{
-              background: 'transparent', border: `1px solid ${camp.color}`,
-              color: camp.color, padding: '9px 22px',
-              fontFamily: 'monospace', fontWeight: 700, fontSize: 11,
-              letterSpacing: '0.12em', cursor: 'pointer', transition: 'all 0.2s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = camp.color; e.currentTarget.style.color = '#000'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = camp.color; }}
-          >
-            ENROLL_NOW →
-          </button>
+          <HudButton label="ENROLL_NOW" size="sm" />
         </div>
       </div>
     </div>
@@ -140,18 +143,7 @@ export default function Camps() {
             <div className="glitch-text" data-text="ACTION-PACKED" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', marginBottom: 4 }}>ACTION-PACKED</div>
             <div className="glitch-text" data-text="HOLIDAY CAMPS_" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>HOLIDAY CAMPS_</div>
           </div>
-          <button style={{
-            fontFamily: 'monospace', fontWeight: 700, fontSize: 12,
-            letterSpacing: '0.1em', textTransform: 'uppercase',
-            background: 'transparent', border: `1px solid ${G}`, color: G,
-            padding: '12px 28px', cursor: 'pointer', marginBottom: 8,
-            transition: 'background 0.2s',
-          }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,166,62,0.08)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-          >
-            VIEW_ALL_CAMPS
-          </button>
+          <HudButton label="VIEW_ALL_CAMPS" />
         </div>
       </div>
 

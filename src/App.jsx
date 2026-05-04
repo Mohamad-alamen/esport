@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
-import StatsGrid from './components/StatsGrid';
 import Features from './components/Features';
-import Games from './components/Games';
 import Tournaments from './components/Tournaments';
 import Teams from './components/Teams';
 import Camps from './components/Camps';
@@ -55,14 +53,12 @@ export default function App() {
       <Cursor />
       <Navbar />
       <Hero />
-      <StatsGrid />
       <Features />
-      <Games />
+      <Banner />
       <Tournaments />
       <Teams />
       <Camps />
       <Coaches />
-      <Banner />
       <NewsSection />
       <Partners />
       <CTA />

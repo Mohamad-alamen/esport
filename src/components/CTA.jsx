@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { G, GG } from '../constants';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
-import { Scanlines } from './ui';
+import { Scanlines, HudButton } from './ui';
 
 function CTABg() {
   const canvasRef = useRef(null);
@@ -203,30 +203,8 @@ export default function CTA() {
         </p>
 
         <div style={{ display: 'flex', gap: 20, justifyContent: 'center' }}>
-          <a href="#" style={{
-            fontFamily: 'monospace', fontWeight: 700, fontSize: 14,
-            letterSpacing: '0.12em', textTransform: 'uppercase',
-            background: G, color: '#fff', padding: '18px 60px',
-            textDecoration: 'none', boxShadow: `0 0 32px ${GG}`,
-            transition: 'background 0.2s, box-shadow 0.2s',
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#00c44a'; e.currentTarget.style.boxShadow = '0 0 48px rgba(0,166,62,0.6)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = G; e.currentTarget.style.boxShadow = `0 0 32px ${GG}`; }}
-          >
-            REGISTER_NOW
-          </a>
-          <a href="#" style={{
-            fontFamily: 'monospace', fontWeight: 700, fontSize: 14,
-            letterSpacing: '0.12em', textTransform: 'uppercase',
-            background: 'transparent', color: G, padding: '18px 48px',
-            border: `1px solid ${G}`, textDecoration: 'none',
-            transition: 'background 0.2s',
-          }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,166,62,0.08)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-          >
-            LEARN_MORE
-          </a>
+          <HudButton label="REGISTER_NOW" href="#" size="lg" variant="primary" />
+          <HudButton label="LEARN_MORE" href="#" size="lg" />
         </div>
       </div>
     </section>

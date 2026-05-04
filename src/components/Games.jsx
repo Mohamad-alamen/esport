@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { G, GG, GAMES } from '../constants';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
-import { Scanlines } from './ui';
+import { Scanlines, HudButton } from './ui';
 
 function GameCard({ game, index, visible }) {
   const [hov, setHov] = useState(false);
@@ -14,49 +14,54 @@ function GameCard({ game, index, visible }) {
         position: 'relative',
         background: '#0a0a0a',
         border: hov ? `1px solid ${game.color}` : '1px solid rgba(255,255,255,0.07)',
-        boxShadow: hov ? `0 0 28px ${game.color}40` : 'none',
+        boxShadow: hov ? `0 0 28px ${game.color}35` : 'none',
         overflow: 'hidden',
         cursor: 'pointer',
         transform: hov ? 'translateY(-5px)' : 'translateY(0)',
         transition: 'border-color 0.3s, box-shadow 0.3s, transform 0.35s cubic-bezier(0.16,1,0.3,1)',
-        ...fadeStyle(visible, 0.1 + index * 0.08),
+        ...fadeStyle(visible, 0.08 + index * 0.07),
       }}
     >
-      {/* Neon top bar */}
-      <div style={{
-        height: 2,
-        background: `linear-gradient(90deg, ${game.color}, transparent)`,
-        boxShadow: hov ? `0 0 10px ${game.color}` : 'none',
-        transition: 'box-shadow 0.3s',
-      }} />
+      {/* Full-card corner brackets */}
+      {[
+        { top: 0, left: 0, borderTop: true, borderLeft: true },
+        { top: 0, right: 0, borderTop: true, borderRight: true },
+        { bottom: 0, left: 0, borderBottom: true, borderLeft: true },
+        { bottom: 0, right: 0, borderBottom: true, borderRight: true },
+      ].map((c, i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          top: c.top, right: c.right, bottom: c.bottom, left: c.left,
+          width: 16, height: 16, zIndex: 10, pointerEvents: 'none',
+          borderTop:    c.borderTop    ? `2px solid ${hov ? game.color : 'rgba(255,255,255,0.3)'}` : 'none',
+          borderRight:  c.borderRight  ? `2px solid ${hov ? game.color : 'rgba(255,255,255,0.3)'}` : 'none',
+          borderBottom: c.borderBottom ? `2px solid ${hov ? game.color : 'rgba(255,255,255,0.3)'}` : 'none',
+          borderLeft:   c.borderLeft   ? `2px solid ${hov ? game.color : 'rgba(255,255,255,0.3)'}` : 'none',
+          transition: 'border-color 0.3s',
+        }} />
+      ))}
 
-      {/* Image (16/9) */}
+      {/* Image */}
       <div style={{ position: 'relative', aspectRatio: '16/9', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute', inset: 0,
           backgroundImage: `url(${game.img})`,
           backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: hov ? 'grayscale(0%) brightness(0.6)' : 'grayscale(60%) brightness(0.35)',
-          transform: hov ? 'scale(1.06)' : 'scale(1)',
+          filter: hov ? 'brightness(1)' : 'brightness(0.8)',
+          transform: hov ? 'scale(1.05)' : 'scale(1)',
           transition: 'filter 0.5s ease, transform 0.6s ease',
         }} />
 
-        {/* Scan-line on hover */}
+        {/* Light bottom fade */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,10,0.45) 0%, transparent 50%)', pointerEvents: 'none' }} />
+
+        {/* Scan on hover */}
         {hov && (
           <div style={{
             position: 'absolute', left: 0, right: 0, height: '40%',
             background: `linear-gradient(to bottom, transparent, ${game.color}08, transparent)`,
-            animation: 'scanAnim 1.5s linear infinite',
-            pointerEvents: 'none',
+            animation: 'scanAnim 1.5s linear infinite', pointerEvents: 'none',
           }} />
-        )}
-
-        {/* HUD corners on hover */}
-        {hov && (
-          <>
-            <div style={{ position: 'absolute', top: 0, left: 0, width: 20, height: 20, borderTop: `2px solid ${game.color}`, borderLeft: `2px solid ${game.color}` }} />
-            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 20, height: 20, borderBottom: `2px solid ${game.color}`, borderRight: `2px solid ${game.color}` }} />
-          </>
         )}
 
         {/* Tag badge */}
@@ -72,56 +77,52 @@ function GameCard({ game, index, visible }) {
       </div>
 
       {/* Content */}
-      <div style={{ padding: '18px 20px 20px' }}>
+      <div style={{ padding: '16px 20px 20px' }}>
         {/* Accent bar */}
         <div style={{
-          height: 2, width: hov ? '100%' : '36px',
+          height: 2, width: hov ? '100%' : '32px',
           background: game.color,
-          boxShadow: `0 0 8px ${game.color}`,
-          transition: 'width 0.4s ease',
-          marginBottom: 14,
+          boxShadow: hov ? `0 0 10px ${game.color}` : 'none',
+          transition: 'width 0.4s ease, box-shadow 0.3s',
+          marginBottom: 12,
         }} />
 
         {/* Game name */}
         <h3 style={{
           fontFamily: 'Orbitron', fontWeight: 900, fontSize: 15,
           color: hov ? '#fff' : 'rgba(255,255,255,0.88)',
-          letterSpacing: '0.03em', marginBottom: 14,
+          letterSpacing: '0.02em', marginBottom: 14,
           transition: 'color 0.25s',
         }}>
           {game.name}
         </h3>
 
-        {/* Stats row */}
-        <div style={{ display: 'flex', gap: 20 }}>
-          <div>
-            <div style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 18, color: game.color, marginBottom: 2 }}>
-              {game.tournaments}
-            </div>
-            <div style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.1em' }}>
-              TOURNAMENTS
-            </div>
-          </div>
-          <div style={{ width: 1, background: 'rgba(255,255,255,0.07)' }} />
-          <div>
-            <div style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 18, color: game.color, marginBottom: 2 }}>
-              {game.teams}
-            </div>
-            <div style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.1em' }}>
-              TEAMS
-            </div>
-          </div>
-        </div>
-
-        {/* CTA */}
+        {/* Divider */}
         <div style={{
-          marginTop: 16,
-          opacity: hov ? 1 : 0,
-          transform: hov ? 'translateY(0)' : 'translateY(6px)',
-          transition: 'opacity 0.3s, transform 0.3s',
-        }}>
-          <span style={{ fontFamily: 'monospace', fontSize: 10, color: game.color, letterSpacing: '0.1em' }}>
-            → EXPLORE_GAME
+          height: 1,
+          background: hov ? `linear-gradient(90deg, ${game.color}60, transparent)` : 'rgba(255,255,255,0.06)',
+          marginBottom: 14, transition: 'background 0.35s',
+        }} />
+
+        {/* Footer row */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div style={{ display: 'flex', gap: 16 }}>
+            <div>
+              <div style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 16, color: '#fff', marginBottom: 2 }}>{game.tournaments}</div>
+              <div style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>TOURNAMENTS</div>
+            </div>
+            <div style={{ width: 1, background: 'rgba(255,255,255,0.07)', alignSelf: 'stretch' }} />
+            <div>
+              <div style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 16, color: '#fff', marginBottom: 2 }}>{game.teams}</div>
+              <div style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>TEAMS</div>
+            </div>
+          </div>
+          <span style={{
+            fontFamily: 'monospace', fontSize: 10, color: game.color, letterSpacing: '0.1em',
+            opacity: hov ? 1 : 0, transform: hov ? 'translateX(0)' : 'translateX(6px)',
+            transition: 'opacity 0.3s, transform 0.3s',
+          }}>
+            EXPLORE →
           </span>
         </div>
       </div>
@@ -136,7 +137,6 @@ export default function Games() {
     <section ref={ref} style={{ padding: '120px 80px', background: '#050505', position: 'relative', overflow: 'hidden' }}>
       <Scanlines />
 
-      {/* Radial glow */}
       <div style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translate(-50%,-50%)', width: 800, height: 800, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,166,62,0.04) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
       <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative', zIndex: 2 }}>
@@ -154,17 +154,7 @@ export default function Games() {
               Discover games and their active tournaments
             </p>
           </div>
-          <button style={{
-            fontFamily: 'monospace', fontWeight: 700, fontSize: 12,
-            letterSpacing: '0.1em', background: 'transparent',
-            border: `1px solid ${G}`, color: G, padding: '12px 28px',
-            cursor: 'pointer', transition: 'background 0.2s',
-          }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,166,62,0.08)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-          >
-            VIEW_ALL
-          </button>
+          <HudButton label="VIEW_ALL" />
         </div>
 
         {/* 3×2 grid */}

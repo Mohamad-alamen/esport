@@ -50,6 +50,92 @@ export function SLabel({ text, sub }) {
   );
 }
 
+export function HudButton({ label, href, onClick, size = 'md', variant = 'outline', style: ext = {} }) {
+  const [hov, setHov] = useState(false);
+
+  const pad = { sm: '9px 18px',  md: '12px 24px', lg: '15px 32px' }[size];
+  const fs  = { sm: 10,          md: 11,           lg: 13          }[size];
+  const cut = { sm: 10,          md: 13,           lg: 18          }[size];
+  const iw  = { sm: 10,          md: 12,           lg: 14          }[size];
+
+  const ChevronIcon = ({ color }) => (
+    <svg width={iw} height={iw} viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0 }}>
+      <polyline points="3,1 9,6 3,11" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+
+  // Chamfer on top-RIGHT + bottom-LEFT corners
+  const clip = `polygon(0 0, calc(100% - ${cut}px) 0, 100% ${cut}px, 100% 100%, ${cut}px 100%, 0 calc(100% - ${cut}px))`;
+
+  // Primary: solid green fill, flat
+  if (variant === 'primary') {
+    const el = (
+      <div
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
+        onClick={onClick}
+        style={{
+          clipPath: clip, display: 'inline-flex', alignItems: 'center',
+          background: hov ? '#00c44a' : G,
+          cursor: 'pointer',
+          boxShadow: hov ? `0 0 32px rgba(0,166,62,0.65)` : `0 0 18px rgba(0,166,62,0.35)`,
+          transition: 'background 0.2s, box-shadow 0.2s',
+          gap: 10, padding: pad,
+          ...ext,
+        }}
+      >
+        <span style={{
+          fontFamily: 'monospace', fontWeight: 700, fontSize: fs,
+          letterSpacing: '0.1em', textTransform: 'uppercase',
+          color: '#fff', whiteSpace: 'nowrap',
+        }}>{label}</span>
+        <ChevronIcon color="#fff" />
+      </div>
+    );
+    if (href) return <a href={href} style={{ textDecoration: 'none', display: 'inline-block' }}>{el}</a>;
+    return el;
+  }
+
+  // Outline variant: flat, no internal separator
+  const borderCol = hov ? G : 'rgba(255,255,255,0.55)';
+  const textCol   = hov ? '#fff' : 'rgba(255,255,255,0.85)';
+  const fillCol   = hov ? 'rgba(0,166,62,0.1)' : '#080808';
+
+  const inner = (
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      onClick={onClick}
+      style={{
+        clipPath: clip, background: borderCol,
+        padding: '1px', display: 'inline-flex',
+        cursor: 'pointer',
+        boxShadow: hov ? `0 0 22px rgba(0,166,62,0.45)` : 'none',
+        transition: 'background 0.25s, box-shadow 0.25s',
+        ...ext,
+      }}
+    >
+      <div style={{
+        clipPath: clip, background: fillCol,
+        display: 'flex', alignItems: 'center',
+        gap: 10, padding: pad,
+        transition: 'background 0.25s',
+      }}>
+        <span style={{
+          fontFamily: 'monospace', fontWeight: 700, fontSize: fs,
+          letterSpacing: '0.1em', textTransform: 'uppercase',
+          color: textCol, whiteSpace: 'nowrap',
+          transition: 'color 0.25s',
+        }}>{label}</span>
+        <ChevronIcon color={textCol} />
+      </div>
+    </div>
+  );
+
+  if (href) return <a href={href} style={{ textDecoration: 'none', display: 'inline-block' }}>{inner}</a>;
+  return inner;
+}
+
 export function Btn({ children, outline, style = {}, onClick }) {
   const [hov, setHov] = useState(false);
   const base = {

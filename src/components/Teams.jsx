@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { G, GG, TEAMS } from '../constants';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
-import { Scanlines } from './ui';
+import { Scanlines, HudButton } from './ui';
 
 function TeamCard({ team, index, visible }) {
   const [hov, setHov] = useState(false);
@@ -13,8 +13,8 @@ function TeamCard({ team, index, visible }) {
       style={{
         position: 'relative',
         background: '#0a0a0a',
-        border: hov ? `1px solid ${team.rankColor}` : '1px solid rgba(255,255,255,0.07)',
-        boxShadow: hov ? `0 0 28px ${team.rankColor}40` : 'none',
+        border: hov ? `1px solid ${G}` : '1px solid rgba(255,255,255,0.07)',
+        boxShadow: hov ? `0 0 28px ${GG}` : 'none',
         overflow: 'hidden',
         cursor: 'pointer',
         transform: hov ? 'translateY(-5px)' : 'translateY(0)',
@@ -32,11 +32,11 @@ function TeamCard({ team, index, visible }) {
         <div key={i} style={{
           position: 'absolute',
           top: c.top, right: c.right, bottom: c.bottom, left: c.left,
-          width: 18, height: 18, zIndex: 10, pointerEvents: 'none',
-          borderTop:    c.borderTop    ? `2px solid ${hov ? G : 'rgba(255,255,255,0.5)'}` : 'none',
-          borderRight:  c.borderRight  ? `2px solid ${hov ? G : 'rgba(255,255,255,0.5)'}` : 'none',
-          borderBottom: c.borderBottom ? `2px solid ${hov ? G : 'rgba(255,255,255,0.5)'}` : 'none',
-          borderLeft:   c.borderLeft   ? `2px solid ${hov ? G : 'rgba(255,255,255,0.5)'}` : 'none',
+          width: 20, height: 20, zIndex: 10, pointerEvents: 'none',
+          borderTop:    c.borderTop    ? `2px solid ${hov ? G : 'rgba(255,255,255,0.35)'}` : 'none',
+          borderRight:  c.borderRight  ? `2px solid ${hov ? G : 'rgba(255,255,255,0.35)'}` : 'none',
+          borderBottom: c.borderBottom ? `2px solid ${hov ? G : 'rgba(255,255,255,0.35)'}` : 'none',
+          borderLeft:   c.borderLeft   ? `2px solid ${hov ? G : 'rgba(255,255,255,0.35)'}` : 'none',
           transition: 'border-color 0.3s',
         }} />
       ))}
@@ -47,7 +47,7 @@ function TeamCard({ team, index, visible }) {
           position: 'absolute', inset: 0,
           backgroundImage: `url(${team.img})`,
           backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: hov ? 'brightness(1)' : 'brightness(0.85)',
+          filter: hov ? 'brightness(1)' : 'brightness(0.8)',
           transform: hov ? 'scale(1.05)' : 'scale(1)',
           transition: 'filter 0.55s ease, transform 0.65s ease',
         }} />
@@ -64,16 +64,8 @@ function TeamCard({ team, index, visible }) {
       {/* Content */}
       <div style={{ padding: '16px 20px 20px' }}>
 
-        {/* Rank + Name */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-          <span style={{
-            fontFamily: 'Orbitron', fontWeight: 900, fontSize: 11,
-            color: '#000', background: hov ? G : 'rgba(255,255,255,0.8)',
-            padding: '3px 9px', letterSpacing: '0.06em', flexShrink: 0,
-            transition: 'background 0.3s',
-          }}>
-            #{team.rank}
-          </span>
+        {/* Name */}
+        <div style={{ marginBottom: 12 }}>
           <h3 style={{
             fontFamily: 'Orbitron', fontWeight: 900, fontSize: 14,
             color: hov ? '#fff' : 'rgba(255,255,255,0.88)',
@@ -137,17 +129,7 @@ export default function Teams() {
               <div className="glitch-text" data-text="TEAMS_" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>TEAMS_</div>
             </div>
           </div>
-          <button style={{
-            fontFamily: 'monospace', fontWeight: 700, fontSize: 12,
-            letterSpacing: '0.1em', background: 'transparent',
-            border: `1px solid ${G}`, color: G, padding: '12px 28px',
-            cursor: 'pointer', transition: 'background 0.2s',
-          }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(0,166,62,0.08)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-          >
-            VIEW_ALL
-          </button>
+          <HudButton label="VIEW_ALL" />
         </div>
 
         {/* 4-column grid */}
