@@ -11,7 +11,7 @@ function HeroBG() {
     const ctx = canvas.getContext('2d');
     let W = (canvas.width = window.innerWidth);
     let H = (canvas.height = window.innerHeight);
-    let raf, t = 0;
+    let raf, t = 0, paused = false;
 
     const TYPES = ['triangle', 'square', 'circle', 'cross'];
 
@@ -90,6 +90,7 @@ function HeroBG() {
     }));
 
     function draw() {
+      if (paused) return;
       t += 0.006;
       ctx.fillStyle = '#050505';
       ctx.fillRect(0, 0, W, H);
@@ -148,12 +149,22 @@ function HeroBG() {
 
     draw();
 
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && paused) { paused = false; draw(); }
+      else { paused = true; cancelAnimationFrame(raf); }
+    }, { threshold: 0 });
+    io.observe(canvas);
+
     const onResize = () => {
       W = canvas.width = window.innerWidth;
       H = canvas.height = window.innerHeight;
     };
     window.addEventListener('resize', onResize);
-    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', onResize); };
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      window.removeEventListener('resize', onResize);
+    };
   }, []);
 
   return (

@@ -12,6 +12,7 @@ function CTABg() {
     const ctx = canvas.getContext('2d');
     const section = canvas.parentElement;
     let W = (canvas.width = section.clientWidth || window.innerWidth);
+    let paused = false;
     let H = (canvas.height = section.clientHeight || 600);
     let raf, t = 0;
 
@@ -102,6 +103,7 @@ function CTABg() {
     }));
 
     function draw() {
+      if (paused) return;
       t += 0.006;
 
       // Full clear each frame for clean look
@@ -164,12 +166,18 @@ function CTABg() {
 
     draw();
 
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && paused) { paused = false; draw(); }
+      else { paused = true; cancelAnimationFrame(raf); }
+    }, { threshold: 0 });
+    io.observe(canvas);
+
     const onResize = () => {
       W = canvas.width = section.clientWidth || window.innerWidth;
       H = canvas.height = section.clientHeight || 600;
     };
     window.addEventListener('resize', onResize);
-    return () => { cancelAnimationFrame(raf); window.removeEventListener('resize', onResize); };
+    return () => { cancelAnimationFrame(raf); io.disconnect(); window.removeEventListener('resize', onResize); };
   }, []);
 
   return (
