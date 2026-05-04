@@ -11,6 +11,7 @@ function TeamCard({ team, index, visible }) {
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
+        position: 'relative',
         background: '#0a0a0a',
         border: hov ? `1px solid ${team.rankColor}` : '1px solid rgba(255,255,255,0.07)',
         boxShadow: hov ? `0 0 28px ${team.rankColor}40` : 'none',
@@ -21,13 +22,24 @@ function TeamCard({ team, index, visible }) {
         ...fadeStyle(visible, 0.1 + index * 0.1),
       }}
     >
-      {/* Neon top bar */}
-      <div style={{
-        height: 2,
-        background: `linear-gradient(90deg, ${team.rankColor}, transparent)`,
-        boxShadow: hov ? `0 0 10px ${team.rankColor}` : 'none',
-        transition: 'box-shadow 0.3s',
-      }} />
+      {/* Card corner brackets */}
+      {[
+        { top: 0, left: 0, borderTop: true, borderLeft: true },
+        { top: 0, right: 0, borderTop: true, borderRight: true },
+        { bottom: 0, left: 0, borderBottom: true, borderLeft: true },
+        { bottom: 0, right: 0, borderBottom: true, borderRight: true },
+      ].map((c, i) => (
+        <div key={i} style={{
+          position: 'absolute',
+          top: c.top, right: c.right, bottom: c.bottom, left: c.left,
+          width: 18, height: 18, zIndex: 10, pointerEvents: 'none',
+          borderTop:    c.borderTop    ? `2px solid ${hov ? G : 'rgba(255,255,255,0.5)'}` : 'none',
+          borderRight:  c.borderRight  ? `2px solid ${hov ? G : 'rgba(255,255,255,0.5)'}` : 'none',
+          borderBottom: c.borderBottom ? `2px solid ${hov ? G : 'rgba(255,255,255,0.5)'}` : 'none',
+          borderLeft:   c.borderLeft   ? `2px solid ${hov ? G : 'rgba(255,255,255,0.5)'}` : 'none',
+          transition: 'border-color 0.3s',
+        }} />
+      ))}
 
       {/* Image */}
       <div style={{ position: 'relative', aspectRatio: '16/9', overflow: 'hidden' }}>
@@ -35,103 +47,69 @@ function TeamCard({ team, index, visible }) {
           position: 'absolute', inset: 0,
           backgroundImage: `url(${team.img})`,
           backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: hov ? 'grayscale(0%) brightness(0.55)' : 'grayscale(70%) brightness(0.3)',
+          filter: hov ? 'brightness(1)' : 'brightness(0.85)',
           transform: hov ? 'scale(1.05)' : 'scale(1)',
           transition: 'filter 0.55s ease, transform 0.65s ease',
         }} />
-
-        {/* Bottom gradient */}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,10,0.95) 0%, transparent 60%)' }} />
-
-        {/* Scan on hover */}
+        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,10,0.5) 0%, transparent 50%)' }} />
         {hov && (
           <div style={{
             position: 'absolute', left: 0, right: 0, height: '40%',
-            background: `linear-gradient(to bottom, transparent, ${team.rankColor}08, transparent)`,
+            background: `linear-gradient(to bottom, transparent, rgba(0,166,62,0.05), transparent)`,
             animation: 'scanAnim 1.5s linear infinite', pointerEvents: 'none',
           }} />
         )}
-
-        {/* HUD corners on hover */}
-        {hov && (
-          <>
-            <div style={{ position: 'absolute', top: 0, left: 0, width: 20, height: 20, borderTop: `2px solid ${team.rankColor}`, borderLeft: `2px solid ${team.rankColor}` }} />
-            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 20, height: 20, borderBottom: `2px solid ${team.rankColor}`, borderRight: `2px solid ${team.rankColor}` }} />
-          </>
-        )}
-
-        {/* Recruiting badge */}
-        <div style={{ position: 'absolute', top: 12, left: 14 }}>
-          <span style={{
-            fontFamily: 'monospace', fontSize: 9, letterSpacing: '0.12em',
-            color: G, border: `1px solid ${G}`,
-            padding: '3px 10px', background: 'rgba(0,0,0,0.7)',
-          }}>
-            RECRUITING
-          </span>
-        </div>
-
-        {/* Rank badge */}
-        <div style={{
-          position: 'absolute', top: 12, right: 14,
-          fontFamily: 'Orbitron', fontWeight: 900, fontSize: 14,
-          color: '#000', background: team.rankColor,
-          width: 36, height: 36,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: `0 0 14px ${team.rankColor}80`,
-        }}>
-          #{team.rank}
-        </div>
       </div>
 
       {/* Content */}
-      <div style={{ padding: '18px 20px 22px' }}>
-        {/* Name + tag */}
-        <h3 style={{
-          fontFamily: 'Orbitron', fontWeight: 900, fontSize: 16,
-          color: hov ? '#fff' : 'rgba(255,255,255,0.88)',
-          letterSpacing: '0.02em', marginBottom: 5,
-          transition: 'color 0.25s',
-        }}>
-          {team.name}
-        </h3>
-        <div style={{ fontFamily: 'monospace', fontSize: 10, color: `${G}`, letterSpacing: '0.14em', marginBottom: 16 }}>
-          [{team.tag}]
+      <div style={{ padding: '16px 20px 20px' }}>
+
+        {/* Rank + Name */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+          <span style={{
+            fontFamily: 'Orbitron', fontWeight: 900, fontSize: 11,
+            color: '#000', background: hov ? G : 'rgba(255,255,255,0.8)',
+            padding: '3px 9px', letterSpacing: '0.06em', flexShrink: 0,
+            transition: 'background 0.3s',
+          }}>
+            #{team.rank}
+          </span>
+          <h3 style={{
+            fontFamily: 'Orbitron', fontWeight: 900, fontSize: 14,
+            color: hov ? '#fff' : 'rgba(255,255,255,0.88)',
+            letterSpacing: '0.02em', lineHeight: 1.2,
+            transition: 'color 0.25s',
+          }}>
+            {team.name}
+          </h3>
         </div>
 
-        {/* Divider */}
+        {/* Accent divider */}
         <div style={{
           height: 1,
-          background: hov ? `linear-gradient(90deg, ${team.rankColor}, transparent)` : 'rgba(255,255,255,0.06)',
-          marginBottom: 16, transition: 'background 0.35s',
+          background: hov ? `linear-gradient(90deg, ${G}, transparent)` : 'rgba(255,255,255,0.07)',
+          marginBottom: 14, transition: 'background 0.35s',
         }} />
 
         {/* Stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', marginBottom: 16 }}>
-          <div>
-            <div style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 20, color: '#fff', marginBottom: 4 }}>{team.wins}</div>
-            <div style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.1em' }}>WINS</div>
-          </div>
-          <div>
-            <div style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 20, color: 'rgba(255,255,255,0.6)', marginBottom: 4 }}>{team.losses}</div>
-            <div style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.1em' }}>LOSSES</div>
-          </div>
-          <div>
-            <div style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 20, color: G, textShadow: `0 0 12px ${GG}`, marginBottom: 4 }}>{team.winRate}%</div>
-            <div style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.1em' }}>WIN RATE</div>
-          </div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', marginBottom: 14 }}>
+          {[
+            { val: team.wins,         label: 'WINS',     color: '#fff' },
+            { val: team.losses,       label: 'LOSSES',   color: 'rgba(255,255,255,0.5)' },
+            { val: `${team.winRate}%`, label: 'WIN RATE', color: G, shadow: true },
+          ].map(({ val, label, color, shadow }) => (
+            <div key={label}>
+              <div style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 18, color, marginBottom: 3, textShadow: shadow ? `0 0 12px ${GG}` : 'none' }}>{val}</div>
+              <div style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>{label}</div>
+            </div>
+          ))}
         </div>
 
         {/* Region + Points */}
-        <div style={{
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-          paddingTop: 12, borderTop: '1px solid rgba(255,255,255,0.05)',
-        }}>
-          <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.08em' }}>
-            ◈ {team.region}
-          </span>
-          <span style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 13, color: team.rankColor, letterSpacing: '0.04em' }}>
-            {team.points.toLocaleString()} <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.4)', fontWeight: 400 }}>PTS</span>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 10, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+          <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em' }}>◈ {team.region}</span>
+          <span style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 12, color: hov ? G : 'rgba(255,255,255,0.7)', letterSpacing: '0.04em', transition: 'color 0.3s' }}>
+            {team.points.toLocaleString()} <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>PTS</span>
           </span>
         </div>
       </div>

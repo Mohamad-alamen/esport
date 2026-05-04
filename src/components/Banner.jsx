@@ -1,101 +1,105 @@
-import { useState } from 'react';
-import { G, GG } from '../constants';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
-import { Scanlines } from './ui';
+
+// Drop your video file into /public and update this path
+const VIDEO_SRC = 'https://cdn.prod.website-files.com/67dd801246bec500f0832874%2F67e22628165a6b1c009650c5_7914827-hd_1920_1080_30fps-transcode.mp4';
+const FALLBACK_IMG = 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1600&q=80';
+
+const STATS = [
+  { v: '500+', l: 'PLAYERS',    d: 'SETTING NEW STANDARDS IN\nESPORTS EXCELLENCE' },
+  { v: '242',  l: 'MATCHES',    d: 'ENDLESS ACTION,\nUNFORGETTABLE MATCHES' },
+  { v: '1M+',  l: 'SUPPORTERS', d: 'UNITING GAMERS WITH PRIDE\nAND PASSION' },
+  { v: '190',  l: 'WINS',       d: 'A TRUE SHOWCASE OF SKILL\nAND DEDICATION' },
+];
+
+const CROSS_POS = [
+  { top: 16, left: 16 },
+  { top: 16, right: 16 },
+  { bottom: 16, left: 16 },
+  { bottom: 16, right: 16 },
+];
 
 export default function Banner() {
   const [ref, visible] = useReveal();
-  const [hovCreate, setHovCreate] = useState(false);
-  const [hovBrowse, setHovBrowse] = useState(false);
 
   return (
-    <section ref={ref} style={{ position: 'relative', background: '#080808', overflow: 'hidden' }}>
-      <Scanlines />
+    <section ref={ref} style={{ background: '#050505', padding: '60px 80px' }}>
 
-      {/* Neon top border */}
-      <div style={{ height: 2, background: `linear-gradient(90deg, transparent, ${G}, transparent)`, boxShadow: `0 0 18px ${G}` }} />
-
-      {/* Radial glow */}
-      <div style={{ position: 'absolute', inset: 0, background: `radial-gradient(ellipse at center, rgba(0,166,62,0.07) 0%, transparent 65%)`, pointerEvents: 'none' }} />
-
-      {/* HUD corner brackets */}
-      <div style={{ position: 'absolute', top: 2, left: 0, width: 40, height: 40, borderTop: `2px solid ${G}`, borderLeft: `2px solid ${G}`, zIndex: 3 }} />
-      <div style={{ position: 'absolute', top: 2, right: 0, width: 40, height: 40, borderTop: `2px solid ${G}`, borderRight: `2px solid ${G}`, zIndex: 3 }} />
-      <div style={{ position: 'absolute', bottom: 2, left: 0, width: 40, height: 40, borderBottom: `2px solid ${G}`, borderLeft: `2px solid ${G}`, zIndex: 3 }} />
-      <div style={{ position: 'absolute', bottom: 2, right: 0, width: 40, height: 40, borderBottom: `2px solid ${G}`, borderRight: `2px solid ${G}`, zIndex: 3 }} />
-
+      {/* Constrained video card */}
       <div style={{
-        maxWidth: 1280, margin: '0 auto', padding: '72px 80px',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        gap: 48, position: 'relative', zIndex: 2,
+        position: 'relative', overflow: 'hidden', height: 560,
+        maxWidth: 1280, margin: '0 auto',
+        border: '1px solid rgba(255,255,255,0.08)',
       }}>
 
-        {/* Left — text */}
-        <div style={fadeStyle(visible, 0)}>
+        {/* Video background */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={FALLBACK_IMG}
+          style={{
+            position: 'absolute', inset: 0,
+            width: '100%', height: '100%',
+            objectFit: 'cover', objectPosition: 'center',
+            filter: 'brightness(1)',
+          }}
+        >
+          <source src={VIDEO_SRC} type="video/mp4" />
+        </video>
 
-          <div style={{ display: 'flex', gap: 14, alignItems: 'baseline', flexWrap: 'wrap', marginBottom: 20 }}>
-            <div
-              className="glitch-text"
-              data-text="BUILD YOUR"
-              style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(32px, 4vw, 56px)', color: '#fff', lineHeight: 0.95, letterSpacing: '-0.02em', position: 'relative' }}
-            >
-              BUILD YOUR
-            </div>
-            <div
-              className="glitch-text"
-              data-text="LEGACY_"
-              style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(32px, 4vw, 56px)', color: G, lineHeight: 0.95, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}
-            >
-              LEGACY_
-            </div>
+        {/* Corner crosshairs */}
+        {CROSS_POS.map((pos, i) => (
+          <div key={i} style={{
+            position: 'absolute', ...pos, zIndex: 4,
+            color: 'rgba(255,255,255,0.3)',
+            fontFamily: 'monospace', fontSize: 20, lineHeight: 1,
+            userSelect: 'none',
+          }}>+</div>
+        ))}
+
+        {/* Stats bar */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0,
+          background: 'rgba(5,5,5,0.82)',
+          borderTop: '1px solid rgba(255,255,255,0.1)',
+          zIndex: 3,
+          ...fadeStyle(visible, 0.1),
+        }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+            {STATS.map((stat, i) => (
+              <div key={i} style={{
+                padding: '28px 40px 32px',
+                borderRight: i < 3 ? '1px solid rgba(255,255,255,0.08)' : 'none',
+              }}>
+                <div style={{
+                  fontFamily: 'monospace', fontSize: 10,
+                  color: 'rgba(255,255,255,0.5)', letterSpacing: '0.18em',
+                  marginBottom: 10,
+                }}>
+                  [ {stat.l} ]
+                </div>
+                <div style={{
+                  fontFamily: 'Orbitron', fontWeight: 900, fontSize: 52,
+                  color: '#fff', lineHeight: 1, marginBottom: 14,
+                  letterSpacing: '-0.02em',
+                }}>
+                  {stat.v}
+                </div>
+                <div style={{
+                  fontFamily: 'monospace', fontSize: 9,
+                  color: 'rgba(255,255,255,0.48)', letterSpacing: '0.1em',
+                  lineHeight: 1.8, textTransform: 'uppercase',
+                  whiteSpace: 'pre-line',
+                }}>
+                  {stat.d}
+                </div>
+              </div>
+            ))}
           </div>
-          <p style={{ fontFamily: 'Rajdhani', fontSize: 16, color: 'rgba(255,255,255,0.65)', lineHeight: 1.65, maxWidth: 480 }}>
-            Form a squad, register for tournaments, and compete across multiple titles — all in one platform built for champions.
-          </p>
-        </div>
-
-        {/* Right — actions */}
-        <div style={{ display: 'flex', gap: 16, flexShrink: 0, ...fadeStyle(visible, 0.15) }}>
-          {/* CREATE_TEAM */}
-          <button
-            onMouseEnter={() => setHovCreate(true)}
-            onMouseLeave={() => setHovCreate(false)}
-            style={{
-              fontFamily: 'monospace', fontWeight: 700, fontSize: 13,
-              letterSpacing: '0.14em', padding: '18px 40px',
-              background: hovCreate ? '#00c44a' : G,
-              color: '#000', border: 'none', cursor: 'pointer',
-              boxShadow: hovCreate ? '0 0 40px rgba(0,166,62,0.65)' : `0 0 24px ${GG}`,
-              transition: 'background 0.2s, box-shadow 0.2s',
-              position: 'relative',
-            }}
-          >
-            {/* inner top accent */}
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: 'rgba(255,255,255,0.25)' }} />
-            CREATE_TEAM
-          </button>
-
-          {/* BROWSE_GAMES */}
-          <button
-            onMouseEnter={() => setHovBrowse(true)}
-            onMouseLeave={() => setHovBrowse(false)}
-            style={{
-              fontFamily: 'monospace', fontWeight: 700, fontSize: 13,
-              letterSpacing: '0.14em', padding: '18px 40px',
-              background: hovBrowse ? 'rgba(0,166,62,0.1)' : 'transparent',
-              color: G, border: `1px solid ${G}`,
-              cursor: 'pointer',
-              boxShadow: hovBrowse ? `0 0 28px ${GG}` : 'none',
-              transition: 'background 0.2s, box-shadow 0.2s',
-            }}
-          >
-            BROWSE_GAMES
-          </button>
         </div>
       </div>
 
-      {/* Neon bottom border */}
-      <div style={{ height: 2, background: `linear-gradient(90deg, transparent, ${G}, transparent)`, boxShadow: `0 0 18px ${G}` }} />
     </section>
   );
 }

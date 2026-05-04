@@ -63,10 +63,10 @@ export const ABOUT_IMGS = [
 ];
 
 export const COACHES = [
-  { name: 'Nader Al-Rashid', role: 'CS2 Strategist',  exp: '7 Yrs',  spec: 'Tactical FPS', initials: 'NA', img: 'https://images.unsplash.com/photo-1603481588273-2f908a9a7a1b?w=400&q=80' },
-  { name: 'Amira Hassan',    role: 'Valorant Pro',    exp: '5 Yrs',  spec: 'Shooting',     initials: 'AH', img: 'https://images.unsplash.com/photo-1598550476439-6847785fcea6?w=400&q=80' },
-  { name: 'Tariq Mahmoud',   role: 'FIFA Specialist', exp: '6 Yrs',  spec: 'Football',     initials: 'TM', img: 'https://images.unsplash.com/photo-1538481199705-c710c4e965fc?w=400&q=80' },
-  { name: 'Lina Karim',      role: 'Mobile Lead',     exp: '4 Yrs',  spec: 'Mobile',       initials: 'LK', img: 'https://images.unsplash.com/photo-1580327344181-c1163234e5a0?w=400&q=80' },
+  { name: 'Nader Al-Rashid', role: 'CS2 Strategist',  exp: '7 Yrs',  spec: 'Tactical FPS', initials: 'NA', img: 'https://framerusercontent.com/images/LYgiBBNSW2de4PgvQuptFJSJc0.jpg?width=2666&height=4000' },
+  { name: 'Amira Hassan',    role: 'Valorant Pro',    exp: '5 Yrs',  spec: 'Shooting',     initials: 'AH', img: 'https://framerusercontent.com/images/i3U1a0hwirgMDWLcd5CG2sRMDU.jpg?width=1130&height=1333' },
+  { name: 'Tariq Mahmoud',   role: 'FIFA Specialist', exp: '6 Yrs',  spec: 'Football',     initials: 'TM', img: 'https://framerusercontent.com/images/H8ePsD965CzTAVvi4NIrJCNDqvA.jpg?width=1281&height=1333' },
+  { name: 'Lina Karim',      role: 'Mobile Lead',     exp: '4 Yrs',  spec: 'Mobile',       initials: 'LK', img: 'https://framerusercontent.com/images/0gc7iUILzCAdOz2an61fZEQAg.jpg?width=1333&height=2000' },
 ];
 
 export const NEWS = [
@@ -77,16 +77,16 @@ export const NEWS = [
 ];
 
 export const UPCOMING_TOURNAMENTS = [
-  { name: 'League of Legends Bootcamp',  game: 'League of Legends', tag: 'MOBA',   desc: 'Intensive 6-week program covering all fundamentals',  organizer: 'Ali Al-Mousawi',      duration: '30 HRS', price: '350,000 IQD', color: '#C89B3C', img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&q=80' },
-  { name: 'FIFA Pro Techniques',         game: 'FIFA 24',           tag: 'Sports', desc: 'Master advanced moves and competitive strategies',     organizer: 'Mohammed Al-Saidi',   duration: '20 HRS', price: '200,000 IQD', color: '#00A63E', img: 'https://images.unsplash.com/photo-1560272564-c83b66b1ad12?w=800&q=80' },
-  { name: 'Valorant Tactical Mastery',   game: 'VALORANT',          tag: 'FPS',    desc: 'Learn pro-level tactics from Radiant players',        organizer: 'Hassan Al-Iraqi',     duration: '40 HRS', price: '400,000 IQD', color: '#FF4655', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80' },
+  { name: 'League of Legends Bootcamp',  game: 'League of Legends', tag: 'MOBA',   desc: 'Intensive 6-week program covering all fundamentals',  organizer: 'Ali Al-Mousawi',      duration: '30 HRS', price: '350,000 IQD', color: '#C89B3C', img: 'https://i0.wp.com/highschool.latimes.com/wp-content/uploads/2021/09/league-of-legends.jpeg?fit=1607%2C895&ssl=1' },
+  { name: 'FIFA Pro Techniques',         game: 'FIFA 24',           tag: 'Sports', desc: 'Master advanced moves and competitive strategies',     organizer: 'Mohammed Al-Saidi',   duration: '20 HRS', price: '200,000 IQD', color: '#00A63E', img: 'https://prod.assets.earlygamecdn.com/images/EA-FC-24-Cover-standard-edition.jpg?transform=Card+Publication+Webp' },
+  { name: 'Valorant Tactical Mastery',   game: 'VALORANT',          tag: 'FPS',    desc: 'Learn pro-level tactics from Radiant players',        organizer: 'Hassan Al-Iraqi',     duration: '40 HRS', price: '400,000 IQD', color: '#FF4655', img: 'https://xboxwire.thesourcemediaassets.com/sites/2/2024/08/Val-Console-Launch-Hero-1080-__-GAME-STORES-80b474d3ff38615edd0a-1900x1080.jpg' },
 ];
 
 export const TEAMS = [
-  { rank: 1, name: 'Baghdad Lions',    tag: 'ABG', wins: 52, losses: 10, winRate: 84, region: 'Iraq', points: 2800, rankColor: '#FFD700', img: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?w=600&q=80' },
-  { rank: 2, name: 'Iraq Eagles',      tag: 'NEQ', wins: 45, losses: 12, winRate: 79, region: 'Iraq', points: 2500, rankColor: '#C0C0C0', img: 'https://images.unsplash.com/photo-1593305841991-05c297ba4575?w=600&q=80' },
-  { rank: 3, name: 'Al-Nosour Squad',  tag: 'EGL', wins: 45, losses: 12, winRate: 79, region: 'Iraq', points: 2500, rankColor: '#CD7F32', img: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=600&q=80' },
-  { rank: 4, name: 'Rafidain Knights', tag: 'FRD', wins: 38, losses: 15, winRate: 72, region: 'Iraq', points: 2200, rankColor: '#00A63E', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80' },
+  { rank: 1, name: 'Baghdad Lions',    tag: 'ABG', wins: 52, losses: 10, winRate: 84, region: 'Iraq', points: 2800, rankColor: '#FFD700', img: 'https://news.lenovo.com/wp-content/uploads/2021/12/image1-1024x576.png' },
+  { rank: 2, name: 'Iraq Eagles',      tag: 'NEQ', wins: 45, losses: 12, winRate: 79, region: 'Iraq', points: 2500, rankColor: '#C0C0C0', img: 'https://blix.gg/blog/wp-content/uploads/2024/10/e0b0e235caec9f6d.png' },
+  { rank: 3, name: 'Al-Nosour Squad',  tag: 'EGL', wins: 45, losses: 12, winRate: 79, region: 'Iraq', points: 2500, rankColor: '#CD7F32', img: 'https://press.razer.com/wp-content/uploads/2018/04/100Thieves-Razer-Announcement1.png' },
+  { rank: 4, name: 'Rafidain Knights', tag: 'FRD', wins: 38, losses: 15, winRate: 72, region: 'Iraq', points: 2200, rankColor: '#00A63E', img: 'https://images.squarespace-cdn.com/content/v1/5e258d296b02aa4a67c851ce/a2c57678-624a-4b3f-bc5c-463dae8aa329/IMG_8237.jpg?format=1500w' },
 ];
 
 export const PARTNERS = ['INTEL', 'NVIDIA', 'LOGITECH', 'RED BULL', 'ALIENWARE', 'HYPERX'];

@@ -11,6 +11,7 @@ function TournamentCard({ item, index, visible }) {
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
+        position: 'relative',
         background: '#0a0a0a',
         border: hov ? `1px solid ${item.color}` : '1px solid rgba(255,255,255,0.07)',
         boxShadow: hov ? `0 0 32px ${item.color}35` : 'none',
@@ -21,19 +22,26 @@ function TournamentCard({ item, index, visible }) {
         ...fadeStyle(visible, 0.1 + index * 0.1),
       }}
     >
+      {/* HUD corners on full card */}
+      {hov && (
+        <>
+          <div style={{ position: 'absolute', top: 0, left: 0, width: 22, height: 22, borderTop: `2px solid ${item.color}`, borderLeft: `2px solid ${item.color}`, zIndex: 10, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', top: 0, right: 0, width: 22, height: 22, borderTop: `2px solid ${item.color}`, borderRight: `2px solid ${item.color}`, zIndex: 10, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, width: 22, height: 22, borderBottom: `2px solid ${item.color}`, borderLeft: `2px solid ${item.color}`, zIndex: 10, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: 0, right: 0, width: 22, height: 22, borderBottom: `2px solid ${item.color}`, borderRight: `2px solid ${item.color}`, zIndex: 10, pointerEvents: 'none' }} />
+        </>
+      )}
+
       {/* Image */}
       <div style={{ position: 'relative', aspectRatio: '16/9', overflow: 'hidden' }}>
         <div style={{
           position: 'absolute', inset: 0,
           backgroundImage: `url(${item.img})`,
           backgroundSize: 'cover', backgroundPosition: 'center',
-          filter: hov ? 'grayscale(0%) brightness(0.55)' : 'grayscale(50%) brightness(0.35)',
+          filter: hov ? 'grayscale(0%) brightness(1)' : 'grayscale(0%) brightness(0.75)',
           transform: hov ? 'scale(1.06)' : 'scale(1)',
           transition: 'filter 0.5s ease, transform 0.6s ease',
         }} />
-
-        {/* Neon top bar */}
-        <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: `linear-gradient(90deg, ${item.color}, transparent)`, boxShadow: hov ? `0 0 12px ${item.color}` : 'none', transition: 'box-shadow 0.3s' }} />
 
         {/* Scan on hover */}
         {hov && (
@@ -42,14 +50,6 @@ function TournamentCard({ item, index, visible }) {
             background: `linear-gradient(to bottom, transparent, ${item.color}08, transparent)`,
             animation: 'scanAnim 1.5s linear infinite', pointerEvents: 'none',
           }} />
-        )}
-
-        {/* HUD corners */}
-        {hov && (
-          <>
-            <div style={{ position: 'absolute', top: 0, left: 0, width: 22, height: 22, borderTop: `2px solid ${item.color}`, borderLeft: `2px solid ${item.color}` }} />
-            <div style={{ position: 'absolute', bottom: 0, right: 0, width: 22, height: 22, borderBottom: `2px solid ${item.color}`, borderRight: `2px solid ${item.color}` }} />
-          </>
         )}
 
         {/* Tag + game badge */}
