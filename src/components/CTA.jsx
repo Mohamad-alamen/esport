@@ -188,7 +188,7 @@ function CTABg() {
   );
 }
 
-export default function CTA() {
+export default function CTA({ onJoin }) {
   const [ref, visible] = useReveal(0.15);
 
   return (
@@ -211,7 +211,7 @@ export default function CTA() {
         </p>
 
         <div style={{ display: 'flex', gap: 20, justifyContent: 'center' }}>
-          <HudButton label="REGISTER_NOW" href="#" size="lg" variant="primary" />
+          <HudButton label="REGISTER_NOW" onClick={onJoin} size="lg" variant="primary" />
           <HudButton label="LEARN_MORE" href="#" size="lg" />
         </div>
       </div>

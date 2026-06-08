@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { G, GG, NAV } from '../constants';
 
-export default function Navbar() {
+export default function Navbar({ onSignIn, onJoin }) {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState('HOME');
 
@@ -69,17 +69,18 @@ export default function Navbar() {
         padding: '0 32px', gap: 16,
         borderLeft: '1px solid rgba(255,255,255,0.07)',
       }}>
-        <a href="#" style={{
+        <button onClick={onSignIn} style={{
+          background: 'transparent', border: 'none',
           fontFamily: 'monospace', fontSize: 14, letterSpacing: '0.1em',
-          color: 'rgba(255,255,255,0.4)', textDecoration: 'none',
+          color: 'rgba(255,255,255,0.4)', cursor: 'pointer',
           transition: 'color 0.2s',
         }}
           onMouseEnter={e => e.currentTarget.style.color = '#fff'}
           onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
         >
           SIGN_IN
-        </a>
-        <button style={{
+        </button>
+        <button onClick={onJoin} style={{
           fontFamily: 'monospace', fontWeight: 700, fontSize: 14,
           letterSpacing: '0.1em', textTransform: 'uppercase',
           background: G, color: '#fff',

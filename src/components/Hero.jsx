@@ -175,7 +175,7 @@ function HeroBG() {
   );
 }
 
-export default function Hero() {
+export default function Hero({ onJoin }) {
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { setTimeout(() => setLoaded(true), 80); }, []);
 
@@ -233,7 +233,7 @@ export default function Hero() {
 
         {/* Buttons */}
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginBottom: 56, ...f(0.36) }}>
-          <HudButton label="GET_STARTED" href="#" size="lg" variant="primary" />
+          <HudButton label="GET_STARTED" onClick={onJoin} size="lg" variant="primary" />
         </div>
 
       </div>
