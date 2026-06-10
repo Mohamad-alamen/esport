@@ -96,6 +96,93 @@ function AuthBG() {
   return <canvas ref={ref} style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }} />;
 }
 
+/* ─── ERROR UI ─── */
+function ErrorMsg({ msg }) {
+  if (!msg) return null;
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 8,
+      marginTop: 6, padding: '8px 12px',
+      background: 'rgba(255,50,50,0.07)',
+      border: '1px solid rgba(255,80,80,0.35)',
+    }}>
+      <span style={{ color: '#ff5151', fontFamily: 'monospace', fontSize: 12, lineHeight: 1, flexShrink: 0 }}>✕</span>
+      <span style={{ fontFamily: 'monospace', fontSize: 10, color: '#ff8080', letterSpacing: '0.12em' }}>{msg}</span>
+    </div>
+  );
+}
+
+function ErrorBanner({ msg }) {
+  if (!msg) return null;
+  return (
+    <div style={{
+      position: 'relative', display: 'flex', alignItems: 'flex-start', gap: 12,
+      padding: '14px 18px', marginBottom: 22,
+      background: 'rgba(255,50,50,0.08)',
+      border: '1px solid rgba(255,80,80,0.4)',
+    }}>
+      <HudCorners size={8} color="rgba(255,80,80,0.5)" />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0, marginTop: 1 }}>
+        <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+          stroke="#ff5151" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+      <span style={{ fontFamily: 'monospace', fontSize: 11, color: '#ff8080', letterSpacing: '0.1em', lineHeight: 1.55 }}>{msg}</span>
+    </div>
+  );
+}
+
+function Lockout({ cooldown, onRetry }) {
+  const [left, setLeft] = useState(cooldown);
+  useEffect(() => {
+    if (left <= 0) return;
+    const t = setInterval(() => setLeft(l => Math.max(0, l - 1)), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+  return (
+    <div style={{ textAlign: 'center', padding: '12px 0 24px', animation: 'fadeUp 0.4s ease' }}>
+      <div style={{
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        width: 76, height: 76, position: 'relative',
+        border: '2px solid rgba(255,80,80,0.45)',
+        boxShadow: '0 0 40px rgba(255,50,50,0.18), inset 0 0 24px rgba(255,50,50,0.07)',
+        marginBottom: 28,
+      }}>
+        <HudCorners size={12} color="rgba(255,80,80,0.5)" />
+        <svg width="34" height="34" viewBox="0 0 24 24" fill="none">
+          <rect x="5" y="11" width="14" height="10" rx="1.5" stroke="#ff5151" strokeWidth="1.8" />
+          <path d="M8 11V7a4 4 0 018 0v4" stroke="#ff5151" strokeWidth="1.8" strokeLinecap="round" />
+          <circle cx="12" cy="16" r="1.5" fill="#ff5151" />
+        </svg>
+      </div>
+      <div style={{
+        fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: 22,
+        color: '#ff5151', letterSpacing: '0.06em', marginBottom: 14,
+        textShadow: '0 0 30px rgba(255,50,50,0.5)',
+      }}>ACCESS DENIED</div>
+      <p style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 15, color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: 340, margin: '0 auto 28px' }}>
+        Too many failed attempts. Your session has been temporarily locked for security.
+      </p>
+      {left > 0 && (
+        <div style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.18em', marginBottom: 28 }}>
+          TRY AGAIN IN{' '}
+          <span style={{ color: '#ff8080', fontSize: 17, fontWeight: 700, letterSpacing: '0.08em' }}>{fmt(left)}</span>
+        </div>
+      )}
+      <button onClick={onRetry} disabled={left > 0} style={{
+        fontFamily: 'monospace', fontSize: 12, letterSpacing: '0.18em',
+        background: left > 0 ? 'transparent' : 'rgba(255,80,80,0.12)',
+        border: `1px solid ${left > 0 ? 'rgba(255,80,80,0.2)' : 'rgba(255,80,80,0.45)'}`,
+        color: left > 0 ? 'rgba(255,255,255,0.25)' : '#ff8080',
+        padding: '13px 36px', cursor: left > 0 ? 'not-allowed' : 'pointer',
+        transition: 'all 0.2s', position: 'relative',
+      }}>
+        {left > 0 ? `LOCKED — ${fmt(left)}` : '↻ TRY AGAIN'}
+      </button>
+    </div>
+  );
+}
+
 /* ─── PRIMITIVES ─── */
 function HudCorners({ size = 16, color = 'rgba(255,255,255,0.35)', glow = false }) {
   return [
@@ -129,11 +216,11 @@ function GlitchH({ text, color = '#fff', size = 44, extra = {} }) {
 function FieldLabel({ children, hint }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-      <span style={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase' }}>
+      <span style={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.85)', textTransform: 'uppercase' }}>
         <span style={{ color: G }}>///</span> {children}
       </span>
       {hint && (
-        <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em' }}>
+        <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.1em' }}>
           {hint}
         </span>
       )}
@@ -141,7 +228,7 @@ function FieldLabel({ children, hint }) {
   );
 }
 
-function Field({ type = 'text', value, onChange, placeholder, autoComplete, onFocusChange, focused }) {
+function Field({ type = 'text', value, onChange, placeholder, autoComplete, onFocusChange, focused, hasError }) {
   const [showPw, setShowPw] = useState(false);
   const isPw = type === 'password';
   const realType = isPw && showPw ? 'text' : type;
@@ -149,16 +236,16 @@ function Field({ type = 'text', value, onChange, placeholder, autoComplete, onFo
   return (
     <div style={{
       position: 'relative',
-      background: focused ? 'rgba(0,166,62,0.04)' : 'rgba(0,0,0,0.5)',
-      border: `1px solid ${focused ? G : (filled ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.1)')}`,
-      boxShadow: focused ? `0 0 22px ${GG}, inset 0 0 22px rgba(0,166,62,0.05)` : 'none',
+      background: hasError ? 'rgba(255,50,50,0.06)' : (focused ? 'rgba(0,166,62,0.1)' : '#111'),
+      border: `1px solid ${hasError ? 'rgba(255,80,80,0.55)' : (focused ? G : (filled ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.25)'))}`,
+      boxShadow: hasError ? '0 0 14px rgba(255,50,50,0.15)' : (focused ? `0 0 22px ${GG}, inset 0 0 22px rgba(0,166,62,0.06)` : 'none'),
       transition: 'all 0.25s',
       display: 'flex', alignItems: 'center',
     }}>
       <HudCorners size={10} color={focused ? G : 'rgba(255,255,255,0.25)'} />
       <span style={{
         position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
-        fontFamily: 'monospace', fontSize: 10, color: focused ? G : 'rgba(255,255,255,0.3)',
+        fontFamily: 'monospace', fontSize: 10, color: focused ? G : 'rgba(255,255,255,0.5)',
         letterSpacing: '0.2em', transition: 'color 0.2s',
       }}>{'>'}</span>
       <input
@@ -187,12 +274,13 @@ function Field({ type = 'text', value, onChange, placeholder, autoComplete, onFo
   );
 }
 
-function FieldRow({ label, hint, ...rest }) {
+function FieldRow({ label, hint, error, ...rest }) {
   const [focused, setFocused] = useState(false);
   return (
     <div style={{ marginBottom: 22 }}>
       <FieldLabel hint={hint}>{label}</FieldLabel>
-      <Field {...rest} focused={focused} onFocusChange={setFocused} />
+      <Field {...rest} focused={focused} onFocusChange={setFocused} hasError={!!error} />
+      {error && <ErrorMsg msg={error} />}
     </div>
   );
 }
@@ -320,17 +408,41 @@ function ScreenHeader({ slug, line1, line2, sub }) {
 }
 
 /* ─── SIGN IN ─── */
+const MAX_SIGNIN_ATTEMPTS = 5;
+const SIGNIN_LOCKOUT_SECS = 120;
+
 function SignIn({ go }) {
   const [identifier, setIdentifier] = useState('');
   const [pw, setPw] = useState('');
   const [remember, setRemember] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [attempts, setAttempts] = useState(0);
+  const [locked, setLocked] = useState(false);
 
   const submit = e => {
     e && e.preventDefault();
+    setError('');
     setLoading(true);
-    setTimeout(() => setLoading(false), 1200);
+    setTimeout(() => {
+      setLoading(false);
+      if (pw === 'demo1234') { go('__success__'); return; }
+      const next = attempts + 1;
+      setAttempts(next);
+      if (next >= MAX_SIGNIN_ATTEMPTS) {
+        setLocked(true);
+      } else {
+        setError(`INCORRECT_PASSWORD — ${MAX_SIGNIN_ATTEMPTS - next} attempt${MAX_SIGNIN_ATTEMPTS - next === 1 ? '' : 's'} remaining before lockout.`);
+      }
+    }, 1000);
   };
+
+  if (locked) return (
+    <>
+      <ScreenHeader slug=".auth.login_terminal" line1="WELCOME" line2="BACK, PLAYER_" sub="" />
+      <Lockout cooldown={SIGNIN_LOCKOUT_SECS} onRetry={() => { setLocked(false); setAttempts(0); setError(''); setPw(''); }} />
+    </>
+  );
 
   return (
     <form onSubmit={submit}>
@@ -342,12 +454,16 @@ function SignIn({ go }) {
       />
 
       <FieldRow label="Nickname or Phone" type="text" autoComplete="username"
-        value={identifier} onChange={e => setIdentifier(e.target.value)} placeholder="ShadowStrike  /  +964 7XX XXX XXXX" />
+        value={identifier} onChange={e => { setIdentifier(e.target.value); setError(''); }}
+        placeholder="ShadowStrike  /  +964 7XX XXX XXXX" />
 
       <FieldRow label="Password" type="password" autoComplete="current-password"
         hint={<a onClick={e => { e.preventDefault(); go('forgot'); }}
           style={{ color: G, textDecoration: 'none', cursor: 'pointer' }}>FORGOT?</a>}
-        value={pw} onChange={e => setPw(e.target.value)} placeholder="••••••••••••" />
+        value={pw} onChange={e => { setPw(e.target.value); setError(''); }}
+        placeholder="••••••••••••" />
+
+      <ErrorBanner msg={error} />
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 26, cursor: 'pointer' }}
         onClick={() => setRemember(r => !r)}>
@@ -464,9 +580,9 @@ function Forgot({ go }) {
       {step === 0 && (
         <div>
           <FieldLabel hint="AUTO-DETECTED">Phone Number</FieldLabel>
-          <div style={{ display: 'flex', position: 'relative', background: phoneFocus ? 'rgba(0,166,62,0.04)' : 'rgba(0,0,0,0.5)', border: `1px solid ${phoneFocus ? G : 'rgba(255,255,255,0.1)'}`, boxShadow: phoneFocus ? `0 0 22px ${GG}` : 'none', transition: 'all 0.2s', marginBottom: 4 }}>
-            <HudCorners size={10} color={phoneFocus ? G : 'rgba(255,255,255,0.25)'} />
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 16px', borderRight: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
+          <div style={{ display: 'flex', position: 'relative', background: phoneFocus ? 'rgba(0,166,62,0.1)' : '#111', border: `1px solid ${phoneFocus ? G : 'rgba(255,255,255,0.25)'}`, boxShadow: phoneFocus ? `0 0 22px ${GG}` : 'none', transition: 'all 0.2s', marginBottom: 4 }}>
+            <HudCorners size={10} color={phoneFocus ? G : 'rgba(255,255,255,0.3)'} />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 16px', borderRight: '1px solid rgba(255,255,255,0.2)', flexShrink: 0 }}>
               <span style={{ fontFamily: 'monospace', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '0.08em' }}>IQ</span>
               <span style={{ fontFamily: 'monospace', fontSize: 13, color: G, letterSpacing: '0.06em' }}>+964</span>
             </div>
@@ -491,9 +607,9 @@ function Forgot({ go }) {
               return (
                 <input key={i} ref={el => otpRefs.current[i] = el} value={d} inputMode="numeric" maxLength={1}
                   onChange={e => onDigit(i, e.target.value)} onKeyDown={e => onKey(i, e)}
-                  style={{ width: 52, height: 64, textAlign: 'center', background: filled ? 'rgba(0,166,62,0.08)' : 'rgba(0,0,0,0.5)', border: `1px solid ${filled ? G : 'rgba(255,255,255,0.12)'}`, boxShadow: filled ? `0 0 16px ${GG}` : 'none', color: '#fff', fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: 24, outline: 'none', transition: 'all 0.2s' }}
+                  style={{ width: 52, height: 64, textAlign: 'center', background: filled ? 'rgba(0,166,62,0.12)' : '#111', border: `1px solid ${filled ? G : 'rgba(255,255,255,0.28)'}`, boxShadow: filled ? `0 0 16px ${GG}` : 'none', color: '#fff', fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: 24, outline: 'none', transition: 'all 0.2s' }}
                   onFocus={e => { e.target.style.borderColor = G; e.target.style.boxShadow = `0 0 22px ${GG}`; }}
-                  onBlur={e => { if (!e.target.value) { e.target.style.borderColor = 'rgba(255,255,255,0.12)'; e.target.style.boxShadow = 'none'; } }} />
+                  onBlur={e => { if (!e.target.value) { e.target.style.borderColor = 'rgba(255,255,255,0.28)'; e.target.style.boxShadow = 'none'; } }} />
               );
             })}
           </div>
@@ -592,10 +708,10 @@ function NavRow({ children }) {
 function MiniLabel({ children, hint }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-      <span style={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.55)', textTransform: 'uppercase' }}>
+      <span style={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.85)', textTransform: 'uppercase' }}>
         <span style={{ color: G }}>///</span> {children}
       </span>
-      {hint && <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.12em' }}>{hint}</span>}
+      {hint && <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.12em' }}>{hint}</span>}
     </div>
   );
 }
@@ -607,10 +723,10 @@ function Select({ value, onChange, options, placeholder }) {
       <select value={value} onChange={onChange} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}
         style={{
           appearance: 'none', WebkitAppearance: 'none', width: '100%',
-          background: focus ? 'rgba(0,166,62,0.04)' : 'rgba(0,0,0,0.5)',
-          border: `1px solid ${focus ? G : (value ? 'rgba(255,255,255,0.18)' : 'rgba(255,255,255,0.1)')}`,
+          background: focus ? 'rgba(0,166,62,0.1)' : '#111',
+          border: `1px solid ${focus ? G : (value ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.25)')}`,
           boxShadow: focus ? `0 0 18px ${GG}` : 'none',
-          color: value ? '#fff' : 'rgba(255,255,255,0.35)',
+          color: value ? '#fff' : 'rgba(255,255,255,0.55)',
           fontFamily: 'Rajdhani, sans-serif', fontSize: 15, fontWeight: 500,
           padding: '15px 36px 15px 16px', outline: 'none', cursor: 'pointer',
           transition: 'all 0.2s',
@@ -648,20 +764,35 @@ function RegProgressDots({ step }) {
   );
 }
 
+const TAKEN_NICKNAMES = ['shadowstrike', 'xghost', 'viper99', 'neon'];
+
 function StepInfo({ data, set, next }) {
   const days = Array.from({ length: 31 }, (_, i) => ({ v: String(i + 1), l: String(i + 1).padStart(2, '0') }));
   const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'].map((m, i) => ({ v: String(i + 1), l: m }));
   const years = Array.from({ length: 44 }, (_, i) => ({ v: String(2013 - i), l: String(2013 - i) }));
+  const [nicknameError, setNicknameError] = useState('');
+  const [loading, setLoading] = useState(false);
   const valid = data.fullName.trim() && data.nickname.trim() && data.dobD && data.dobM && data.dobY && data.gender;
+
+  const tryNext = () => {
+    const taken = TAKEN_NICKNAMES.includes(data.nickname.trim().toLowerCase());
+    if (taken) {
+      setNicknameError(`NICKNAME_TAKEN — "${data.nickname}" is already in use. Choose a different one.`);
+      return;
+    }
+    setLoading(true);
+    setTimeout(() => { setLoading(false); next(); }, 800);
+  };
 
   return (
     <div>
       <StepHead n={1} slug=".register.player_info" line1="WHO ARE" line2="YOU, PLAYER?_"
         sub="Set up your identity. Your nickname is what the community sees — your legal details stay private." />
-      <FieldRow label="Full Name" hint="ADMIN-ONLY" placeholder="e.g. Ahmed Al-Rashid"
+      <FieldRow label="Full Name" placeholder="e.g. Ahmed Al-Rashid"
         value={data.fullName} onChange={e => set({ fullName: e.target.value })} />
-      <FieldRow label="Nickname" hint="PUBLIC · UNIQUE" placeholder="e.g. ShadowStrike"
-        value={data.nickname} onChange={e => set({ nickname: e.target.value })} />
+      <FieldRow label="Nickname" placeholder="e.g. ShadowStrike"
+        value={data.nickname} onChange={e => { set({ nickname: e.target.value }); setNicknameError(''); }}
+        error={nicknameError} />
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'rgba(0,166,62,0.05)', border: '1px solid rgba(0,166,62,0.2)', padding: '12px 16px', marginTop: -8, marginBottom: 24 }}>
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
           <rect x="5" y="11" width="14" height="9" rx="1.5" stroke={G} strokeWidth="1.8" />
@@ -669,7 +800,7 @@ function StepInfo({ data, set, next }) {
         </svg>
         <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 13.5, color: 'rgba(255,255,255,0.7)', lineHeight: 1.45 }}>Your real name is private and only visible to admins.</span>
       </div>
-      <MiniLabel hint="DD / MM / YYYY">Date of Birth</MiniLabel>
+      <MiniLabel>Date of Birth</MiniLabel>
       <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
         <Select value={data.dobD} onChange={e => set({ dobD: e.target.value })} options={days} placeholder="DAY" />
         <Select value={data.dobM} onChange={e => set({ dobM: e.target.value })} options={months} placeholder="MONTH" />
@@ -688,7 +819,7 @@ function StepInfo({ data, set, next }) {
           );
         })}
       </div>
-      <NavRow><WizBtn label="Continue" disabled={!valid} onClick={next} /></NavRow>
+      <NavRow><WizBtn label="Continue" disabled={!valid} loading={loading} loadingLabel="CHECKING..." onClick={tryNext} /></NavRow>
     </div>
   );
 }
@@ -723,13 +854,22 @@ function StepAvatar({ data, set, next, back }) {
   );
 }
 
+const REGISTERED_PHONES = ['7001234567', '7701234567'];
+
 function StepPhone({ data, set, next, back }) {
   const [loading, setLoading] = useState(false);
   const [focus, setFocus] = useState(false);
+  const [phoneError, setPhoneError] = useState('');
   const valid = data.phone.replace(/\D/g, '').length >= 9;
 
   const send = () => {
     if (!valid) return;
+    setPhoneError('');
+    const normalized = data.phone.replace(/\D/g, '');
+    if (REGISTERED_PHONES.includes(normalized)) {
+      setPhoneError('PHONE_ALREADY_REGISTERED — An account with this number already exists. Try signing in instead.');
+      return;
+    }
     setLoading(true);
     setTimeout(() => { setLoading(false); next(); }, 1100);
   };
@@ -738,27 +878,30 @@ function StepPhone({ data, set, next, back }) {
     <div>
       <StepHead n={3} slug=".register.phone_link" line1="LINK YOUR" line2="NUMBER_"
         sub="We'll send a one-time verification code to confirm it's really you. Standard rates may apply." />
-      <MiniLabel hint="AUTO-DETECTED">Phone Number</MiniLabel>
-      <div style={{ display: 'flex', position: 'relative', background: focus ? 'rgba(0,166,62,0.04)' : 'rgba(0,0,0,0.5)', border: `1px solid ${focus ? G : 'rgba(255,255,255,0.1)'}`, boxShadow: focus ? `0 0 22px ${GG}` : 'none', transition: 'all 0.2s' }}>
-        <HudCorners size={10} color={focus ? G : 'rgba(255,255,255,0.25)'} />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 16px', borderRight: '1px solid rgba(255,255,255,0.1)', flexShrink: 0 }}>
+      <MiniLabel>Phone Number</MiniLabel>
+      <div style={{ display: 'flex', position: 'relative', background: phoneError ? 'rgba(255,50,50,0.06)' : (focus ? 'rgba(0,166,62,0.1)' : '#111'), border: `1px solid ${phoneError ? 'rgba(255,80,80,0.55)' : (focus ? G : 'rgba(255,255,255,0.25)')}`, boxShadow: phoneError ? '0 0 14px rgba(255,50,50,0.15)' : (focus ? `0 0 22px ${GG}` : 'none'), transition: 'all 0.2s' }}>
+        <HudCorners size={10} color={phoneError ? 'rgba(255,80,80,0.5)' : (focus ? G : 'rgba(255,255,255,0.3)')} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 16px', borderRight: `1px solid ${phoneError ? 'rgba(255,80,80,0.3)' : 'rgba(255,255,255,0.2)'}`, flexShrink: 0 }}>
           <span style={{ fontFamily: 'monospace', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '0.08em' }}>IQ</span>
-          <span style={{ fontFamily: 'monospace', fontSize: 13, color: G, letterSpacing: '0.06em' }}>+964</span>
+          <span style={{ fontFamily: 'monospace', fontSize: 13, color: phoneError ? '#ff8080' : G, letterSpacing: '0.06em' }}>+964</span>
         </div>
         <input type="tel" value={data.phone} placeholder="7XX XXX XXXX" autoComplete="tel"
           onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}
-          onChange={e => set({ phone: e.target.value.replace(/[^\d ]/g, '') })}
+          onChange={e => { set({ phone: e.target.value.replace(/[^\d ]/g, '') }); setPhoneError(''); }}
           style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', padding: '16px 18px', fontFamily: 'Rajdhani, sans-serif', fontSize: 16, fontWeight: 500, color: '#fff', letterSpacing: '0.06em' }} />
       </div>
-      <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 16 }}>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
-          <path d="M12 2a10 10 0 00-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1012 2z" stroke={G} strokeWidth="1.6" />
-          <path d="M8.5 8.5c0 4 3 7 6.5 7" stroke={G} strokeWidth="1.6" strokeLinecap="round" />
-        </svg>
-        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 13.5, color: 'rgba(255,255,255,0.6)', lineHeight: 1.4 }}>
-          A 6-digit code will be sent via <span style={{ color: G, fontWeight: 700 }}>WhatsApp</span>.
-        </span>
-      </div>
+      {phoneError && <ErrorMsg msg={phoneError} />}
+      {!phoneError && (
+        <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginTop: 16 }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}>
+            <path d="M12 2a10 10 0 00-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1012 2z" stroke={G} strokeWidth="1.6" />
+            <path d="M8.5 8.5c0 4 3 7 6.5 7" stroke={G} strokeWidth="1.6" strokeLinecap="round" />
+          </svg>
+          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 13.5, color: 'rgba(255,255,255,0.6)', lineHeight: 1.4 }}>
+            A 6-digit code will be sent via <span style={{ color: G, fontWeight: 700 }}>WhatsApp</span>.
+          </span>
+        </div>
+      )}
       <NavRow>
         <GhostBtn label="Back" onClick={back} />
         <WizBtn label="Send Code" disabled={!valid} loading={loading} loadingLabel="SENDING..." onClick={send} />
@@ -767,28 +910,32 @@ function StepPhone({ data, set, next, back }) {
   );
 }
 
+const MAX_OTP_ATTEMPTS = 3;
+const OTP_LOCKOUT_SECS = 300;
+const CORRECT_OTP = '123456';
+
 function StepOTP({ data, set, next, back }) {
   const [digits, setDigits] = useState(['', '', '', '', '', '']);
-  const [expiry, setExpiry] = useState(300);
   const [resendIn, setResendIn] = useState(60);
   const [loading, setLoading] = useState(false);
+  const [otpError, setOtpError] = useState('');
+  const [attempts, setAttempts] = useState(0);
+  const [locked, setLocked] = useState(false);
+  const [shakeKey, setShakeKey] = useState(0);
   const refs = useRef([]);
 
   useEffect(() => {
-    const t = setInterval(() => {
-      setExpiry(e => (e > 0 ? e - 1 : 0));
-      setResendIn(r => (r > 0 ? r - 1 : 0));
-    }, 1000);
+    const t = setInterval(() => setResendIn(r => (r > 0 ? r - 1 : 0)), 1000);
     return () => clearInterval(t);
   }, []);
 
-  const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
   const code = digits.join('');
   const valid = code.length === 6;
 
   const onDigit = (i, v) => {
     const c = v.replace(/\D/g, '').slice(-1);
     const nd = [...digits]; nd[i] = c; setDigits(nd);
+    setOtpError('');
     if (c && i < 5) refs.current[i + 1] && refs.current[i + 1].focus();
   };
   const onKey = (i, e) => {
@@ -797,30 +944,49 @@ function StepOTP({ data, set, next, back }) {
   const verify = () => {
     if (!valid) return;
     setLoading(true);
-    setTimeout(() => { setLoading(false); next(); }, 1000);
+    setTimeout(() => {
+      setLoading(false);
+      if (code === CORRECT_OTP) { next(); return; }
+      const next_attempts = attempts + 1;
+      setAttempts(next_attempts);
+      setDigits(['', '', '', '', '', '']);
+      refs.current[0] && refs.current[0].focus();
+      setShakeKey(k => k + 1);
+      if (next_attempts >= MAX_OTP_ATTEMPTS) {
+        setLocked(true);
+      } else {
+        setOtpError(`INVALID_CODE — ${MAX_OTP_ATTEMPTS - next_attempts} attempt${MAX_OTP_ATTEMPTS - next_attempts === 1 ? '' : 's'} remaining.`);
+      }
+    }, 900);
   };
+
+  if (locked) return (
+    <>
+      <StepHead n={4} slug=".register.otp_verify" line1="ENTER THE" line2="6-DIGIT CODE_" sub="" />
+      <Lockout cooldown={OTP_LOCKOUT_SECS} onRetry={() => { setLocked(false); setAttempts(0); setOtpError(''); setDigits(['', '', '', '', '', '']); }} />
+    </>
+  );
 
   return (
     <div>
       <StepHead n={4} slug=".register.otp_verify" line1="ENTER THE" line2="6-DIGIT CODE_"
         sub={`Sent via WhatsApp to IQ +964 ${data.phone || '7XX XXX XXXX'}. The code expires in 5 minutes.`} />
-      <div style={{ display: 'flex', gap: 10, justifyContent: 'space-between' }}>
+      <div key={shakeKey} style={{ display: 'flex', gap: 10, justifyContent: 'space-between', animation: shakeKey > 0 ? 'shake 0.5s ease' : 'none' }}>
         {digits.map((d, i) => {
           const filled = d !== '';
+          const errStyle = otpError ? { background: 'rgba(255,50,50,0.1)', border: '1px solid rgba(255,80,80,0.55)', boxShadow: '0 0 12px rgba(255,50,50,0.2)', color: '#fff' } : {};
           return (
             <input key={i} ref={el => refs.current[i] = el} value={d} inputMode="numeric" maxLength={1}
               onChange={e => onDigit(i, e.target.value)} onKeyDown={e => onKey(i, e)}
-              style={{ width: 52, height: 64, textAlign: 'center', background: filled ? 'rgba(0,166,62,0.08)' : 'rgba(0,0,0,0.5)', border: `1px solid ${filled ? G : 'rgba(255,255,255,0.12)'}`, boxShadow: filled ? `0 0 16px ${GG}` : 'none', color: '#fff', fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: 24, outline: 'none', transition: 'all 0.2s' }}
-              onFocus={e => { e.target.style.borderColor = G; e.target.style.boxShadow = `0 0 22px ${GG}`; }}
-              onBlur={e => { if (!e.target.value) { e.target.style.borderColor = 'rgba(255,255,255,0.12)'; e.target.style.boxShadow = 'none'; } }} />
+              style={{ width: 52, height: 64, textAlign: 'center', background: filled ? 'rgba(0,166,62,0.12)' : '#111', border: `1px solid ${filled ? G : 'rgba(255,255,255,0.28)'}`, boxShadow: filled ? `0 0 16px ${GG}` : 'none', color: '#fff', fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: 24, outline: 'none', transition: 'all 0.2s', ...errStyle }}
+              onFocus={e => { if (!otpError) { e.target.style.borderColor = G; e.target.style.boxShadow = `0 0 22px ${GG}`; } }}
+              onBlur={e => { if (!e.target.value && !otpError) { e.target.style.borderColor = 'rgba(255,255,255,0.28)'; e.target.style.boxShadow = 'none'; } }} />
           );
         })}
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 18 }}>
-        <span style={{ fontFamily: 'monospace', fontSize: 11, color: expiry > 0 ? 'rgba(255,255,255,0.5)' : '#ff5151', letterSpacing: '0.12em' }}>
-          {expiry > 0 ? `EXPIRES_IN ${fmt(expiry)}` : 'CODE_EXPIRED'}
-        </span>
-        <button type="button" onClick={() => resendIn === 0 && setResendIn(60)} disabled={resendIn > 0}
+      {otpError && <ErrorMsg msg={otpError} />}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 18 }}>
+        <button type="button" onClick={() => { if (resendIn === 0) { setResendIn(60); setAttempts(0); setOtpError(''); } }} disabled={resendIn > 0}
           style={{ background: 'transparent', border: 'none', cursor: resendIn > 0 ? 'not-allowed' : 'pointer', fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.12em', color: resendIn > 0 ? 'rgba(255,255,255,0.3)' : G }}>
           {resendIn > 0 ? `RESEND IN ${resendIn}s` : '↻ RESEND_CODE'}
         </button>
@@ -1051,7 +1217,7 @@ export default function AuthPage({ initialView = 'signin', onHome }) {
   const [view, setView] = useState(initialView);
   const [regStep, setRegStep] = useState(0);
 
-  const goView = v => { if (v === 'create') setRegStep(0); setView(v); };
+  const goView = v => { if (v === '__success__') { onHome(); return; } if (v === 'create') setRegStep(0); setView(v); };
 
   return (
     <div style={{ minHeight: '100vh', background: '#050505' }}>
@@ -1059,7 +1225,7 @@ export default function AuthPage({ initialView = 'signin', onHome }) {
       <div style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'grid', gridTemplateColumns: '1.05fr 1fr' }}>
         <SidePanel view={view} />
 
-        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh', background: 'rgba(5,5,5,0.92)' }}>
+        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#0a0a0a' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px 56px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <button onClick={onHome} style={{
               background: 'transparent', border: 'none', cursor: 'pointer',
