@@ -111,6 +111,10 @@ body * { cursor: none !important; }
 .glitch-text::before { color: #00ff88; animation: glitch1 5s infinite 1.2s; }
 .glitch-text::after  { color: #00A63E; animation: glitch2 5s infinite 1.8s; }
 
+/* Arabic glyphs (hamza, madda, descenders) need more vertical room than
+   CALVIN's tight Latin leading — bump line-height for titles in RTL only. */
+html[dir="rtl"] .glitch-text { line-height: 1.2 !important; }
+
 @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 @keyframes shake { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)} 45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)} }

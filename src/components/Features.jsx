@@ -124,7 +124,7 @@ export default function Features() {
             </div>
             <div className="glitch-text" data-text={t.features.title[0]} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', marginBottom: 4 }}>{t.features.title[0]}</div>
             <div className="glitch-text" data-text={t.features.title[1]}  style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', marginBottom: 4, textShadow: `0 0 40px ${GG}` }}>{t.features.title[1]}</div>
-            <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: 'rgba(255,255,255,0.6)', lineHeight: 0.92, letterSpacing: '-0.02em' }}>{t.features.title[2]}</div>
+            <div className="glitch-text" data-text={t.features.title[2]} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: 'rgba(255,255,255,0.6)', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}>{t.features.title[2]}</div>
           </div>
           <div style={{ ...fadeStyle(visible, 0.15, 'right'), paddingBottom: 8 }}>
             <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 20, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 24 }}>
