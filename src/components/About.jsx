@@ -11,7 +11,7 @@ export default function About() {
 
           {/* Left — text */}
           <div style={fadeStyle(visible, 0, 'left')}>
-            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: G, textShadow: `0 0 8px ${GG}`, marginBottom: 32 }}>
+            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, fontWeight: 600, textTransform: 'uppercase', color: G, textShadow: `0 0 8px ${GG}`, marginBottom: 32 }}>
               {LABELS.about}
             </div>
             <h2 style={{
@@ -32,7 +32,7 @@ export default function About() {
 
             <a href="#" style={{
               fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, fontWeight: 700,
-              letterSpacing: '0.1em', textTransform: 'uppercase',
+              textTransform: 'uppercase',
               color: 'rgba(255,255,255,0.5)', textDecoration: 'none',
               transition: 'color 0.2s, text-shadow 0.2s',
             }}

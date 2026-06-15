@@ -65,12 +65,12 @@ function TournamentCard({ item, index, visible, enrollLabel }) {
 
         {/* Tag + game badge */}
         <div style={{ position: 'absolute', top: 14, left: 16, display: 'flex', gap: 8 }}>
-          <span style={{ fontFamily: 'monospace', fontSize: 9, letterSpacing: '0.14em', color: hov ? G : '#fff', border: `1px solid ${hov ? G : 'rgba(255,255,255,0.6)'}`, padding: '3px 10px', background: 'rgba(0,0,0,0.7)', transition: 'color 0.3s, border-color 0.3s' }}>
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: hov ? G : '#fff', border: `1px solid ${hov ? G : 'rgba(255,255,255,0.6)'}`, padding: '3px 10px', background: 'rgba(0,0,0,0.7)', transition: 'color 0.3s, border-color 0.3s' }}>
             {item.tag}
           </span>
         </div>
         <div style={{ position: 'absolute', top: 14, right: 16 }}>
-          <span style={{ fontFamily: 'monospace', fontSize: 9, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.6)', background: 'rgba(0,0,0,0.7)', padding: '3px 10px' }}>
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: 'rgba(255,255,255,0.6)', background: 'rgba(0,0,0,0.7)', padding: '3px 10px' }}>
             {item.game}
           </span>
         </div>
@@ -92,8 +92,7 @@ function TournamentCard({ item, index, visible, enrollLabel }) {
           color: hov ? '#fff' : 'rgba(255,255,255,0.9)',
           lineHeight: 1.3, marginBottom: 10,
           transition: 'color 0.25s',
-          textTransform: 'uppercase', letterSpacing: '0.03em',
-        }}>
+          textTransform: 'uppercase', }}>
           {item.name}
         </h3>
 
@@ -104,11 +103,11 @@ function TournamentCard({ item, index, visible, enrollLabel }) {
 
         {/* Organizer + duration */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 18 }}>
-          <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.06em' }}>
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.55)', }}>
             {item.organizer}
           </span>
           <span style={{ width: 3, height: 3, borderRadius: '50%', background: 'rgba(255,255,255,0.25)' }} />
-          <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.06em' }}>
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.55)', }}>
             {item.duration}
           </span>
         </div>
@@ -145,7 +144,7 @@ export default function Tournaments() {
         {/* Header */}
         <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 20 : 0, justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', marginBottom: isMobile ? 36 : 56, ...fadeStyle(visible, 0) }}>
           <div>
-            <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>
+            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, color: G, textTransform: 'uppercase', marginBottom: 16 }}>
               {t.tournaments.kicker}
             </div>
             <div style={{ display: 'flex', gap: 14, alignItems: 'baseline', flexWrap: 'wrap' }}>

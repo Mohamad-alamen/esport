@@ -216,7 +216,7 @@ export default function Hero({ onJoin }) {
         {/* Live badge */}
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 18px', border: '1px solid rgba(0,166,62,0.35)', marginBottom: 44, ...f(0) }}>
           <span style={{ width: 6, height: 6, borderRadius: '50%', background: G, boxShadow: `0 0 8px ${G}`, animation: 'glowPulse 2s infinite' }} />
-          <span style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.18em' }}>{t.hero.badge}</span>
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: G, }}>{t.hero.badge}</span>
         </div>
 
         {/* Headings */}
@@ -253,26 +253,70 @@ export default function Hero({ onJoin }) {
 
       {/* Scroll hint */}
       <div style={{ position: 'absolute', bottom: 44, left: '50%', transform: 'translateX(-50%)', zIndex: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-        <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.2)', letterSpacing: '0.2em' }}>{t.hero.scroll}</span>
+        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: 'rgba(255,255,255,0.2)', }}>{t.hero.scroll}</span>
         <div style={{ width: 1, height: 28, background: `linear-gradient(to bottom, ${G}, transparent)`, animation: 'floatUp 2s ease-in-out infinite' }} />
       </div>
 
       {/* Ticker */}
-      <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0,
-        height: 34, overflow: 'hidden', display: 'flex', alignItems: 'center',
-        background: 'rgba(0,166,62,0.07)', borderTop: `1px solid rgba(0,166,62,0.2)`, zIndex: 5,
-      }}>
-        <div style={{ display: 'flex', animation: 'ticker 30s linear infinite', whiteSpace: 'nowrap', willChange: 'transform' }}>
-          {[1, 2].map(k => (
-            <span key={k} style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.2em' }}>
-              {t.hero.ticker.map(item => (
-                <span key={item}>&nbsp;&nbsp;&nbsp;◆&nbsp;{item}</span>
-              ))}
-            </span>
-          ))}
-        </div>
-      </div>
+      <Ticker items={t.hero.ticker} color={G} />
     </section>
+  );
+}
+
+/**
+ * Seamless infinite marquee that works in both LTR and RTL, at any screen width.
+ * It measures one repetition of the list and the container, then renders enough
+ * (even-numbered) repetitions that HALF the track is always wider than the
+ * viewport — so animating translateX from 0 to -50% never exposes a gap.
+ * Duration scales with width to keep a constant scroll speed in both languages.
+ */
+function Ticker({ items, color }) {
+  const wrapRef = useRef(null);
+  const probeRef = useRef(null);
+  const [reps, setReps] = useState(2);
+  const [dur, setDur] = useState(30);
+
+  useEffect(() => {
+    const recalc = () => {
+      const wrap = wrapRef.current;
+      const probe = probeRef.current;
+      if (!wrap || !probe) return;
+      const groupW = probe.scrollWidth;       // width of one repetition of the list
+      const contW = wrap.clientWidth;
+      if (!groupW) return;
+      let n = Math.ceil((contW * 2) / groupW); // half the track (n/2 groups) must exceed the viewport
+      if (n < 2) n = 2;
+      if (n % 2) n += 1;                       // keep even so -50% lands on a group boundary
+      setReps(n);
+      setDur(((n * groupW) / 2) / 70);         // ~70px/s, time to travel half the track
+    };
+    recalc();
+    window.addEventListener('resize', recalc);
+    return () => window.removeEventListener('resize', recalc);
+  }, [items]);
+
+  const itemStyle = { fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color, };
+  const renderList = (rep) =>
+    items.map(item => (
+      <span key={`${rep}-${item}`} style={itemStyle}>&nbsp;&nbsp;&nbsp;◆&nbsp;{item}</span>
+    ));
+
+  return (
+    <div ref={wrapRef} style={{
+      position: 'absolute', bottom: 0, left: 0, right: 0,
+      height: 34, overflow: 'hidden', display: 'flex', alignItems: 'center',
+      background: 'rgba(0,166,62,0.07)', borderTop: `1px solid rgba(0,166,62,0.2)`, zIndex: 5,
+      direction: 'ltr',
+    }}>
+      {/* Hidden probe = one repetition, used only to measure its width */}
+      <div ref={probeRef} aria-hidden style={{ position: 'absolute', visibility: 'hidden', whiteSpace: 'nowrap', display: 'flex' }}>
+        {renderList('probe')}
+      </div>
+      <div style={{ display: 'flex', flexShrink: 0, width: 'max-content', whiteSpace: 'nowrap', willChange: 'transform', animation: `ticker ${dur}s linear infinite` }}>
+        {Array.from({ length: reps }).map((_, r) => (
+          <div key={r} style={{ display: 'flex', flexShrink: 0 }}>{renderList(r)}</div>
+        ))}
+      </div>
+    </div>
   );
 }

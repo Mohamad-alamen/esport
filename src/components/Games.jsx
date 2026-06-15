@@ -67,8 +67,7 @@ function GameCard({ game, index, visible }) {
         {/* Tag badge */}
         <div style={{ position: 'absolute', top: 12, left: 14 }}>
           <span style={{
-            fontFamily: 'monospace', fontSize: 9, letterSpacing: '0.14em',
-            color: game.color, border: `1px solid ${game.color}`,
+            fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: game.color, border: `1px solid ${game.color}`,
             padding: '3px 10px', background: 'rgba(0,0,0,0.65)',
           }}>
             {game.tag}
@@ -91,7 +90,7 @@ function GameCard({ game, index, visible }) {
         <h3 style={{
           fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 15,
           color: hov ? '#fff' : 'rgba(255,255,255,0.88)',
-          letterSpacing: '0.02em', marginBottom: 14,
+          marginBottom: 14,
           transition: 'color 0.25s',
         }}>
           {game.name}
@@ -109,17 +108,16 @@ function GameCard({ game, index, visible }) {
           <div style={{ display: 'flex', gap: 16 }}>
             <div>
               <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 700, fontSize: 16, color: '#fff', marginBottom: 2 }}>{game.tournaments}</div>
-              <div style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>TOURNAMENTS</div>
+              <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 8, color: 'rgba(255,255,255,0.4)', }}>TOURNAMENTS</div>
             </div>
             <div style={{ width: 1, background: 'rgba(255,255,255,0.07)', alignSelf: 'stretch' }} />
             <div>
               <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 700, fontSize: 16, color: '#fff', marginBottom: 2 }}>{game.teams}</div>
-              <div style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>TEAMS</div>
+              <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 8, color: 'rgba(255,255,255,0.4)', }}>TEAMS</div>
             </div>
           </div>
           <span style={{
-            fontFamily: 'monospace', fontSize: 10, color: game.color, letterSpacing: '0.1em',
-            opacity: hov ? 1 : 0, transform: hov ? 'translateX(0)' : 'translateX(6px)',
+            fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: game.color, opacity: hov ? 1 : 0, transform: hov ? 'translateX(0)' : 'translateX(6px)',
             transition: 'opacity 0.3s, transform 0.3s',
           }}>
             EXPLORE →
@@ -143,7 +141,7 @@ export default function Games() {
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56, ...fadeStyle(visible, 0) }}>
           <div>
-            <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>
+            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, color: G, textTransform: 'uppercase', marginBottom: 16 }}>
               /// .active.titles
             </div>
             <div style={{ display: 'flex', gap: 14, alignItems: 'baseline' }}>

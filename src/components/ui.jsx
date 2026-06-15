@@ -38,12 +38,12 @@ export function SLabel({ text, sub }) {
         color: G, background: 'rgba(0,166,62,0.1)',
         border: '1px solid rgba(0,166,62,0.2)',
         padding: '5px 14px', borderRadius: 9999,
-        letterSpacing: '0.08em', textTransform: 'uppercase',
+        textTransform: 'uppercase',
       }}>
         {text}
       </span>
       {sub && (
-        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.08em', marginLeft: 12 }}>
+        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.45)', marginLeft: 12 }}>
           {sub}
         </span>
       )}
@@ -87,8 +87,8 @@ export function HudButton({ label, href, onClick, size = 'md', variant = 'outlin
         }}
       >
         <span style={{
-          fontFamily: 'monospace', fontWeight: 700, fontSize: fs,
-          letterSpacing: '0.1em', textTransform: 'uppercase',
+          fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontWeight: 700, fontSize: fs,
+          textTransform: 'uppercase',
           color: '#fff', whiteSpace: 'nowrap',
         }}>{label}</span>
         <ChevronIcon color="#fff" />
@@ -124,8 +124,8 @@ export function HudButton({ label, href, onClick, size = 'md', variant = 'outlin
         transition: 'background 0.25s',
       }}>
         <span style={{
-          fontFamily: 'monospace', fontWeight: 700, fontSize: fs,
-          letterSpacing: '0.1em', textTransform: 'uppercase',
+          fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontWeight: 700, fontSize: fs,
+          textTransform: 'uppercase',
           color: textCol, whiteSpace: 'nowrap',
           transition: 'color 0.25s',
         }}>{label}</span>
@@ -142,7 +142,7 @@ export function Btn({ children, outline, style = {}, onClick }) {
   const [hov, setHov] = useState(false);
   const base = {
     fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontWeight: 700, fontSize: 14,
-    letterSpacing: '0.06em', padding: '13px 32px', borderRadius: 8,
+    padding: '13px 32px', borderRadius: 8,
     border: 'none', cursor: 'pointer', transition: 'all 0.2s',
     textTransform: 'uppercase',
   };

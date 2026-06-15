@@ -72,7 +72,7 @@ function TeamCard({ team, index, visible }) {
           <h3 style={{
             fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 14,
             color: hov ? '#fff' : 'rgba(255,255,255,0.88)',
-            letterSpacing: '0.02em', lineHeight: 1.2,
+            lineHeight: 1.2,
             transition: 'color 0.25s',
           }}>
             {team.name}
@@ -95,16 +95,16 @@ function TeamCard({ team, index, visible }) {
           ].map(({ val, label, color, shadow }) => (
             <div key={label}>
               <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 700, fontSize: 18, color, marginBottom: 3, textShadow: shadow ? `0 0 12px ${GG}` : 'none' }}>{val}</div>
-              <div style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>{label}</div>
+              <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 8, color: 'rgba(255,255,255,0.4)', }}>{label}</div>
             </div>
           ))}
         </div>
 
         {/* Region + Points */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 10, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-          <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em' }}>◈ {team.region}</span>
-          <span style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 700, fontSize: 12, color: hov ? G : 'rgba(255,255,255,0.7)', letterSpacing: '0.04em', transition: 'color 0.3s' }}>
-            {team.points.toLocaleString()} <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>{t.teams.pts}</span>
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: 'rgba(255,255,255,0.4)', }}>◈ {team.region}</span>
+          <span style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 700, fontSize: 12, color: hov ? G : 'rgba(255,255,255,0.7)', transition: 'color 0.3s' }}>
+            {team.points.toLocaleString()} <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>{t.teams.pts}</span>
           </span>
         </div>
       </div>
@@ -127,7 +127,7 @@ export default function Teams() {
         {/* Header */}
         <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 20 : 0, justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', marginBottom: isMobile ? 36 : 56, ...fadeStyle(visible, 0) }}>
           <div>
-            <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>
+            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, color: G, textTransform: 'uppercase', marginBottom: 16 }}>
               {t.teams.kicker}
             </div>
             <div style={{ display: 'flex', gap: 14, alignItems: 'baseline', flexWrap: 'wrap' }}>

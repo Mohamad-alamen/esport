@@ -111,8 +111,8 @@ function ErrorMsg({ msg }) {
       background: 'rgba(255,50,50,0.07)',
       border: '1px solid rgba(255,80,80,0.35)',
     }}>
-      <span style={{ color: '#ff5151', fontFamily: 'monospace', fontSize: 12, lineHeight: 1, flexShrink: 0 }}>✕</span>
-      <span style={{ fontFamily: 'monospace', fontSize: 10, color: '#ff8080', letterSpacing: '0.12em' }}>{msg}</span>
+      <span style={{ color: '#ff5151', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 12, lineHeight: 1, flexShrink: 0 }}>✕</span>
+      <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: '#ff8080', }}>{msg}</span>
     </div>
   );
 }
@@ -131,7 +131,7 @@ function ErrorBanner({ msg }) {
         <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
           stroke="#ff5151" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
-      <span style={{ fontFamily: 'monospace', fontSize: 11, color: '#ff8080', letterSpacing: '0.1em', lineHeight: 1.55 }}>{msg}</span>
+      <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: '#ff8080', lineHeight: 1.55 }}>{msg}</span>
     </div>
   );
 }
@@ -164,21 +164,20 @@ function Lockout({ cooldown, onRetry }) {
       </div>
       <div style={{
         fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 22,
-        color: '#ff5151', letterSpacing: '0.06em', marginBottom: 14,
+        color: '#ff5151', marginBottom: 14,
         textShadow: '0 0 30px rgba(255,50,50,0.5)',
       }}>{a.lockout.title}</div>
       <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 15, color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: 340, margin: '0 auto 28px' }}>
         {a.lockout.body}
       </p>
       {left > 0 && (
-        <div style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.18em', marginBottom: 28 }}>
+        <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: 'rgba(255,255,255,0.35)', marginBottom: 28 }}>
           {a.lockout.tryAgainIn}{' '}
-          <span style={{ color: '#ff8080', fontSize: 17, fontWeight: 700, letterSpacing: '0.08em' }}>{fmt(left)}</span>
+          <span style={{ color: '#ff8080', fontSize: 17, fontWeight: 700, }}>{fmt(left)}</span>
         </div>
       )}
       <button onClick={onRetry} disabled={left > 0} style={{
-        fontFamily: 'monospace', fontSize: 12, letterSpacing: '0.18em',
-        background: left > 0 ? 'transparent' : 'rgba(255,80,80,0.12)',
+        fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 12, background: left > 0 ? 'transparent' : 'rgba(255,80,80,0.12)',
         border: `1px solid ${left > 0 ? 'rgba(255,80,80,0.2)' : 'rgba(255,80,80,0.45)'}`,
         color: left > 0 ? 'rgba(255,255,255,0.25)' : '#ff8080',
         padding: '13px 36px', cursor: left > 0 ? 'not-allowed' : 'pointer',
@@ -223,11 +222,11 @@ function GlitchH({ text, color = '#fff', size = 44, extra = {} }) {
 function FieldLabel({ children, hint }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-      <span style={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.85)', textTransform: 'uppercase' }}>
+      <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.85)', textTransform: 'uppercase' }}>
         <span style={{ color: G }}>///</span> {children}
       </span>
       {hint && (
-        <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.1em' }}>
+        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.55)', }}>
           {hint}
         </span>
       )}
@@ -253,8 +252,8 @@ function Field({ type = 'text', value, onChange, placeholder, autoComplete, onFo
       <HudCorners size={10} color={focused ? G : 'rgba(255,255,255,0.25)'} />
       <span style={{
         position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
-        fontFamily: 'monospace', fontSize: 10, color: focused ? G : 'rgba(255,255,255,0.5)',
-        letterSpacing: '0.2em', transition: 'color 0.2s',
+        fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: focused ? G : 'rgba(255,255,255,0.5)',
+        transition: 'color 0.2s',
       }}>{'>'}</span>
       <input
         type={realType} value={value} onChange={onChange} placeholder={placeholder} autoComplete={autoComplete}
@@ -264,14 +263,14 @@ function Field({ type = 'text', value, onChange, placeholder, autoComplete, onFo
           flex: 1, background: 'transparent', border: 'none', outline: 'none',
           padding: '16px 18px 16px 36px',
           fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, fontWeight: 500,
-          color: '#fff', letterSpacing: '0.02em', width: '100%',
+          color: '#fff', width: '100%',
         }}
       />
       {isPw && (
         <button type="button" onClick={() => setShowPw(s => !s)} style={{
           background: 'transparent', border: 'none',
-          fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.5)',
-          letterSpacing: '0.15em', padding: '0 18px', cursor: 'pointer', transition: 'color 0.2s',
+          fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.5)',
+          padding: '0 18px', cursor: 'pointer', transition: 'color 0.2s',
         }}
           onMouseEnter={e => e.currentTarget.style.color = G}
           onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}>
@@ -304,8 +303,8 @@ function PrimaryBtn({ label, onClick, disabled, loading }) {
         clipPath: clip, width: '100%',
         background: disabled ? 'rgba(0,166,62,0.3)' : (hov ? '#00c44a' : G),
         color: '#fff', border: 'none',
-        padding: '17px 24px', fontFamily: 'monospace', fontWeight: 700, fontSize: 13,
-        letterSpacing: '0.18em', textTransform: 'uppercase',
+        padding: '17px 24px', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontWeight: 700, fontSize: 13,
+        textTransform: 'uppercase',
         cursor: disabled || loading ? 'not-allowed' : 'pointer',
         boxShadow: hov && !disabled ? `0 0 36px ${GG}` : `0 0 18px rgba(0,166,62,0.25)`,
         transition: 'all 0.2s',
@@ -336,8 +335,8 @@ function GoogleBtn({ onClick }) {
         background: hov ? 'rgba(255,255,255,0.04)' : 'transparent',
         border: `1px solid ${hov ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.15)'}`,
         padding: '15px 24px',
-        fontFamily: 'monospace', fontWeight: 600, fontSize: 12,
-        letterSpacing: '0.15em', color: hov ? '#fff' : 'rgba(255,255,255,0.85)',
+        fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontWeight: 600, fontSize: 12,
+        color: hov ? '#fff' : 'rgba(255,255,255,0.85)',
         textTransform: 'uppercase', cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14,
         transition: 'all 0.2s', position: 'relative',
@@ -358,7 +357,7 @@ function Divider({ label = 'OR' }) {
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: 16, margin: '26px 0' }}>
       <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.12))' }} />
-      <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.3em' }}>{label}</span>
+      <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.4)', }}>{label}</span>
       <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg, rgba(255,255,255,0.12), transparent)' }} />
     </div>
   );
@@ -399,8 +398,8 @@ function StrengthBar({ pw }) {
         ))}
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.15em' }}>{t.auth.pwStrengthLabel}</span>
-        <span style={{ fontFamily: 'monospace', fontSize: 9, color, letterSpacing: '0.15em', fontWeight: 700 }}>{label}</span>
+        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: 'rgba(255,255,255,0.4)', }}>{t.auth.pwStrengthLabel}</span>
+        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color, fontWeight: 700 }}>{label}</span>
       </div>
     </div>
   );
@@ -409,7 +408,7 @@ function StrengthBar({ pw }) {
 function ScreenHeader({ slug, line1, line2, sub }) {
   return (
     <div style={{ marginBottom: 36 }}>
-      <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.22em', textTransform: 'uppercase', marginBottom: 14 }}>
+      <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: G, textTransform: 'uppercase', marginBottom: 14 }}>
         /// {slug}
       </div>
       <GlitchH text={line1} extra={{ marginBottom: 4 }} />
@@ -490,7 +489,7 @@ function SignIn({ go }) {
         }}>
           {remember && <span style={{ color: '#fff', fontSize: 11, fontWeight: 900, lineHeight: 1 }}>✓</span>}
         </div>
-        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.65)', letterSpacing: '0.02em' }}>
+        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.65)', }}>
           {a.remember}
         </span>
       </div>
@@ -501,7 +500,7 @@ function SignIn({ go }) {
         {a.newTo}{' '}
         <a onClick={e => { e.preventDefault(); go('create'); }} style={{
           color: G, textDecoration: 'none', cursor: 'pointer', fontWeight: 700,
-          letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: 13,
+          textTransform: 'uppercase', fontSize: 13,
         }}>{a.createLink}</a>
       </div>
     </form>
@@ -561,7 +560,7 @@ function Forgot({ go }) {
   if (step === 3) {
     return (
       <div>
-        <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.22em', marginBottom: 14 }}>/// {a.successSlug}</div>
+        <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: G, marginBottom: 14 }}>/// {a.successSlug}</div>
         <GlitchH text={a.successLine1} extra={{ marginBottom: 4 }} />
         <GlitchH text={a.successLine2} color={G} extra={{ textShadow: `0 0 30px ${GG}`, marginBottom: 28 }} />
         <div style={{ position: 'relative', border: `1px solid ${G}`, background: 'rgba(0,166,62,0.05)', padding: '24px 28px', marginBottom: 28 }}>
@@ -571,7 +570,7 @@ function Forgot({ go }) {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke={G} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </div>
             <div>
-              <div style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.2em', marginBottom: 6 }}>{a.resetComplete}</div>
+              <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: G, marginBottom: 6 }}>{a.resetComplete}</div>
               <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, color: '#fff', lineHeight: 1.5, fontWeight: 600 }}>{a.successMsg}</div>
               <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, marginTop: 8 }}>{a.successSub}</div>
             </div>
@@ -584,7 +583,7 @@ function Forgot({ go }) {
 
   return (
     <form onSubmit={e => e.preventDefault()}>
-      <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.22em', marginBottom: 14 }}>/// {a.slug}</div>
+      <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: G, marginBottom: 14 }}>/// {a.slug}</div>
       <GlitchH text={a.line1} extra={{ marginBottom: 4 }} />
       <GlitchH text={a.line2} color={G} extra={{ textShadow: `0 0 30px ${GG}`, marginBottom: 18 }} />
       <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, maxWidth: 400, marginBottom: 28 }}>
@@ -601,13 +600,13 @@ function Forgot({ go }) {
           <div style={{ display: 'flex', position: 'relative', background: phoneFocus ? 'rgba(0,166,62,0.1)' : '#111', border: `1px solid ${phoneFocus ? G : 'rgba(255,255,255,0.25)'}`, boxShadow: phoneFocus ? `0 0 22px ${GG}` : 'none', transition: 'all 0.2s', marginBottom: 4 }}>
             <HudCorners size={10} color={phoneFocus ? G : 'rgba(255,255,255,0.3)'} />
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 16px', borderRight: '1px solid rgba(255,255,255,0.2)', flexShrink: 0 }}>
-              <span style={{ fontFamily: 'monospace', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '0.08em' }}>IQ</span>
-              <span style={{ fontFamily: 'monospace', fontSize: 13, color: G, letterSpacing: '0.06em' }}>+964</span>
+              <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 12, fontWeight: 700, color: '#fff', }}>IQ</span>
+              <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, color: G, }}>+964</span>
             </div>
             <input type="tel" value={phone} placeholder={a.phonePlaceholder} autoComplete="tel"
               onFocus={() => setPhoneFocus(true)} onBlur={() => setPhoneFocus(false)}
               onChange={e => setPhone(e.target.value.replace(/[^\d ]/g, ''))}
-              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', padding: '16px 18px', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, fontWeight: 500, color: '#fff', letterSpacing: '0.06em' }} />
+              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', padding: '16px 18px', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, fontWeight: 500, color: '#fff', }} />
           </div>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center', margin: '14px 0 28px' }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}><path d="M12 2a10 10 0 00-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1012 2z" stroke={G} strokeWidth="1.6" /></svg>
@@ -632,9 +631,9 @@ function Forgot({ go }) {
             })}
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '18px 0 28px' }}>
-            <button type="button" onClick={() => setStep(0)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.5)' }}>{a.changeNumber}</button>
+            <button type="button" onClick={() => setStep(0)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: 'rgba(255,255,255,0.5)' }}>{a.changeNumber}</button>
             <button type="button" onClick={() => resendIn === 0 && setResendIn(60)} disabled={resendIn > 0}
-              style={{ background: 'transparent', border: 'none', cursor: resendIn > 0 ? 'not-allowed' : 'pointer', fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.12em', color: resendIn > 0 ? 'rgba(255,255,255,0.3)' : G }}>
+              style={{ background: 'transparent', border: 'none', cursor: resendIn > 0 ? 'not-allowed' : 'pointer', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: resendIn > 0 ? 'rgba(255,255,255,0.3)' : G }}>
               {resendIn > 0 ? fill(a.resendInTemplate, { secs: resendIn }) : a.resend}
             </button>
           </div>
@@ -652,7 +651,7 @@ function Forgot({ go }) {
             value={pw2} onChange={e => setPw2(e.target.value)} />
           <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', marginTop: -6, marginBottom: 26 }}>
             {[[t.auth.reqs.len, hasLen], [t.auth.reqs.letter, hasLetter], [t.auth.reqs.num, hasNum]].map(([txt, ok]) => (
-              <span key={txt} style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.08em', color: ok ? G : 'rgba(255,255,255,0.4)' }}>
+              <span key={txt} style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: ok ? G : 'rgba(255,255,255,0.4)' }}>
                 <span style={{ width: 12, height: 12, border: `1px solid ${ok ? G : 'rgba(255,255,255,0.25)'}`, background: ok ? G : 'transparent', color: '#fff', fontSize: 8, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{ok ? '✓' : ''}</span>
                 {txt}
               </span>
@@ -664,7 +663,7 @@ function Forgot({ go }) {
 
       <div style={{ textAlign: 'center', marginTop: 26, fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.5)' }}>
         {a.remembered}{' '}
-        <a onClick={e => { e.preventDefault(); go('signin'); }} style={{ color: G, textDecoration: 'none', cursor: 'pointer', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: 13 }}>{a.backLink}</a>
+        <a onClick={e => { e.preventDefault(); go('signin'); }} style={{ color: G, textDecoration: 'none', cursor: 'pointer', fontWeight: 700, textTransform: 'uppercase', fontSize: 13 }}>{a.backLink}</a>
       </div>
     </form>
   );
@@ -688,8 +687,8 @@ function WizBtn({ label, onClick, disabled, loading, loadingLabel = 'PROCESSING.
         clipPath: clip, flex: 1,
         background: disabled ? 'rgba(0,166,62,0.25)' : (hov ? '#00c44a' : G),
         color: '#fff', border: 'none', padding: '16px 24px',
-        fontFamily: 'monospace', fontWeight: 700, fontSize: 13,
-        letterSpacing: '0.16em', textTransform: 'uppercase',
+        fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontWeight: 700, fontSize: 13,
+        textTransform: 'uppercase',
         cursor: disabled || loading ? 'not-allowed' : 'pointer',
         boxShadow: hov && !disabled ? `0 0 32px ${GG}` : `0 0 16px rgba(0,166,62,0.22)`,
         transition: 'all 0.2s',
@@ -714,8 +713,8 @@ function GhostBtn({ label, onClick, arrow = '←' }) {
         background: 'transparent',
         border: `1px solid ${hov ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.14)'}`,
         color: hov ? '#fff' : 'rgba(255,255,255,0.6)',
-        padding: '16px 22px', fontFamily: 'monospace', fontWeight: 700, fontSize: 12,
-        letterSpacing: '0.16em', textTransform: 'uppercase', cursor: 'pointer',
+        padding: '16px 22px', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontWeight: 700, fontSize: 12,
+        textTransform: 'uppercase', cursor: 'pointer',
         transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap',
       }}>
       {dispArrow && <span style={{ fontSize: 15 }}>{dispArrow}</span>}<span>{label}</span>
@@ -730,10 +729,10 @@ function NavRow({ children }) {
 function MiniLabel({ children, hint }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
-      <span style={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.85)', textTransform: 'uppercase' }}>
+      <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.85)', textTransform: 'uppercase' }}>
         <span style={{ color: G }}>///</span> {children}
       </span>
-      {hint && <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.12em' }}>{hint}</span>}
+      {hint && <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: 'rgba(255,255,255,0.55)', }}>{hint}</span>}
     </div>
   );
 }
@@ -756,7 +755,7 @@ function Select({ value, onChange, options, placeholder }) {
         <option value="" disabled>{placeholder}</option>
         {options.map(o => <option key={o.v} value={o.v} style={{ background: '#0a0a0a' }}>{o.l}</option>)}
       </select>
-      <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: focus ? G : 'rgba(255,255,255,0.4)', fontFamily: 'monospace', fontSize: 11 }}>▼</span>
+      <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: focus ? G : 'rgba(255,255,255,0.4)', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11 }}>▼</span>
     </div>
   );
 }
@@ -766,9 +765,9 @@ function StepHead({ n, slug, line1, line2, sub }) {
   return (
     <div style={{ marginBottom: 30 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-        <span style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.22em' }}>/// {slug}</span>
+        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: G, }}>/// {slug}</span>
         <span style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.08)' }} />
-        <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.18em' }}>{t.auth.reg.stepLabel} {String(n).padStart(2, '0')} / 06</span>
+        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: 'rgba(255,255,255,0.4)', }}>{t.auth.reg.stepLabel} {String(n).padStart(2, '0')} / 06</span>
       </div>
       <GlitchH text={line1} size={38} extra={{ marginBottom: 2 }} />
       <GlitchH text={line2} color={G} size={38} extra={{ textShadow: `0 0 30px ${GG}`, marginBottom: 14 }} />
@@ -837,7 +836,7 @@ function StepInfo({ data, set, next }) {
           const on = data.gender === g.v;
           return (
             <button key={g.v} type="button" onClick={() => set({ gender: g.v })}
-              style={{ flex: 1, position: 'relative', background: on ? 'rgba(0,166,62,0.1)' : 'rgba(0,0,0,0.5)', border: `1px solid ${on ? G : 'rgba(255,255,255,0.1)'}`, boxShadow: on ? `0 0 18px ${GG}` : 'none', color: on ? '#fff' : 'rgba(255,255,255,0.6)', padding: '15px', fontFamily: 'monospace', fontSize: 12, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s' }}>
+              style={{ flex: 1, position: 'relative', background: on ? 'rgba(0,166,62,0.1)' : 'rgba(0,0,0,0.5)', border: `1px solid ${on ? G : 'rgba(255,255,255,0.1)'}`, boxShadow: on ? `0 0 18px ${GG}` : 'none', color: on ? '#fff' : 'rgba(255,255,255,0.6)', padding: '15px', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 12, fontWeight: 700, textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s' }}>
               {on && <HudCorners size={9} color={G} />}
               {g.l}
             </button>
@@ -869,7 +868,7 @@ function StepAvatar({ data, set, next, back }) {
           );
         })}
       </div>
-      <div style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.12em', marginTop: 16, textAlign: 'center' }}>
+      <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.35)', marginTop: 16, textAlign: 'center' }}>
         {data.avatar != null ? fill(a.selectedTemplate, { n: String(data.avatar + 1).padStart(2, '0') }) : a.noSelection}
       </div>
       <NavRow>
@@ -911,13 +910,13 @@ function StepPhone({ data, set, next, back }) {
       <div style={{ display: 'flex', position: 'relative', background: phoneError ? 'rgba(255,50,50,0.06)' : (focus ? 'rgba(0,166,62,0.1)' : '#111'), border: `1px solid ${phoneError ? 'rgba(255,80,80,0.55)' : (focus ? G : 'rgba(255,255,255,0.25)')}`, boxShadow: phoneError ? '0 0 14px rgba(255,50,50,0.15)' : (focus ? `0 0 22px ${GG}` : 'none'), transition: 'all 0.2s' }}>
         <HudCorners size={10} color={phoneError ? 'rgba(255,80,80,0.5)' : (focus ? G : 'rgba(255,255,255,0.3)')} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 16px', borderRight: `1px solid ${phoneError ? 'rgba(255,80,80,0.3)' : 'rgba(255,255,255,0.2)'}`, flexShrink: 0 }}>
-          <span style={{ fontFamily: 'monospace', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '0.08em' }}>IQ</span>
-          <span style={{ fontFamily: 'monospace', fontSize: 13, color: phoneError ? '#ff8080' : G, letterSpacing: '0.06em' }}>+964</span>
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 12, fontWeight: 700, color: '#fff', }}>IQ</span>
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, color: phoneError ? '#ff8080' : G, }}>+964</span>
         </div>
         <input type="tel" value={data.phone} placeholder="7XX XXX XXXX" autoComplete="tel"
           onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}
           onChange={e => { set({ phone: e.target.value.replace(/[^\d ]/g, '') }); setPhoneError(''); }}
-          style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', padding: '16px 18px', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, fontWeight: 500, color: '#fff', letterSpacing: '0.06em' }} />
+          style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', padding: '16px 18px', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, fontWeight: 500, color: '#fff', }} />
       </div>
       {phoneError && <ErrorMsg msg={phoneError} />}
       {!phoneError && (
@@ -1020,11 +1019,11 @@ function StepOTP({ data, set, next, back }) {
       {otpError && <ErrorMsg msg={otpError} />}
       <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 18 }}>
         <button type="button" onClick={() => { if (resendIn === 0) { setResendIn(60); setAttempts(0); setOtpError(''); } }} disabled={resendIn > 0}
-          style={{ background: 'transparent', border: 'none', cursor: resendIn > 0 ? 'not-allowed' : 'pointer', fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.12em', color: resendIn > 0 ? 'rgba(255,255,255,0.3)' : G }}>
+          style={{ background: 'transparent', border: 'none', cursor: resendIn > 0 ? 'not-allowed' : 'pointer', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: resendIn > 0 ? 'rgba(255,255,255,0.3)' : G }}>
           {resendIn > 0 ? fill(a.resendInTemplate, { secs: resendIn }) : a.resend}
         </button>
       </div>
-      <div style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em', marginTop: 14 }}>{a.autoRead}</div>
+      <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 14 }}>{a.autoRead}</div>
       <NavRow>
         <GhostBtn label={a.back} onClick={back} />
         <WizBtn label={a.verify} disabled={!valid} loading={loading} loadingLabel={a.verifying} onClick={verify} />
@@ -1042,7 +1041,7 @@ function StepPassword({ data, set, next, back }) {
   const valid = hasLen && hasLetter && hasNum && pw === pw2 && pw2.length > 0;
 
   const Req = ({ ok, children }) => (
-    <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.08em', color: ok ? G : 'rgba(255,255,255,0.4)' }}>
+    <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: ok ? G : 'rgba(255,255,255,0.4)' }}>
       <span style={{ width: 12, height: 12, border: `1px solid ${ok ? G : 'rgba(255,255,255,0.25)'}`, background: ok ? G : 'transparent', color: '#fff', fontSize: 8, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{ok ? '✓' : ''}</span>
       {children}
     </span>
@@ -1082,18 +1081,18 @@ function DocModal({ kind, onClose }) {
         <HudCorners size={16} color={G} glow />
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
           <div>
-            <div style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.2em', marginBottom: 8 }}>/// {doc.legal}</div>
+            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: G, marginBottom: 8 }}>/// {doc.legal}</div>
             <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 22, color: '#fff' }}>{title}</div>
           </div>
-          <button type="button" onClick={onClose} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.6)', width: 32, height: 32, cursor: 'pointer', fontFamily: 'monospace', fontSize: 14 }}>✕</button>
+          <button type="button" onClick={onClose} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.6)', width: 32, height: 32, cursor: 'pointer', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14 }}>✕</button>
         </div>
         {body.map(([h, p]) => (
           <div key={h} style={{ marginBottom: 20 }}>
-            <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.14em', marginBottom: 8 }}>{h}</div>
+            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: G, marginBottom: 8 }}>{h}</div>
             <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 15, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65 }}>{p}</p>
           </div>
         ))}
-        <div style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em', marginTop: 24, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
+        <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 24, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
           {doc.version}
         </div>
       </div>
@@ -1137,7 +1136,7 @@ function RegSuccess({ data, onHome }) {
   const av = data.avatar != null ? AVATARS[data.avatar] : AVATARS[0];
   return (
     <div style={{ textAlign: 'center' }}>
-      <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.22em', marginBottom: 18 }}>/// {a.slug}</div>
+      <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: G, marginBottom: 18 }}>/// {a.slug}</div>
       <div style={{ position: 'relative', width: 96, height: 96, margin: '0 auto 28px', border: `1px solid ${G}`, padding: 8, boxShadow: `0 0 30px ${GG}` }}>
         <HudCorners size={14} color={G} glow />
         <img src={av.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
@@ -1187,7 +1186,7 @@ function RegisterWizard({ go, step, setStep, onHome }) {
       </div>
       <div style={{ textAlign: 'center', marginTop: 24, fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.5)' }}>
         {t.auth.reg.rosterQ}{' '}
-        <a onClick={e => { e.preventDefault(); go('signin'); }} style={{ color: G, textDecoration: 'none', cursor: 'pointer', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: 13 }}>{t.auth.reg.signinLink}</a>
+        <a onClick={e => { e.preventDefault(); go('signin'); }} style={{ color: G, textDecoration: 'none', cursor: 'pointer', fontWeight: 700, textTransform: 'uppercase', fontSize: 13 }}>{t.auth.reg.signinLink}</a>
       </div>
     </div>
   );
@@ -1207,17 +1206,17 @@ function SidePanel({ view }) {
       <div style={{ position: 'absolute', inset: 0, pointerEvents: 'none', background: 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.18) 2px, rgba(0,0,0,0.18) 4px)' }} />
 
       {[{ top: 24, left: 24 }, { top: 24, right: 24 }, { bottom: 24, left: 24 }, { bottom: 24, right: 24 }].map((p, i) => (
-        <div key={i} style={{ position: 'absolute', ...p, color: 'rgba(255,255,255,0.4)', fontFamily: 'monospace', fontSize: 18, lineHeight: 1, zIndex: 4 }}>+</div>
+        <div key={i} style={{ position: 'absolute', ...p, color: 'rgba(255,255,255,0.4)', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 18, lineHeight: 1, zIndex: 4 }}>+</div>
       ))}
 
       <div style={{ position: 'relative', zIndex: 2, padding: 56, display: 'flex', flexDirection: 'column', height: '100%' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 'auto' }}>
           <div style={{ width: 40, height: 40, background: G, clipPath: 'polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%)', boxShadow: `0 0 16px ${GG}` }} />
           <div>
-            <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 18, color: '#fff', letterSpacing: '0.04em', lineHeight: 1 }}>
+            <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 18, color: '#fff', lineHeight: 1 }}>
               EARTHLINK<span style={{ color: G }}>.ESPORTS</span>
             </div>
-            <div style={{ fontFamily: 'monospace', fontSize: 9, color: G, letterSpacing: '0.25em', marginTop: 4 }}>{t.auth.brandTag}</div>
+            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: G, marginTop: 4 }}>{t.auth.brandTag}</div>
           </div>
         </div>
 
@@ -1254,8 +1253,8 @@ export default function AuthPage({ initialView = 'signin', onHome }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: isMobile ? '18px 20px' : '24px 56px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <button onClick={onHome} style={{
               background: 'transparent', border: 'none', cursor: 'pointer',
-              fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.5)',
-              letterSpacing: '0.18em', textDecoration: 'none', transition: 'color 0.2s',
+              fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.5)',
+              textDecoration: 'none', transition: 'color 0.2s',
             }}
               onMouseEnter={e => e.currentTarget.style.color = G}
               onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}>
@@ -1271,7 +1270,7 @@ export default function AuthPage({ initialView = 'signin', onHome }) {
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', padding: isMobile ? '16px 20px' : '20px 56px', borderTop: '1px solid rgba(255,255,255,0.05)', fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', padding: isMobile ? '16px 20px' : '20px 56px', borderTop: '1px solid rgba(255,255,255,0.05)', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.35)', }}>
             <span>{t.auth.footerCopyright}</span>
             <span>{t.auth.footerLinks}</span>
           </div>

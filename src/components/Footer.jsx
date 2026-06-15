@@ -47,8 +47,7 @@ export default function Footer() {
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {SOCIALS.map(s => (
                 <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" style={{
-                  fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.1em',
-                  color: 'rgba(255,255,255,0.62)',
+                  fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.62)',
                   border: '1px solid rgba(255,255,255,0.09)',
                   padding: '5px 13px', textDecoration: 'none',
                   transition: 'color 0.2s, border-color 0.2s, box-shadow 0.2s',
@@ -65,7 +64,7 @@ export default function Footer() {
           {/* Nav link columns */}
           {t.footer.cols.map((col, ci) => (
             <div key={col.t} style={fadeStyle(visible, 0.24 + ci * 0.08)}>
-              <div style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 10 }}>
+              <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: G, textTransform: 'uppercase', marginBottom: 10 }}>
                 /// .{col.t.toLowerCase()}
               </div>
               <div style={{ height: 1, background: `linear-gradient(90deg, ${G}55, transparent)`, marginBottom: 22 }} />
@@ -74,8 +73,7 @@ export default function Footer() {
                   <a href="#" style={{
                     fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, fontWeight: 600,
                     color: 'rgba(255,255,255,0.65)',
-                    textDecoration: 'none', letterSpacing: '0.03em',
-                    transition: 'color 0.2s',
+                    textDecoration: 'none', transition: 'color 0.2s',
                   }}
                     onMouseEnter={e => e.currentTarget.style.color = '#fff'}
                     onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
@@ -93,17 +91,17 @@ export default function Footer() {
           padding: '20px 0',
           display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12,
         }}>
-          <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.07em' }}>
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.45)', }}>
             {t.footer.copyright}
           </span>
           <div style={{ display: 'flex', gap: 24 }}>
-            <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.07em' }}>
+            <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.45)', }}>
               {t.footer.privacy}
             </span>
-            <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.07em' }}>
+            <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.45)', }}>
               {t.footer.terms}
             </span>
-            <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.07em' }}>
+            <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.45)', }}>
               {t.footer.region}
             </span>
           </div>

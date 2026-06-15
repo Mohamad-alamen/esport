@@ -71,7 +71,7 @@ function CoachCard({ coach, index, visible }) {
         <div style={{
           fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 16,
           color: G,
-          letterSpacing: '0.01em', marginBottom: 6,
+          marginBottom: 6,
           textTransform: 'uppercase',
           textShadow: hov ? `0 0 16px rgba(0,166,62,0.9), 0 0 40px rgba(0,166,62,0.4)` : `0 0 8px rgba(0,166,62,0.3)`,
           transition: 'text-shadow 0.35s ease',
@@ -81,8 +81,7 @@ function CoachCard({ coach, index, visible }) {
         <div style={{
           fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14,
           color: 'rgba(255,255,255,0.5)',
-          letterSpacing: '0.04em',
-        }}>
+          }}>
           {coach.role} / {coach.spec}
         </div>
       </div>
@@ -105,7 +104,7 @@ export default function Coaches() {
         {/* Header */}
         <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 16 : 0, justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', marginBottom: isMobile ? 36 : 56, ...fadeStyle(visible, 0) }}>
           <div>
-            <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>
+            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, color: G, textTransform: 'uppercase', marginBottom: 16 }}>
               {t.coaches.kicker}
             </div>
             <div style={{ display: 'flex', gap: 12, alignItems: 'baseline', flexWrap: 'wrap' }}>

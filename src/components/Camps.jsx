@@ -72,9 +72,8 @@ function CampCard({ camp, index, visible, enrollLabel }) {
           display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
         }}>
           <span style={{
-            fontFamily: 'monospace', fontSize: 10,
+            fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10,
             color: hov ? G : '#fff',
-            letterSpacing: '0.15em',
             border: `1px solid ${hov ? G : 'rgba(255,255,255,0.6)'}`,
             padding: '4px 12px', background: 'rgba(0,0,0,0.55)',
             transition: 'color 0.3s, border-color 0.3s',
@@ -82,9 +81,8 @@ function CampCard({ camp, index, visible, enrollLabel }) {
             {camp.tag}
           </span>
           <span style={{
-            fontFamily: 'monospace', fontSize: 9,
-            color: 'rgba(255,255,255,0.6)', letterSpacing: '0.12em',
-          }}>
+            fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9,
+            color: 'rgba(255,255,255,0.6)', }}>
             {String(index + 1).padStart(2, '0')} / 03
           </span>
         </div>
@@ -108,8 +106,7 @@ function CampCard({ camp, index, visible, enrollLabel }) {
           color: hov ? '#fff' : 'rgba(255,255,255,0.85)',
           lineHeight: 1.15, marginBottom: 0,
           transition: 'color 0.25s',
-          letterSpacing: '0.02em',
-        }}>
+          }}>
           {camp.title}
         </h3>
 
@@ -142,7 +139,7 @@ export default function Camps() {
       <div style={{ padding: isMobile ? '64px 20px 32px' : '100px 80px 60px', opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(40px)', transition: 'opacity 0.9s ease, transform 0.9s ease' }}>
         <div style={{ maxWidth: 1440, margin: '0 auto', display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 20 : 0, justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end' }}>
           <div>
-            <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>
+            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, color: G, textTransform: 'uppercase', marginBottom: 16 }}>
               {t.camps.kicker}
             </div>
             <div className="glitch-text" data-text={t.camps.title1} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', marginBottom: 4 }}>{t.camps.title1}</div>

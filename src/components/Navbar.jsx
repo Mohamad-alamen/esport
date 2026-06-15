@@ -22,8 +22,7 @@ export default function Navbar({ onSignIn, onJoin }) {
       background: 'transparent', cursor: 'pointer',
       border: '1px solid rgba(0,166,62,0.4)',
       padding: '7px 12px',
-      fontFamily: 'monospace', fontWeight: 700, fontSize: 12, letterSpacing: '0.08em',
-      color: G, transition: 'background 0.2s, box-shadow 0.2s, color 0.2s',
+      fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontWeight: 700, fontSize: 12, color: G, transition: 'background 0.2s, box-shadow 0.2s, color 0.2s',
     }}
       onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,166,62,0.12)'; e.currentTarget.style.boxShadow = `0 0 16px ${GG}`; }}
       onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.boxShadow = 'none'; }}
@@ -95,7 +94,7 @@ export default function Navbar({ onSignIn, onJoin }) {
                   style={{
                     display: 'flex', alignItems: 'center', gap: 8,
                     padding: '16px 20px', textDecoration: 'none',
-                    fontFamily: lang === 'ar' ? 'inherit' : 'monospace', fontSize: 15, letterSpacing: lang === 'ar' ? '0' : '0.1em',
+                    fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 15, letterSpacing: lang === 'ar' ? '0' : '0.1em',
                     color: active === i ? G : 'rgba(255,255,255,0.7)',
                     borderBottom: '1px solid rgba(255,255,255,0.05)',
                   }}>
@@ -106,12 +105,12 @@ export default function Navbar({ onSignIn, onJoin }) {
               <div style={{ display: 'flex', gap: 12, padding: '18px 20px' }}>
                 <button onClick={() => { setOpen(false); onSignIn(); }} style={{
                   flex: 1, background: 'transparent', border: '1px solid rgba(255,255,255,0.2)',
-                  fontFamily: lang === 'ar' ? 'inherit' : 'monospace', fontSize: 14, padding: '13px',
+                  fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, padding: '13px',
                   color: 'rgba(255,255,255,0.8)', cursor: 'pointer',
                 }}>{t.nav.signIn}</button>
                 <button onClick={() => { setOpen(false); onJoin(); }} style={{
                   flex: 1, background: G, border: 'none',
-                  fontFamily: lang === 'ar' ? 'inherit' : 'monospace', fontWeight: 700, fontSize: 14, padding: '13px',
+                  fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontWeight: 700, fontSize: 14, padding: '13px',
                   color: '#fff', cursor: 'pointer', boxShadow: `0 0 24px ${GG}`,
                 }}>{t.nav.join}</button>
               </div>
@@ -130,7 +129,7 @@ export default function Navbar({ onSignIn, onJoin }) {
                 style={{
                   display: 'flex', alignItems: 'center',
                   padding: '0 24px',
-                  fontFamily: lang === 'ar' ? 'inherit' : 'monospace', fontSize: 14, letterSpacing: lang === 'ar' ? '0' : '0.1em',
+                  fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, letterSpacing: lang === 'ar' ? '0' : '0.1em',
                   textDecoration: 'none',
                   color: active === i ? G : 'rgba(255,255,255,0.45)',
                   borderInlineEnd: '1px solid rgba(255,255,255,0.05)',
@@ -157,7 +156,7 @@ export default function Navbar({ onSignIn, onJoin }) {
             {langBtn}
             <button onClick={onSignIn} style={{
               background: 'transparent', border: 'none',
-              fontFamily: lang === 'ar' ? 'inherit' : 'monospace', fontSize: 14, letterSpacing: lang === 'ar' ? '0' : '0.1em',
+              fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, letterSpacing: lang === 'ar' ? '0' : '0.1em',
               color: 'rgba(255,255,255,0.4)', cursor: 'pointer',
               transition: 'color 0.2s', whiteSpace: 'nowrap',
             }}
@@ -167,7 +166,7 @@ export default function Navbar({ onSignIn, onJoin }) {
               {t.nav.signIn}
             </button>
             <button onClick={onJoin} style={{
-              fontFamily: lang === 'ar' ? 'inherit' : 'monospace', fontWeight: 700, fontSize: 14,
+              fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontWeight: 700, fontSize: 14,
               letterSpacing: lang === 'ar' ? '0' : '0.1em',
               background: G, color: '#fff',
               padding: '10px 24px', border: 'none', cursor: 'pointer',

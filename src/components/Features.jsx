@@ -119,7 +119,7 @@ export default function Features() {
         {/* Header */}
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 24 : 80, marginBottom: 48, alignItems: 'end' }}>
           <div style={fadeStyle(visible, 0, 'left')}>
-            <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 20 }}>
+            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, color: G, textTransform: 'uppercase', marginBottom: 20 }}>
               {t.features.kicker}
             </div>
             <div className="glitch-text" data-text={t.features.title[0]} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', marginBottom: 4 }}>{t.features.title[0]}</div>
@@ -155,11 +155,11 @@ export default function Features() {
               )}
 
               <div style={{ marginBottom: 14 }}>{FEATURE_ICONS[i]}</div>
-              <h3 style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 700, fontSize: 16, color: activeIdx === i ? G : '#fff', marginBottom: 10, letterSpacing: '0.04em', transition: 'color 0.2s' }}>
+              <h3 style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 700, fontSize: 16, color: activeIdx === i ? G : '#fff', marginBottom: 10, transition: 'color 0.2s' }}>
                 {mod.t.toUpperCase()}
               </h3>
               <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 15, color: 'rgba(255,255,255,0.65)', lineHeight: 1.6 }}>{mod.d}</p>
-              <div style={{ marginTop: 20, fontFamily: 'monospace', fontSize: 11, color: activeIdx === i ? G : 'rgba(0,166,62,0.6)', transition: 'color 0.2s', letterSpacing: '0.08em' }}>
+              <div style={{ marginTop: 20, fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: activeIdx === i ? G : 'rgba(0,166,62,0.6)', transition: 'color 0.2s', }}>
                 → {t.common.accessModule}
               </div>
             </div>

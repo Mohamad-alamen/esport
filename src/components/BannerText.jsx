@@ -17,8 +17,7 @@ export default function BannerText() {
           fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900,
           fontSize: 'clamp(18px, 2.2vw, 32px)',
           color: '#fff', lineHeight: 1.45,
-          maxWidth: 920, letterSpacing: '0.02em',
-        }}>
+          maxWidth: 920, }}>
           WITH SKILLED PLAYERS, SHARP TACTICS, AND STRONG SPIRIT,{' '}
           <span style={{ color: '#00A63E', textShadow: '0 0 30px rgba(0,166,62,0.5)' }}>WE LEAD ESPORTS.</span>
         </p>

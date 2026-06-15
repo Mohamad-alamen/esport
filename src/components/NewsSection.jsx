@@ -59,9 +59,8 @@ function FeatureCard({ item, visible, readMore }) {
         {/* Tag badge — top left */}
         <div style={{ position: 'absolute', top: 24, left: 28 }}>
           <span style={{
-            fontFamily: 'monospace', fontSize: 10,
+            fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10,
             color: hov ? G : '#fff',
-            letterSpacing: '0.15em',
             border: `1px solid ${hov ? G : 'rgba(255,255,255,0.6)'}`,
             padding: '5px 14px', background: 'rgba(0,0,0,0.65)',
             transition: 'color 0.3s, border-color 0.3s',
@@ -72,14 +71,14 @@ function FeatureCard({ item, visible, readMore }) {
 
         {/* Counter — top right */}
         <div style={{ position: 'absolute', top: 24, right: 28 }}>
-          <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.6)', letterSpacing: '0.12em' }}>
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: 'rgba(255,255,255,0.6)', }}>
             01 / {String(NEWS.length).padStart(2, '0')}
           </span>
         </div>
 
         {/* Content overlay at bottom */}
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: '36px 40px' }}>
-          <div style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em', marginBottom: 14 }}>
+          <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: 'rgba(255,255,255,0.3)', marginBottom: 14 }}>
             {item.date}
           </div>
           <h3 style={{
@@ -96,8 +95,7 @@ function FeatureCard({ item, visible, readMore }) {
             {item.desc}
           </p>
           <span style={{
-            fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.1em',
-            opacity: hov ? 1 : 0.5,
+            fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 11, color: G, opacity: hov ? 1 : 0.5,
             transition: 'opacity 0.3s',
           }}>
             {readMore} →
@@ -169,7 +167,7 @@ function NewsCard({ item, index, visible, readMore }) {
 
         {/* Counter badge */}
         <div style={{ position: 'absolute', top: 12, right: 14 }}>
-          <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.1em' }}>
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: 'rgba(255,255,255,0.55)', }}>
             {String(index + 2).padStart(2, '0')} / {String(NEWS.length).padStart(2, '0')}
           </span>
         </div>
@@ -180,16 +178,15 @@ function NewsCard({ item, index, visible, readMore }) {
         {/* Tag + date row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
           <span style={{
-            fontFamily: 'monospace', fontSize: 9,
+            fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9,
             color: hov ? G : '#fff',
-            letterSpacing: '0.14em',
             border: `1px solid ${hov ? G : 'rgba(255,255,255,0.45)'}`,
             padding: '3px 10px', flexShrink: 0,
             transition: 'color 0.3s, border-color 0.3s',
           }}>
             {item.tag}
           </span>
-          <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.08em' }}>
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9, color: 'rgba(255,255,255,0.55)', }}>
             {item.date}
           </span>
         </div>
@@ -224,8 +221,7 @@ function NewsCard({ item, index, visible, readMore }) {
 
         {/* READ_MORE */}
         <span style={{
-          fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.1em',
-          display: 'inline-block',
+          fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: G, display: 'inline-block',
           opacity: hov ? 1 : 0,
           transform: hov ? 'translateX(0)' : 'translateX(-8px)',
           transition: `opacity 0.3s ease ${hov ? '0.05s' : '0s'}, transform 0.3s ease ${hov ? '0.05s' : '0s'}`,
@@ -256,7 +252,7 @@ export default function NewsSection() {
         {/* Header */}
         <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 20 : 0, justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', marginBottom: isMobile ? 32 : 48, ...fadeStyle(visible, 0) }}>
           <div>
-            <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>
+            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, color: G, textTransform: 'uppercase', marginBottom: 16 }}>
               {t.news.kicker}
             </div>
             <div style={{ display: 'flex', gap: 14, alignItems: 'baseline', flexWrap: 'wrap' }}>

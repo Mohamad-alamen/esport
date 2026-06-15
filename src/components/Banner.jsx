@@ -53,7 +53,7 @@ export default function Banner() {
           <div key={i} style={{
             position: 'absolute', ...pos, zIndex: 4,
             color: 'rgba(255,255,255,0.3)',
-            fontFamily: 'monospace', fontSize: 20, lineHeight: 1,
+            fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 20, lineHeight: 1,
             userSelect: 'none',
           }}>+</div>
         ))}
@@ -74,9 +74,8 @@ export default function Banner() {
                 borderTop: isMobile && i >= 2 ? '1px solid rgba(255,255,255,0.08)' : 'none',
               }}>
                 <div style={{
-                  fontFamily: 'monospace', fontSize: 10,
-                  color: 'rgba(255,255,255,0.5)', letterSpacing: '0.18em',
-                  marginBottom: 10,
+                  fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10,
+                  color: 'rgba(255,255,255,0.5)', marginBottom: 10,
                 }}>
                   [ {stat.l} ]
                 </div>
@@ -88,9 +87,8 @@ export default function Banner() {
                   {stat.v}
                 </div>
                 <div style={{
-                  fontFamily: 'monospace', fontSize: 9,
-                  color: 'rgba(255,255,255,0.48)', letterSpacing: '0.1em',
-                  lineHeight: 1.8, textTransform: 'uppercase',
+                  fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 9,
+                  color: 'rgba(255,255,255,0.48)', lineHeight: 1.8, textTransform: 'uppercase',
                   whiteSpace: 'pre-line',
                 }}>
                   {stat.d}
