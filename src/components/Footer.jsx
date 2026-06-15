@@ -4,7 +4,14 @@ import { useResponsive } from '../hooks/useResponsive';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
 import { Scanlines } from './ui';
 
-const SOCIALS = ['Instagram', 'Twitch', 'YouTube', 'Discord', 'X (Twitter)'];
+// Replace the URLs below with Earthlink Esports' real profile links.
+const SOCIALS = [
+  { label: 'Instagram',   url: 'https://instagram.com/' },
+  { label: 'Twitch',      url: 'https://twitch.tv/' },
+  { label: 'YouTube',     url: 'https://youtube.com/' },
+  { label: 'Discord',     url: 'https://discord.gg/' },
+  { label: 'X (Twitter)', url: 'https://x.com/' },
+];
 
 export default function Footer() {
   const { t } = useLang();
@@ -39,7 +46,7 @@ export default function Footer() {
             {/* Social tags */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {SOCIALS.map(s => (
-                <a key={s} href="#" style={{
+                <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer" style={{
                   fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.1em',
                   color: 'rgba(255,255,255,0.62)',
                   border: '1px solid rgba(255,255,255,0.09)',
@@ -49,7 +56,7 @@ export default function Footer() {
                   onMouseEnter={e => { e.currentTarget.style.color = G; e.currentTarget.style.borderColor = G; e.currentTarget.style.boxShadow = `0 0 10px ${GG}`; }}
                   onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.36)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)'; e.currentTarget.style.boxShadow = 'none'; }}
                 >
-                  {s.toUpperCase()}
+                  {s.label.toUpperCase()}
                 </a>
               ))}
             </div>
