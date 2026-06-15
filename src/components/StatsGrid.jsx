@@ -21,7 +21,7 @@ export default function StatsGrid() {
             }}
           >
 
-            <div style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(42px, 4vw, 60px)', color: '#fff', lineHeight: 1, marginBottom: 10, textShadow: `0 0 40px rgba(0,166,62,0.15)` }}>
+            <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 'clamp(42px, 4vw, 60px)', color: '#fff', lineHeight: 1, marginBottom: 10, textShadow: `0 0 40px rgba(0,166,62,0.15)` }}>
               <Counter target={parseInt(s.v)} suffix={s.v.replace(/\d/g, '')} />
             </div>
             <div style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.65)', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 18 }}>

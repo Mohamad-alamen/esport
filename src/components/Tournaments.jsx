@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { G, GG, UPCOMING_TOURNAMENTS } from '../constants';
+import { useLang } from '../LanguageContext';
+import { useResponsive } from '../hooks/useResponsive';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
 import { Scanlines, HudButton } from './ui';
 
-function TournamentCard({ item, index, visible }) {
+function TournamentCard({ item, index, visible, enrollLabel }) {
   const [hov, setHov] = useState(false);
 
   return (
@@ -86,7 +88,7 @@ function TournamentCard({ item, index, visible }) {
 
         {/* Title */}
         <h3 style={{
-          fontFamily: 'Orbitron', fontWeight: 900, fontSize: 16,
+          fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 16,
           color: hov ? '#fff' : 'rgba(255,255,255,0.9)',
           lineHeight: 1.3, marginBottom: 10,
           transition: 'color 0.25s',
@@ -96,7 +98,7 @@ function TournamentCard({ item, index, visible }) {
         </h3>
 
         {/* Description */}
-        <p style={{ fontFamily: 'Rajdhani', fontSize: 14, color: 'rgba(255,255,255,0.62)', lineHeight: 1.6, marginBottom: 16 }}>
+        <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.62)', lineHeight: 1.6, marginBottom: 16 }}>
           {item.desc}
         </p>
 
@@ -114,14 +116,14 @@ function TournamentCard({ item, index, visible }) {
         {/* Price + button */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{
-            fontFamily: 'Orbitron', fontWeight: 900, fontSize: 18,
+            fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 18,
             color: hov ? G : '#fff',
             textShadow: hov ? `0 0 20px ${GG}` : 'none',
             transition: 'color 0.3s, text-shadow 0.3s',
           }}>
             {item.price}
           </div>
-          <HudButton label="ENROLL_NOW" size="sm" />
+          <HudButton label={enrollLabel} size="sm" />
         </div>
       </div>
     </div>
@@ -129,32 +131,35 @@ function TournamentCard({ item, index, visible }) {
 }
 
 export default function Tournaments() {
+  const { t } = useLang();
+  const { isMobile, isCompact } = useResponsive();
+  const titleSize = isMobile ? 'clamp(26px, 7.5vw, 40px)' : 'clamp(36px, 4.5vw, 64px)';
   const [ref, visible] = useReveal();
 
   return (
-    <section ref={ref} style={{ padding: '120px 80px', background: '#080808', position: 'relative', overflow: 'hidden' }}>
+    <section ref={ref} style={{ padding: isMobile ? '64px 20px' : '120px 80px', background: '#080808', position: 'relative', overflow: 'hidden' }}>
       <Scanlines />
       <div style={{ position: 'absolute', top: '30%', right: 0, width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,166,62,0.04) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
       <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative', zIndex: 2 }}>
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56, ...fadeStyle(visible, 0) }}>
+        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 20 : 0, justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', marginBottom: isMobile ? 36 : 56, ...fadeStyle(visible, 0) }}>
           <div>
             <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>
-              /// .upcoming.events
+              {t.tournaments.kicker}
             </div>
-            <div style={{ display: 'flex', gap: 14, alignItems: 'baseline' }}>
-              <div className="glitch-text" data-text="UPCOMING" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}>UPCOMING</div>
-              <div className="glitch-text" data-text="TOURNAMENTS_" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>TOURNAMENTS_</div>
+            <div style={{ display: 'flex', gap: 14, alignItems: 'baseline', flexWrap: 'wrap' }}>
+              <div className="glitch-text" data-text={t.tournaments.title1} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}>{t.tournaments.title1}</div>
+              <div className="glitch-text" data-text={t.tournaments.title2} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>{t.tournaments.title2}</div>
             </div>
           </div>
-          <HudButton label="VIEW_ALL" />
+          <HudButton label={t.common.viewAll} />
         </div>
 
         {/* 3-column grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : (isCompact ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'), gap: 24 }}>
           {UPCOMING_TOURNAMENTS.map((item, i) => (
-            <TournamentCard key={i} item={item} index={i} visible={visible} />
+            <TournamentCard key={i} item={{ ...item, ...t.tournaments.items[i] }} index={i} visible={visible} enrollLabel={t.common.enroll} />
           ))}
         </div>
       </div>

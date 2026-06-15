@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { G, GG, NEWS } from '../constants';
+import { useLang } from '../LanguageContext';
+import { useResponsive } from '../hooks/useResponsive';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
 import { Scanlines, HudButton } from './ui';
 
-function FeatureCard({ item, visible }) {
+function FeatureCard({ item, visible, readMore }) {
   const [hov, setHov] = useState(false);
 
   return (
@@ -81,13 +83,13 @@ function FeatureCard({ item, visible }) {
             {item.date}
           </div>
           <h3 style={{
-            fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(22px, 2.8vw, 36px)',
+            fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 'clamp(22px, 2.8vw, 36px)',
             color: '#fff', lineHeight: 1.15, marginBottom: 14, maxWidth: 680,
           }}>
             {item.title}
           </h3>
           <p style={{
-            fontFamily: 'Rajdhani', fontSize: 16,
+            fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16,
             color: 'rgba(255,255,255,0.7)', lineHeight: 1.65,
             maxWidth: 580, marginBottom: 24,
           }}>
@@ -98,7 +100,7 @@ function FeatureCard({ item, visible }) {
             opacity: hov ? 1 : 0.5,
             transition: 'opacity 0.3s',
           }}>
-            READ_MORE →
+            {readMore} →
           </span>
         </div>
       </div>
@@ -106,7 +108,7 @@ function FeatureCard({ item, visible }) {
   );
 }
 
-function NewsCard({ item, index, visible }) {
+function NewsCard({ item, index, visible, readMore }) {
   const [hov, setHov] = useState(false);
 
   return (
@@ -201,7 +203,7 @@ function NewsCard({ item, index, visible }) {
 
         {/* Title */}
         <h3 style={{
-          fontFamily: 'Orbitron', fontWeight: 700, fontSize: 14,
+          fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 700, fontSize: 14,
           color: hov ? '#fff' : 'rgba(255,255,255,0.82)',
           lineHeight: 1.4, marginBottom: 10,
           transition: 'color 0.25s',
@@ -211,7 +213,7 @@ function NewsCard({ item, index, visible }) {
 
         {/* Description */}
         <p style={{
-          fontFamily: 'Rajdhani', fontSize: 13,
+          fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13,
           color: 'rgba(255,255,255,0.65)', lineHeight: 1.65,
           marginBottom: 18,
           display: '-webkit-box', WebkitLineClamp: 2,
@@ -228,7 +230,7 @@ function NewsCard({ item, index, visible }) {
           transform: hov ? 'translateX(0)' : 'translateX(-8px)',
           transition: `opacity 0.3s ease ${hov ? '0.05s' : '0s'}, transform 0.3s ease ${hov ? '0.05s' : '0s'}`,
         }}>
-          READ_MORE →
+          {readMore} →
         </span>
       </div>
     </div>
@@ -236,11 +238,15 @@ function NewsCard({ item, index, visible }) {
 }
 
 export default function NewsSection() {
+  const { t } = useLang();
+  const { isMobile, isCompact } = useResponsive();
+  const titleSize = isMobile ? 'clamp(26px, 7.5vw, 40px)' : 'clamp(36px, 4.5vw, 64px)';
   const [ref, visible] = useReveal();
-  const [feature, ...rest] = NEWS;
+  const news = NEWS.map((item, i) => ({ ...item, ...t.news.items[i] }));
+  const [feature, ...rest] = news;
 
   return (
-    <section ref={ref} style={{ padding: '120px 80px', background: '#050505', position: 'relative', overflow: 'hidden' }}>
+    <section ref={ref} style={{ padding: isMobile ? '64px 20px' : '120px 80px', background: '#050505', position: 'relative', overflow: 'hidden' }}>
       <Scanlines />
 
       {/* Radial glow */}
@@ -248,26 +254,26 @@ export default function NewsSection() {
 
       <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative', zIndex: 2 }}>
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 48, ...fadeStyle(visible, 0) }}>
+        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 20 : 0, justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', marginBottom: isMobile ? 32 : 48, ...fadeStyle(visible, 0) }}>
           <div>
             <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>
-              /// .news.module_highlight
+              {t.news.kicker}
             </div>
-            <div style={{ display: 'flex', gap: 14, alignItems: 'baseline' }}>
-              <div className="glitch-text" data-text="LATEST" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}>LATEST</div>
-              <div className="glitch-text" data-text="INTEL_" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>INTEL_</div>
+            <div style={{ display: 'flex', gap: 14, alignItems: 'baseline', flexWrap: 'wrap' }}>
+              <div className="glitch-text" data-text={t.news.title1} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}>{t.news.title1}</div>
+              <div className="glitch-text" data-text={t.news.title2} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>{t.news.title2}</div>
             </div>
           </div>
-          <HudButton label="MORE_NEWS" />
+          <HudButton label={t.news.more} />
         </div>
 
         {/* Featured article — full width */}
-        <FeatureCard item={feature} visible={visible} />
+        <FeatureCard item={feature} visible={visible} readMore={t.news.readMore} />
 
         {/* 3-column card grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20, marginTop: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : (isCompact ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'), gap: 20, marginTop: 20 }}>
           {rest.map((item, i) => (
-            <NewsCard key={i} item={item} index={i} visible={visible} />
+            <NewsCard key={i} item={item} index={i} visible={visible} readMore={t.news.readMore} />
           ))}
         </div>
       </div>

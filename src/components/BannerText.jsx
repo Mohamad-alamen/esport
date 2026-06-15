@@ -14,7 +14,7 @@ export default function BannerText() {
         padding: '0 56px', textAlign: 'center',
       }}>
         <p style={{
-          fontFamily: 'Orbitron', fontWeight: 900,
+          fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900,
           fontSize: 'clamp(18px, 2.2vw, 32px)',
           color: '#fff', lineHeight: 1.45,
           maxWidth: 920, letterSpacing: '0.02em',

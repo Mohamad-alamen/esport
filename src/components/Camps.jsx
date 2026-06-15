@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { G, GG, CAMPS } from '../constants';
+import { useLang } from '../LanguageContext';
+import { useResponsive } from '../hooks/useResponsive';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
 import { HudButton } from './ui';
 
-function CampCard({ camp, index, visible }) {
+function CampCard({ camp, index, visible, enrollLabel }) {
   const [hov, setHov] = useState(false);
 
   return (
@@ -102,7 +104,7 @@ function CampCard({ camp, index, visible }) {
 
         {/* Title */}
         <h3 style={{
-          fontFamily: 'Orbitron', fontWeight: 900, fontSize: 20,
+          fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 20,
           color: hov ? '#fff' : 'rgba(255,255,255,0.85)',
           lineHeight: 1.15, marginBottom: 0,
           transition: 'color 0.25s',
@@ -113,7 +115,7 @@ function CampCard({ camp, index, visible }) {
 
         {/* Description — always visible */}
         <p style={{
-          fontFamily: 'Rajdhani', fontSize: 14,
+          fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14,
           color: 'rgba(255,255,255,0.7)', lineHeight: 1.65,
           marginTop: 10, marginBottom: 0,
         }}>
@@ -121,7 +123,7 @@ function CampCard({ camp, index, visible }) {
         </p>
 
         <div style={{ marginTop: 16 }}>
-          <HudButton label="ENROLL_NOW" size="sm" />
+          <HudButton label={enrollLabel} size="sm" />
         </div>
       </div>
     </div>
@@ -129,29 +131,32 @@ function CampCard({ camp, index, visible }) {
 }
 
 export default function Camps() {
+  const { t } = useLang();
+  const { isMobile, isCompact } = useResponsive();
+  const titleSize = isMobile ? 'clamp(24px, 6.8vw, 40px)' : 'clamp(36px, 4.5vw, 64px)';
   const [ref, visible] = useReveal();
 
   return (
     <section ref={ref} style={{ background: '#050505', overflow: 'hidden' }}>
       {/* Header */}
-      <div style={{ padding: '100px 80px 60px', opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(40px)', transition: 'opacity 0.9s ease, transform 0.9s ease' }}>
-        <div style={{ maxWidth: 1440, margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+      <div style={{ padding: isMobile ? '64px 20px 32px' : '100px 80px 60px', opacity: visible ? 1 : 0, transform: visible ? 'none' : 'translateY(40px)', transition: 'opacity 0.9s ease, transform 0.9s ease' }}>
+        <div style={{ maxWidth: 1440, margin: '0 auto', display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 20 : 0, justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end' }}>
           <div>
             <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>
-              /// .holiday.programs
+              {t.camps.kicker}
             </div>
-            <div className="glitch-text" data-text="ACTION-PACKED" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', marginBottom: 4 }}>ACTION-PACKED</div>
-            <div className="glitch-text" data-text="HOLIDAY CAMPS_" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>HOLIDAY CAMPS_</div>
+            <div className="glitch-text" data-text={t.camps.title1} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', marginBottom: 4 }}>{t.camps.title1}</div>
+            <div className="glitch-text" data-text={t.camps.title2} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>{t.camps.title2}</div>
           </div>
-          <HudButton label="VIEW_ALL_CAMPS" />
+          <HudButton label={t.camps.viewAll} />
         </div>
       </div>
 
       {/* Cards grid — padded, landscape 16/9 */}
-      <div style={{ padding: '0 80px 100px', maxWidth: 1440, margin: '0 auto' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 24 }}>
+      <div style={{ padding: isMobile ? '0 20px 64px' : '0 80px 100px', maxWidth: 1440, margin: '0 auto' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : (isCompact ? 'repeat(2,1fr)' : 'repeat(3,1fr)'), gap: 24 }}>
           {CAMPS.map((camp, i) => (
-            <CampCard key={i} camp={camp} index={i} visible={visible} />
+            <CampCard key={i} camp={{ ...camp, ...t.camps.items[i] }} index={i} visible={visible} enrollLabel={t.common.enroll} />
           ))}
         </div>
       </div>

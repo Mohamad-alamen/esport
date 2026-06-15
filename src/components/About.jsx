@@ -11,11 +11,11 @@ export default function About() {
 
           {/* Left — text */}
           <div style={fadeStyle(visible, 0, 'left')}>
-            <div style={{ fontFamily: 'Rajdhani', fontSize: 12, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: G, textShadow: `0 0 8px ${GG}`, marginBottom: 32 }}>
+            <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 12, fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: G, textShadow: `0 0 8px ${GG}`, marginBottom: 32 }}>
               {LABELS.about}
             </div>
             <h2 style={{
-              fontFamily: 'Orbitron', fontWeight: 900,
+              fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900,
               fontSize: 'clamp(28px, 3vw, 44px)',
               color: '#fff', lineHeight: 1.1, marginBottom: 32, letterSpacing: '-0.01em',
             }}>
@@ -26,12 +26,12 @@ export default function About() {
 
             <div style={{ height: 1, background: 'rgba(255,255,255,0.07)', marginBottom: 32 }} />
 
-            <p style={{ fontFamily: 'Rajdhani', fontSize: 17, color: 'rgba(255,255,255,0.58)', lineHeight: 1.75, marginBottom: 32 }}>
+            <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 17, color: 'rgba(255,255,255,0.58)', lineHeight: 1.75, marginBottom: 32 }}>
               Founded in Iraq, Earthlink Esports has grown into the region's premier competitive gaming platform — offering pro coaching, weekly tournaments, and a community where every player can thrive.
             </p>
 
             <a href="#" style={{
-              fontFamily: 'Rajdhani', fontSize: 13, fontWeight: 700,
+              fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, fontWeight: 700,
               letterSpacing: '0.1em', textTransform: 'uppercase',
               color: 'rgba(255,255,255,0.5)', textDecoration: 'none',
               transition: 'color 0.2s, text-shadow 0.2s',

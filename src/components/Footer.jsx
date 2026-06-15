@@ -1,10 +1,14 @@
-import { G, GG, FOOTER_LINKS } from '../constants';
+import { G, GG } from '../constants';
+import { useLang } from '../LanguageContext';
+import { useResponsive } from '../hooks/useResponsive';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
 import { Scanlines } from './ui';
 
 const SOCIALS = ['Instagram', 'Twitch', 'YouTube', 'Discord', 'X (Twitter)'];
 
 export default function Footer() {
+  const { t } = useLang();
+  const { isMobile } = useResponsive();
   const [ref, visible] = useReveal(0.05);
 
   return (
@@ -14,23 +18,23 @@ export default function Footer() {
       {/* Radial glow */}
       <div style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: 900, height: 400, background: 'radial-gradient(ellipse at top, rgba(0,166,62,0.04) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 80px', position: 'relative', zIndex: 2 }}>
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: isMobile ? '0 20px' : '0 80px', position: 'relative', zIndex: 2 }}>
 
         {/* ── Main Columns: Brand + 3 Nav ── */}
         <div style={{
-          display: 'grid', gridTemplateColumns: '1.8fr 1fr 1fr 1fr',
-          gap: 56, padding: '60px 0 52px',
+          display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : '1.8fr 1fr 1fr 1fr',
+          gap: isMobile ? 32 : 56, padding: isMobile ? '40px 0 36px' : '60px 0 52px',
           borderBottom: '1px solid rgba(255,255,255,0.06)',
         }}>
           {/* Brand column */}
-          <div style={fadeStyle(visible, 0.18)}>
+          <div style={{ ...fadeStyle(visible, 0.18), gridColumn: isMobile ? '1 / -1' : 'auto' }}>
             <img
               src="/H_Text_Logo_Green_EE_8k_Trans (1).png"
               alt="Earthlink Esports"
               style={{ height: 48, width: 'auto', display: 'block', marginBottom: 22, filter: `drop-shadow(0 0 8px ${GG})` }}
             />
-            <p style={{ fontFamily: 'Rajdhani', fontSize: 14, color: 'rgba(255,255,255,0.62)', lineHeight: 1.8, maxWidth: 260, marginBottom: 30 }}>
-              The region's premier esports platform — professional training, competitive tournaments, and a thriving gaming community.
+            <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.62)', lineHeight: 1.8, maxWidth: 260, marginBottom: 30 }}>
+              {t.footer.desc}
             </p>
             {/* Social tags */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
@@ -52,7 +56,7 @@ export default function Footer() {
           </div>
 
           {/* Nav link columns */}
-          {FOOTER_LINKS.map((col, ci) => (
+          {t.footer.cols.map((col, ci) => (
             <div key={col.t} style={fadeStyle(visible, 0.24 + ci * 0.08)}>
               <div style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 10 }}>
                 /// .{col.t.toLowerCase()}
@@ -61,7 +65,7 @@ export default function Footer() {
               {col.l.map(link => (
                 <div key={link} style={{ marginBottom: 13 }}>
                   <a href="#" style={{
-                    fontFamily: 'Rajdhani', fontSize: 14, fontWeight: 600,
+                    fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, fontWeight: 600,
                     color: 'rgba(255,255,255,0.65)',
                     textDecoration: 'none', letterSpacing: '0.03em',
                     transition: 'color 0.2s',
@@ -83,17 +87,17 @@ export default function Footer() {
           display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 12,
         }}>
           <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.07em' }}>
-            © 2026 EARTHLINK ESPORTS — ALL RIGHTS RESERVED
+            {t.footer.copyright}
           </span>
           <div style={{ display: 'flex', gap: 24 }}>
             <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.07em' }}>
-              PRIVACY_POLICY
+              {t.footer.privacy}
             </span>
             <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.07em' }}>
-              TERMS_OF_USE
+              {t.footer.terms}
             </span>
             <span style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.07em' }}>
-              IRAQ · MIDDLE EAST · GLOBAL
+              {t.footer.region}
             </span>
           </div>
         </div>

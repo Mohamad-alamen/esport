@@ -89,7 +89,7 @@ function GameCard({ game, index, visible }) {
 
         {/* Game name */}
         <h3 style={{
-          fontFamily: 'Orbitron', fontWeight: 900, fontSize: 15,
+          fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 15,
           color: hov ? '#fff' : 'rgba(255,255,255,0.88)',
           letterSpacing: '0.02em', marginBottom: 14,
           transition: 'color 0.25s',
@@ -108,12 +108,12 @@ function GameCard({ game, index, visible }) {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ display: 'flex', gap: 16 }}>
             <div>
-              <div style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 16, color: '#fff', marginBottom: 2 }}>{game.tournaments}</div>
+              <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 700, fontSize: 16, color: '#fff', marginBottom: 2 }}>{game.tournaments}</div>
               <div style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>TOURNAMENTS</div>
             </div>
             <div style={{ width: 1, background: 'rgba(255,255,255,0.07)', alignSelf: 'stretch' }} />
             <div>
-              <div style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 16, color: '#fff', marginBottom: 2 }}>{game.teams}</div>
+              <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 700, fontSize: 16, color: '#fff', marginBottom: 2 }}>{game.teams}</div>
               <div style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>TEAMS</div>
             </div>
           </div>
@@ -147,14 +147,14 @@ export default function Games() {
               /// .active.titles
             </div>
             <div style={{ display: 'flex', gap: 14, alignItems: 'baseline' }}>
-              <div className="glitch-text" data-text="DISCOVER" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}>DISCOVER</div>
-              <div className="glitch-text" data-text="GAMES_" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>GAMES_</div>
+              <div className="glitch-text" data-text="DISCOVER" style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}>DISCOVER</div>
+              <div className="glitch-text" data-text="GAMES_" style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>GAMES_</div>
             </div>
-            <p style={{ fontFamily: 'Rajdhani', fontSize: 16, color: 'rgba(255,255,255,0.6)', marginTop: 14 }}>
+            <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, color: 'rgba(255,255,255,0.6)', marginTop: 14 }}>
               Discover games and their active tournaments
             </p>
           </div>
-          <HudButton label="VIEW_ALL" />
+          <HudButton label="VIEW ALL" />
         </div>
 
         {/* 3×2 grid */}

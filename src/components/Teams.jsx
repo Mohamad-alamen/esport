@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { G, GG, TEAMS } from '../constants';
+import { useLang } from '../LanguageContext';
+import { useResponsive } from '../hooks/useResponsive';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
 import { Scanlines, HudButton } from './ui';
 
 function TeamCard({ team, index, visible }) {
+  const { t } = useLang();
   const [hov, setHov] = useState(false);
 
   return (
@@ -67,7 +70,7 @@ function TeamCard({ team, index, visible }) {
         {/* Name */}
         <div style={{ marginBottom: 12 }}>
           <h3 style={{
-            fontFamily: 'Orbitron', fontWeight: 900, fontSize: 14,
+            fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 14,
             color: hov ? '#fff' : 'rgba(255,255,255,0.88)',
             letterSpacing: '0.02em', lineHeight: 1.2,
             transition: 'color 0.25s',
@@ -86,12 +89,12 @@ function TeamCard({ team, index, visible }) {
         {/* Stats */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', marginBottom: 14 }}>
           {[
-            { val: team.wins,         label: 'WINS',     color: '#fff' },
-            { val: team.losses,       label: 'LOSSES',   color: 'rgba(255,255,255,0.5)' },
-            { val: `${team.winRate}%`, label: 'WIN RATE', color: G, shadow: true },
+            { val: team.wins,         label: t.teams.stats.wins,    color: '#fff' },
+            { val: team.losses,       label: t.teams.stats.losses,  color: 'rgba(255,255,255,0.5)' },
+            { val: `${team.winRate}%`, label: t.teams.stats.winRate, color: G, shadow: true },
           ].map(({ val, label, color, shadow }) => (
             <div key={label}>
-              <div style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 18, color, marginBottom: 3, textShadow: shadow ? `0 0 12px ${GG}` : 'none' }}>{val}</div>
+              <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 700, fontSize: 18, color, marginBottom: 3, textShadow: shadow ? `0 0 12px ${GG}` : 'none' }}>{val}</div>
               <div style={{ fontFamily: 'monospace', fontSize: 8, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em' }}>{label}</div>
             </div>
           ))}
@@ -100,8 +103,8 @@ function TeamCard({ team, index, visible }) {
         {/* Region + Points */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 10, borderTop: '1px solid rgba(255,255,255,0.05)' }}>
           <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.08em' }}>◈ {team.region}</span>
-          <span style={{ fontFamily: 'Orbitron', fontWeight: 700, fontSize: 12, color: hov ? G : 'rgba(255,255,255,0.7)', letterSpacing: '0.04em', transition: 'color 0.3s' }}>
-            {team.points.toLocaleString()} <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>PTS</span>
+          <span style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 700, fontSize: 12, color: hov ? G : 'rgba(255,255,255,0.7)', letterSpacing: '0.04em', transition: 'color 0.3s' }}>
+            {team.points.toLocaleString()} <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.35)', fontWeight: 400 }}>{t.teams.pts}</span>
           </span>
         </div>
       </div>
@@ -110,32 +113,35 @@ function TeamCard({ team, index, visible }) {
 }
 
 export default function Teams() {
+  const { t } = useLang();
+  const { isMobile, isCompact } = useResponsive();
+  const titleSize = isMobile ? 'clamp(26px, 7.5vw, 40px)' : 'clamp(36px, 4.5vw, 64px)';
   const [ref, visible] = useReveal();
 
   return (
-    <section ref={ref} style={{ padding: '120px 80px', background: '#050505', position: 'relative', overflow: 'hidden' }}>
+    <section ref={ref} style={{ padding: isMobile ? '64px 20px' : '120px 80px', background: '#050505', position: 'relative', overflow: 'hidden' }}>
       <Scanlines />
       <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 800, height: 800, borderRadius: '50%', background: 'radial-gradient(circle, rgba(0,166,62,0.04) 0%, transparent 65%)', pointerEvents: 'none' }} />
 
       <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative', zIndex: 2 }}>
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56, ...fadeStyle(visible, 0) }}>
+        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 20 : 0, justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', marginBottom: isMobile ? 36 : 56, ...fadeStyle(visible, 0) }}>
           <div>
             <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>
-              /// .leaderboard.rankings
+              {t.teams.kicker}
             </div>
-            <div style={{ display: 'flex', gap: 14, alignItems: 'baseline' }}>
-              <div className="glitch-text" data-text="BEST" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}>BEST</div>
-              <div className="glitch-text" data-text="TEAMS_" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>TEAMS_</div>
+            <div style={{ display: 'flex', gap: 14, alignItems: 'baseline', flexWrap: 'wrap' }}>
+              <div className="glitch-text" data-text={t.teams.title1} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}>{t.teams.title1}</div>
+              <div className="glitch-text" data-text={t.teams.title2} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>{t.teams.title2}</div>
             </div>
           </div>
-          <HudButton label="VIEW_ALL" />
+          <HudButton label={t.common.viewAll} />
         </div>
 
         {/* 4-column grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : (isCompact ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)'), gap: isMobile ? 12 : 20 }}>
           {TEAMS.map((team, i) => (
-            <TeamCard key={team.tag} team={team} index={i} visible={visible} />
+            <TeamCard key={team.tag} team={{ ...team, ...t.teams.items[i] }} index={i} visible={visible} />
           ))}
         </div>
       </div>

@@ -1,5 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { G, GG } from '../constants';
+import { useLang } from '../LanguageContext';
+import { useResponsive } from '../hooks/useResponsive';
+
+// Replace {token} placeholders in a template string.
+const fill = (str, vars) => str.replace(/\{(\w+)\}/g, (_, k) => (vars[k] != null ? vars[k] : ''));
 
 /* ─── ANIMATED BACKGROUND ─── */
 function AuthBG() {
@@ -132,6 +137,8 @@ function ErrorBanner({ msg }) {
 }
 
 function Lockout({ cooldown, onRetry }) {
+  const { t } = useLang();
+  const a = t.auth;
   const [left, setLeft] = useState(cooldown);
   useEffect(() => {
     if (left <= 0) return;
@@ -156,16 +163,16 @@ function Lockout({ cooldown, onRetry }) {
         </svg>
       </div>
       <div style={{
-        fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: 22,
+        fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 22,
         color: '#ff5151', letterSpacing: '0.06em', marginBottom: 14,
         textShadow: '0 0 30px rgba(255,50,50,0.5)',
-      }}>ACCESS DENIED</div>
-      <p style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 15, color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: 340, margin: '0 auto 28px' }}>
-        Too many failed attempts. Your session has been temporarily locked for security.
+      }}>{a.lockout.title}</div>
+      <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 15, color: 'rgba(255,255,255,0.5)', lineHeight: 1.65, maxWidth: 340, margin: '0 auto 28px' }}>
+        {a.lockout.body}
       </p>
       {left > 0 && (
         <div style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.18em', marginBottom: 28 }}>
-          TRY AGAIN IN{' '}
+          {a.lockout.tryAgainIn}{' '}
           <span style={{ color: '#ff8080', fontSize: 17, fontWeight: 700, letterSpacing: '0.08em' }}>{fmt(left)}</span>
         </div>
       )}
@@ -177,7 +184,7 @@ function Lockout({ cooldown, onRetry }) {
         padding: '13px 36px', cursor: left > 0 ? 'not-allowed' : 'pointer',
         transition: 'all 0.2s', position: 'relative',
       }}>
-        {left > 0 ? `LOCKED — ${fmt(left)}` : '↻ TRY AGAIN'}
+        {left > 0 ? `${a.lockout.locked} — ${fmt(left)}` : a.lockout.retry}
       </button>
     </div>
   );
@@ -207,7 +214,7 @@ function HudCorners({ size = 16, color = 'rgba(255,255,255,0.35)', glow = false 
 function GlitchH({ text, color = '#fff', size = 44, extra = {} }) {
   return (
     <div className="glitch-text" data-text={text} style={{
-      fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: size, color,
+      fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: size, color,
       lineHeight: 0.95, letterSpacing: '-0.015em', position: 'relative', ...extra,
     }}>{text}</div>
   );
@@ -229,6 +236,7 @@ function FieldLabel({ children, hint }) {
 }
 
 function Field({ type = 'text', value, onChange, placeholder, autoComplete, onFocusChange, focused, hasError }) {
+  const { t } = useLang();
   const [showPw, setShowPw] = useState(false);
   const isPw = type === 'password';
   const realType = isPw && showPw ? 'text' : type;
@@ -255,7 +263,7 @@ function Field({ type = 'text', value, onChange, placeholder, autoComplete, onFo
         style={{
           flex: 1, background: 'transparent', border: 'none', outline: 'none',
           padding: '16px 18px 16px 36px',
-          fontFamily: 'Rajdhani, sans-serif', fontSize: 16, fontWeight: 500,
+          fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, fontWeight: 500,
           color: '#fff', letterSpacing: '0.02em', width: '100%',
         }}
       />
@@ -267,7 +275,7 @@ function Field({ type = 'text', value, onChange, placeholder, autoComplete, onFo
         }}
           onMouseEnter={e => e.currentTarget.style.color = G}
           onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}>
-          {showPw ? 'HIDE' : 'SHOW'}
+          {showPw ? t.auth.hide : t.auth.show}
         </button>
       )}
     </div>
@@ -286,6 +294,7 @@ function FieldRow({ label, hint, error, ...rest }) {
 }
 
 function PrimaryBtn({ label, onClick, disabled, loading }) {
+  const { t, lang } = useLang();
   const [hov, setHov] = useState(false);
   const cut = 18;
   const clip = `polygon(0 0, calc(100% - ${cut}px) 0, 100% ${cut}px, 100% 100%, ${cut}px 100%, 0 calc(100% - ${cut}px))`;
@@ -308,16 +317,17 @@ function PrimaryBtn({ label, onClick, disabled, loading }) {
             width: 12, height: 12, border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff',
             borderRadius: '50%', animation: 'spin 0.8s linear infinite',
           }} />
-          <span>AUTHENTICATING...</span>
+          <span>{t.auth.authenticating}</span>
         </>
       ) : (
-        <><span>{label}</span><span style={{ fontSize: 16 }}>→</span></>
+        <><span>{label}</span><span style={{ fontSize: 16 }}>{lang === 'ar' ? '←' : '→'}</span></>
       )}
     </button>
   );
 }
 
 function GoogleBtn({ onClick }) {
+  const { t } = useLang();
   const [hov, setHov] = useState(false);
   return (
     <button onClick={onClick} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
@@ -339,7 +349,7 @@ function GoogleBtn({ onClick }) {
         <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
         <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
       </svg>
-      <span>CONTINUE WITH GOOGLE</span>
+      <span>{t.auth.google}</span>
     </button>
   );
 }
@@ -356,24 +366,26 @@ function Divider({ label = 'OR' }) {
 
 /* ─── PASSWORD STRENGTH ─── */
 function strength(pw) {
-  if (!pw) return { score: 0, label: '—', color: 'rgba(255,255,255,0.3)' };
+  if (!pw) return { score: 0, key: null, color: 'rgba(255,255,255,0.3)' };
   let s = 0;
   if (pw.length >= 8) s++;
   if (/[A-Z]/.test(pw) && /[a-z]/.test(pw)) s++;
   if (/\d/.test(pw)) s++;
   if (/[^A-Za-z0-9]/.test(pw)) s++;
   const map = [
-    { label: 'WEAK', color: '#ff5151' },
-    { label: 'WEAK', color: '#ff5151' },
-    { label: 'OK', color: '#ffae3a' },
-    { label: 'STRONG', color: G },
-    { label: 'ELITE', color: G },
+    { key: 'weak', color: '#ff5151' },
+    { key: 'weak', color: '#ff5151' },
+    { key: 'ok', color: '#ffae3a' },
+    { key: 'strong', color: G },
+    { key: 'elite', color: G },
   ];
   return { score: s, ...map[s] };
 }
 
 function StrengthBar({ pw }) {
-  const { score, label, color } = strength(pw);
+  const { t } = useLang();
+  const { score, key, color } = strength(pw);
+  const label = key ? t.auth.pwStrength[key] : '—';
   return (
     <div style={{ marginTop: -14, marginBottom: 22 }}>
       <div style={{ display: 'flex', gap: 4, marginBottom: 6 }}>
@@ -387,7 +399,7 @@ function StrengthBar({ pw }) {
         ))}
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.15em' }}>PASSWORD_STRENGTH</span>
+        <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.15em' }}>{t.auth.pwStrengthLabel}</span>
         <span style={{ fontFamily: 'monospace', fontSize: 9, color, letterSpacing: '0.15em', fontWeight: 700 }}>{label}</span>
       </div>
     </div>
@@ -402,7 +414,7 @@ function ScreenHeader({ slug, line1, line2, sub }) {
       </div>
       <GlitchH text={line1} extra={{ marginBottom: 4 }} />
       <GlitchH text={line2} color={G} extra={{ textShadow: `0 0 30px ${GG}`, marginBottom: 18 }} />
-      <p style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 16, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, maxWidth: 380 }}>{sub}</p>
+      <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, maxWidth: 380 }}>{sub}</p>
     </div>
   );
 }
@@ -412,6 +424,8 @@ const MAX_SIGNIN_ATTEMPTS = 5;
 const SIGNIN_LOCKOUT_SECS = 120;
 
 function SignIn({ go }) {
+  const { t } = useLang();
+  const a = t.auth.signin;
   const [identifier, setIdentifier] = useState('');
   const [pw, setPw] = useState('');
   const [remember, setRemember] = useState(true);
@@ -432,14 +446,15 @@ function SignIn({ go }) {
       if (next >= MAX_SIGNIN_ATTEMPTS) {
         setLocked(true);
       } else {
-        setError(`INCORRECT_PASSWORD — ${MAX_SIGNIN_ATTEMPTS - next} attempt${MAX_SIGNIN_ATTEMPTS - next === 1 ? '' : 's'} remaining before lockout.`);
+        const rem = MAX_SIGNIN_ATTEMPTS - next;
+        setError(fill(a.errTemplate, { n: rem, word: rem === 1 ? t.auth.attempt : t.auth.attempts }));
       }
     }, 1000);
   };
 
   if (locked) return (
     <>
-      <ScreenHeader slug=".auth.login_terminal" line1="WELCOME" line2="BACK, PLAYER_" sub="" />
+      <ScreenHeader slug={a.slug} line1={a.line1} line2={a.line2} sub="" />
       <Lockout cooldown={SIGNIN_LOCKOUT_SECS} onRetry={() => { setLocked(false); setAttempts(0); setError(''); setPw(''); }} />
     </>
   );
@@ -447,21 +462,21 @@ function SignIn({ go }) {
   return (
     <form onSubmit={submit}>
       <ScreenHeader
-        slug=".auth.login_terminal"
-        line1="WELCOME"
-        line2="BACK, PLAYER_"
-        sub="Sign in with your nickname or phone number to access your roster, tournament queues, and coaching modules."
+        slug={a.slug}
+        line1={a.line1}
+        line2={a.line2}
+        sub={a.sub}
       />
 
-      <FieldRow label="Nickname or Phone" type="text" autoComplete="username"
+      <FieldRow label={a.idLabel} type="text" autoComplete="username"
         value={identifier} onChange={e => { setIdentifier(e.target.value); setError(''); }}
-        placeholder="ShadowStrike  /  +964 7XX XXX XXXX" />
+        placeholder={a.idPlaceholder} />
 
-      <FieldRow label="Password" type="password" autoComplete="current-password"
+      <FieldRow label={a.pwLabel} type="password" autoComplete="current-password"
         hint={<a onClick={e => { e.preventDefault(); go('forgot'); }}
-          style={{ color: G, textDecoration: 'none', cursor: 'pointer' }}>FORGOT?</a>}
+          style={{ color: G, textDecoration: 'none', cursor: 'pointer' }}>{a.forgot}</a>}
         value={pw} onChange={e => { setPw(e.target.value); setError(''); }}
-        placeholder="••••••••••••" />
+        placeholder={a.pwPlaceholder} />
 
       <ErrorBanner msg={error} />
 
@@ -475,19 +490,19 @@ function SignIn({ go }) {
         }}>
           {remember && <span style={{ color: '#fff', fontSize: 11, fontWeight: 900, lineHeight: 1 }}>✓</span>}
         </div>
-        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 14, color: 'rgba(255,255,255,0.65)', letterSpacing: '0.02em' }}>
-          Keep me signed in on this device
+        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.65)', letterSpacing: '0.02em' }}>
+          {a.remember}
         </span>
       </div>
 
-      <PrimaryBtn label="SIGN IN" loading={loading} disabled={!identifier || !pw} />
+      <PrimaryBtn label={a.submit} loading={loading} disabled={!identifier || !pw} />
 
-      <div style={{ textAlign: 'center', marginTop: 26, fontFamily: 'Rajdhani, sans-serif', fontSize: 14, color: 'rgba(255,255,255,0.5)' }}>
-        New to Earthlink?{' '}
+      <div style={{ textAlign: 'center', marginTop: 26, fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.5)' }}>
+        {a.newTo}{' '}
         <a onClick={e => { e.preventDefault(); go('create'); }} style={{
           color: G, textDecoration: 'none', cursor: 'pointer', fontWeight: 700,
           letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: 13,
-        }}>Create an account →</a>
+        }}>{a.createLink}</a>
       </div>
     </form>
   );
@@ -495,6 +510,9 @@ function SignIn({ go }) {
 
 /* ─── FORGOT PASSWORD ─── */
 function Forgot({ go }) {
+  const { t } = useLang();
+  const { isMobile } = useResponsive();
+  const a = t.auth.forgot;
   const [step, setStep] = useState(0);
   const [phone, setPhone] = useState('');
   const [pw, setPw] = useState('');
@@ -543,9 +561,9 @@ function Forgot({ go }) {
   if (step === 3) {
     return (
       <div>
-        <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.22em', marginBottom: 14 }}>/// .recovery.password_reset</div>
-        <GlitchH text="PASSWORD" extra={{ marginBottom: 4 }} />
-        <GlitchH text="RESTORED_" color={G} extra={{ textShadow: `0 0 30px ${GG}`, marginBottom: 28 }} />
+        <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.22em', marginBottom: 14 }}>/// {a.successSlug}</div>
+        <GlitchH text={a.successLine1} extra={{ marginBottom: 4 }} />
+        <GlitchH text={a.successLine2} color={G} extra={{ textShadow: `0 0 30px ${GG}`, marginBottom: 28 }} />
         <div style={{ position: 'relative', border: `1px solid ${G}`, background: 'rgba(0,166,62,0.05)', padding: '24px 28px', marginBottom: 28 }}>
           <HudCorners size={14} color={G} glow />
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16 }}>
@@ -553,49 +571,49 @@ function Forgot({ go }) {
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4 10-11" stroke={G} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </div>
             <div>
-              <div style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.2em', marginBottom: 6 }}>[ RESET_COMPLETE ]</div>
-              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 16, color: '#fff', lineHeight: 1.5, fontWeight: 600 }}>Your password has been updated.</div>
-              <div style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 14, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, marginTop: 8 }}>Sign in with your new password to get back in the arena.</div>
+              <div style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.2em', marginBottom: 6 }}>{a.resetComplete}</div>
+              <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, color: '#fff', lineHeight: 1.5, fontWeight: 600 }}>{a.successMsg}</div>
+              <div style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, marginTop: 8 }}>{a.successSub}</div>
             </div>
           </div>
         </div>
-        <PrimaryBtn label="BACK TO SIGN IN" onClick={() => go('signin')} />
+        <PrimaryBtn label={a.backToSignin} onClick={() => go('signin')} />
       </div>
     );
   }
 
   return (
     <form onSubmit={e => e.preventDefault()}>
-      <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.22em', marginBottom: 14 }}>/// .auth.recovery_protocol</div>
-      <GlitchH text="RESET" extra={{ marginBottom: 4 }} />
-      <GlitchH text="PASSWORD_" color={G} extra={{ textShadow: `0 0 30px ${GG}`, marginBottom: 18 }} />
-      <p style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 16, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, maxWidth: 400, marginBottom: 28 }}>
-        {step === 0 && "Enter your registered phone number — we'll send a 6-digit verification code via WhatsApp."}
-        {step === 1 && `Enter the code sent to IQ +964 ${phone || '7XX XXX XXXX'}. It expires in 5 minutes.`}
-        {step === 2 && 'Verified. Choose a new password for your account.'}
+      <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.22em', marginBottom: 14 }}>/// {a.slug}</div>
+      <GlitchH text={a.line1} extra={{ marginBottom: 4 }} />
+      <GlitchH text={a.line2} color={G} extra={{ textShadow: `0 0 30px ${GG}`, marginBottom: 18 }} />
+      <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, maxWidth: 400, marginBottom: 28 }}>
+        {step === 0 && a.sub0}
+        {step === 1 && fill(a.sub1Template, { phone: phone || '7XX XXX XXXX' })}
+        {step === 2 && a.sub2}
       </p>
 
       <ProgressDots />
 
       {step === 0 && (
         <div>
-          <FieldLabel hint="AUTO-DETECTED">Phone Number</FieldLabel>
+          <FieldLabel hint={a.autoDetected}>{a.phoneLabel}</FieldLabel>
           <div style={{ display: 'flex', position: 'relative', background: phoneFocus ? 'rgba(0,166,62,0.1)' : '#111', border: `1px solid ${phoneFocus ? G : 'rgba(255,255,255,0.25)'}`, boxShadow: phoneFocus ? `0 0 22px ${GG}` : 'none', transition: 'all 0.2s', marginBottom: 4 }}>
             <HudCorners size={10} color={phoneFocus ? G : 'rgba(255,255,255,0.3)'} />
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 16px', borderRight: '1px solid rgba(255,255,255,0.2)', flexShrink: 0 }}>
               <span style={{ fontFamily: 'monospace', fontSize: 12, fontWeight: 700, color: '#fff', letterSpacing: '0.08em' }}>IQ</span>
               <span style={{ fontFamily: 'monospace', fontSize: 13, color: G, letterSpacing: '0.06em' }}>+964</span>
             </div>
-            <input type="tel" value={phone} placeholder="7XX XXX XXXX" autoComplete="tel"
+            <input type="tel" value={phone} placeholder={a.phonePlaceholder} autoComplete="tel"
               onFocus={() => setPhoneFocus(true)} onBlur={() => setPhoneFocus(false)}
               onChange={e => setPhone(e.target.value.replace(/[^\d ]/g, ''))}
-              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', padding: '16px 18px', fontFamily: 'Rajdhani, sans-serif', fontSize: 16, fontWeight: 500, color: '#fff', letterSpacing: '0.06em' }} />
+              style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', padding: '16px 18px', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, fontWeight: 500, color: '#fff', letterSpacing: '0.06em' }} />
           </div>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center', margin: '14px 0 28px' }}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ flexShrink: 0 }}><path d="M12 2a10 10 0 00-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1012 2z" stroke={G} strokeWidth="1.6" /></svg>
-            <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 13.5, color: 'rgba(255,255,255,0.6)' }}>Code delivered via <span style={{ color: G, fontWeight: 700 }}>WhatsApp</span>.</span>
+            <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13.5, color: 'rgba(255,255,255,0.6)' }}>{a.whatsappNote}<span style={{ color: G, fontWeight: 700 }}>{a.whatsapp}</span>.</span>
           </div>
-          <PrimaryBtn label="SEND CODE" loading={loading} disabled={!phoneValid} onClick={sendOtp} />
+          <PrimaryBtn label={a.sendCode} loading={loading} disabled={!phoneValid} onClick={sendOtp} />
         </div>
       )}
 
@@ -607,46 +625,46 @@ function Forgot({ go }) {
               return (
                 <input key={i} ref={el => otpRefs.current[i] = el} value={d} inputMode="numeric" maxLength={1}
                   onChange={e => onDigit(i, e.target.value)} onKeyDown={e => onKey(i, e)}
-                  style={{ width: 52, height: 64, textAlign: 'center', background: filled ? 'rgba(0,166,62,0.12)' : '#111', border: `1px solid ${filled ? G : 'rgba(255,255,255,0.28)'}`, boxShadow: filled ? `0 0 16px ${GG}` : 'none', color: '#fff', fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: 24, outline: 'none', transition: 'all 0.2s' }}
+                  style={{ width: isMobile ? 44 : 52, height: isMobile ? 56 : 64, textAlign: 'center', background: filled ? 'rgba(0,166,62,0.12)' : '#111', border: `1px solid ${filled ? G : 'rgba(255,255,255,0.28)'}`, boxShadow: filled ? `0 0 16px ${GG}` : 'none', color: '#fff', fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: isMobile ? 20 : 24, outline: 'none', transition: 'all 0.2s' }}
                   onFocus={e => { e.target.style.borderColor = G; e.target.style.boxShadow = `0 0 22px ${GG}`; }}
                   onBlur={e => { if (!e.target.value) { e.target.style.borderColor = 'rgba(255,255,255,0.28)'; e.target.style.boxShadow = 'none'; } }} />
               );
             })}
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '18px 0 28px' }}>
-            <button type="button" onClick={() => setStep(0)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.5)' }}>← CHANGE_NUMBER</button>
+            <button type="button" onClick={() => setStep(0)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.5)' }}>{a.changeNumber}</button>
             <button type="button" onClick={() => resendIn === 0 && setResendIn(60)} disabled={resendIn > 0}
               style={{ background: 'transparent', border: 'none', cursor: resendIn > 0 ? 'not-allowed' : 'pointer', fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.12em', color: resendIn > 0 ? 'rgba(255,255,255,0.3)' : G }}>
-              {resendIn > 0 ? `RESEND IN ${resendIn}s` : '↻ RESEND_CODE'}
+              {resendIn > 0 ? fill(a.resendInTemplate, { secs: resendIn }) : a.resend}
             </button>
           </div>
-          <PrimaryBtn label="VERIFY CODE" loading={loading} disabled={!otpValid} onClick={verify} />
+          <PrimaryBtn label={a.verifyCode} loading={loading} disabled={!otpValid} onClick={verify} />
         </div>
       )}
 
       {step === 2 && (
         <div>
-          <FieldRow label="New Password" type="password" autoComplete="new-password" placeholder="Create a new password"
+          <FieldRow label={a.newPw} type="password" autoComplete="new-password" placeholder={a.newPwPlaceholder}
             value={pw} onChange={e => setPw(e.target.value)} />
           <StrengthBar pw={pw} />
-          <FieldRow label="Confirm Password" type="password" autoComplete="new-password" placeholder="Re-enter your new password"
-            hint={mismatch ? <span style={{ color: '#ff5151' }}>NO MATCH</span> : (pw2 && !mismatch ? <span style={{ color: G }}>✓ MATCH</span> : null)}
+          <FieldRow label={a.confirmPw} type="password" autoComplete="new-password" placeholder={a.confirmPwPlaceholder}
+            hint={mismatch ? <span style={{ color: '#ff5151' }}>{t.auth.noMatch}</span> : (pw2 && !mismatch ? <span style={{ color: G }}>{t.auth.match}</span> : null)}
             value={pw2} onChange={e => setPw2(e.target.value)} />
           <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', marginTop: -6, marginBottom: 26 }}>
-            {[['8+ CHARACTERS', hasLen], ['1 LETTER', hasLetter], ['1 NUMBER', hasNum]].map(([t, ok]) => (
-              <span key={t} style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.08em', color: ok ? G : 'rgba(255,255,255,0.4)' }}>
+            {[[t.auth.reqs.len, hasLen], [t.auth.reqs.letter, hasLetter], [t.auth.reqs.num, hasNum]].map(([txt, ok]) => (
+              <span key={txt} style={{ display: 'flex', alignItems: 'center', gap: 6, fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.08em', color: ok ? G : 'rgba(255,255,255,0.4)' }}>
                 <span style={{ width: 12, height: 12, border: `1px solid ${ok ? G : 'rgba(255,255,255,0.25)'}`, background: ok ? G : 'transparent', color: '#fff', fontSize: 8, fontWeight: 900, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{ok ? '✓' : ''}</span>
-                {t}
+                {txt}
               </span>
             ))}
           </div>
-          <PrimaryBtn label="RESET PASSWORD" loading={loading} disabled={!pwValid} onClick={reset} />
+          <PrimaryBtn label={a.resetPw} loading={loading} disabled={!pwValid} onClick={reset} />
         </div>
       )}
 
-      <div style={{ textAlign: 'center', marginTop: 26, fontFamily: 'Rajdhani, sans-serif', fontSize: 14, color: 'rgba(255,255,255,0.5)' }}>
-        Remembered it?{' '}
-        <a onClick={e => { e.preventDefault(); go('signin'); }} style={{ color: G, textDecoration: 'none', cursor: 'pointer', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: 13 }}>← Back to sign in</a>
+      <div style={{ textAlign: 'center', marginTop: 26, fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.5)' }}>
+        {a.remembered}{' '}
+        <a onClick={e => { e.preventDefault(); go('signin'); }} style={{ color: G, textDecoration: 'none', cursor: 'pointer', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: 13 }}>{a.backLink}</a>
       </div>
     </form>
   );
@@ -658,6 +676,8 @@ const AVATARS = ['Striker', 'Phoenix', 'Viper', 'Nova', 'Raven', 'Titan', 'Ghost
 );
 
 function WizBtn({ label, onClick, disabled, loading, loadingLabel = 'PROCESSING...', arrow = '→' }) {
+  const { lang } = useLang();
+  const dispArrow = lang === 'ar' ? (arrow === '→' ? '←' : arrow === '←' ? '→' : arrow) : arrow;
   const [hov, setHov] = useState(false);
   const cut = 16;
   const clip = `polygon(0 0, calc(100% - ${cut}px) 0, 100% ${cut}px, 100% 100%, ${cut}px 100%, 0 calc(100% - ${cut}px))`;
@@ -678,13 +698,15 @@ function WizBtn({ label, onClick, disabled, loading, loadingLabel = 'PROCESSING.
       {loading ? (
         <><span style={{ width: 12, height: 12, border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} /><span>{loadingLabel}</span></>
       ) : (
-        <><span>{label}</span>{arrow && <span style={{ fontSize: 15 }}>{arrow}</span>}</>
+        <><span>{label}</span>{dispArrow && <span style={{ fontSize: 15 }}>{dispArrow}</span>}</>
       )}
     </button>
   );
 }
 
 function GhostBtn({ label, onClick, arrow = '←' }) {
+  const { lang } = useLang();
+  const dispArrow = lang === 'ar' ? (arrow === '→' ? '←' : arrow === '←' ? '→' : arrow) : arrow;
   const [hov, setHov] = useState(false);
   return (
     <button type="button" onClick={onClick} onMouseEnter={() => setHov(true)} onMouseLeave={() => setHov(false)}
@@ -696,7 +718,7 @@ function GhostBtn({ label, onClick, arrow = '←' }) {
         letterSpacing: '0.16em', textTransform: 'uppercase', cursor: 'pointer',
         transition: 'all 0.2s', display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap',
       }}>
-      {arrow && <span style={{ fontSize: 15 }}>{arrow}</span>}<span>{label}</span>
+      {dispArrow && <span style={{ fontSize: 15 }}>{dispArrow}</span>}<span>{label}</span>
     </button>
   );
 }
@@ -727,7 +749,7 @@ function Select({ value, onChange, options, placeholder }) {
           border: `1px solid ${focus ? G : (value ? 'rgba(255,255,255,0.4)' : 'rgba(255,255,255,0.25)')}`,
           boxShadow: focus ? `0 0 18px ${GG}` : 'none',
           color: value ? '#fff' : 'rgba(255,255,255,0.55)',
-          fontFamily: 'Rajdhani, sans-serif', fontSize: 15, fontWeight: 500,
+          fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 15, fontWeight: 500,
           padding: '15px 36px 15px 16px', outline: 'none', cursor: 'pointer',
           transition: 'all 0.2s',
         }}>
@@ -740,16 +762,17 @@ function Select({ value, onChange, options, placeholder }) {
 }
 
 function StepHead({ n, slug, line1, line2, sub }) {
+  const { t } = useLang();
   return (
     <div style={{ marginBottom: 30 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
         <span style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.22em' }}>/// {slug}</span>
         <span style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.08)' }} />
-        <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.18em' }}>STEP_{String(n).padStart(2, '0')} / 06</span>
+        <span style={{ fontFamily: 'monospace', fontSize: 11, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.18em' }}>{t.auth.reg.stepLabel} {String(n).padStart(2, '0')} / 06</span>
       </div>
       <GlitchH text={line1} size={38} extra={{ marginBottom: 2 }} />
       <GlitchH text={line2} color={G} size={38} extra={{ textShadow: `0 0 30px ${GG}`, marginBottom: 14 }} />
-      <p style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 15, color: 'rgba(255,255,255,0.55)', lineHeight: 1.55, maxWidth: 440 }}>{sub}</p>
+      <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 15, color: 'rgba(255,255,255,0.55)', lineHeight: 1.55, maxWidth: 440 }}>{sub}</p>
     </div>
   );
 }
@@ -767,8 +790,10 @@ function RegProgressDots({ step }) {
 const TAKEN_NICKNAMES = ['shadowstrike', 'xghost', 'viper99', 'neon'];
 
 function StepInfo({ data, set, next }) {
+  const { t } = useLang();
+  const a = t.auth.reg.info;
   const days = Array.from({ length: 31 }, (_, i) => ({ v: String(i + 1), l: String(i + 1).padStart(2, '0') }));
-  const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'].map((m, i) => ({ v: String(i + 1), l: m }));
+  const months = a.months.map((m, i) => ({ v: String(i + 1), l: m }));
   const years = Array.from({ length: 44 }, (_, i) => ({ v: String(2013 - i), l: String(2013 - i) }));
   const [nicknameError, setNicknameError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -777,7 +802,7 @@ function StepInfo({ data, set, next }) {
   const tryNext = () => {
     const taken = TAKEN_NICKNAMES.includes(data.nickname.trim().toLowerCase());
     if (taken) {
-      setNicknameError(`NICKNAME_TAKEN — "${data.nickname}" is already in use. Choose a different one.`);
+      setNicknameError(fill(a.nickTakenTemplate, { nick: data.nickname }));
       return;
     }
     setLoading(true);
@@ -786,11 +811,11 @@ function StepInfo({ data, set, next }) {
 
   return (
     <div>
-      <StepHead n={1} slug=".register.player_info" line1="WHO ARE" line2="YOU, PLAYER?_"
-        sub="Set up your identity. Your nickname is what the community sees — your legal details stay private." />
-      <FieldRow label="Full Name" placeholder="e.g. Ahmed Al-Rashid"
+      <StepHead n={1} slug={a.slug} line1={a.line1} line2={a.line2}
+        sub={a.sub} />
+      <FieldRow label={a.fullName} placeholder={a.fullNamePlaceholder}
         value={data.fullName} onChange={e => set({ fullName: e.target.value })} />
-      <FieldRow label="Nickname" placeholder="e.g. ShadowStrike"
+      <FieldRow label={a.nickname} placeholder={a.nicknamePlaceholder}
         value={data.nickname} onChange={e => { set({ nickname: e.target.value }); setNicknameError(''); }}
         error={nicknameError} />
       <div style={{ display: 'flex', gap: 12, alignItems: 'center', background: 'rgba(0,166,62,0.05)', border: '1px solid rgba(0,166,62,0.2)', padding: '12px 16px', marginTop: -8, marginBottom: 24 }}>
@@ -798,37 +823,39 @@ function StepInfo({ data, set, next }) {
           <rect x="5" y="11" width="14" height="9" rx="1.5" stroke={G} strokeWidth="1.8" />
           <path d="M8 11V8a4 4 0 018 0v3" stroke={G} strokeWidth="1.8" strokeLinecap="round" />
         </svg>
-        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 13.5, color: 'rgba(255,255,255,0.7)', lineHeight: 1.45 }}>Your real name is private and only visible to admins.</span>
+        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13.5, color: 'rgba(255,255,255,0.7)', lineHeight: 1.45 }}>{a.privateNote}</span>
       </div>
-      <MiniLabel>Date of Birth</MiniLabel>
+      <MiniLabel>{a.dob}</MiniLabel>
       <div style={{ display: 'flex', gap: 10, marginBottom: 24 }}>
-        <Select value={data.dobD} onChange={e => set({ dobD: e.target.value })} options={days} placeholder="DAY" />
-        <Select value={data.dobM} onChange={e => set({ dobM: e.target.value })} options={months} placeholder="MONTH" />
-        <Select value={data.dobY} onChange={e => set({ dobY: e.target.value })} options={years} placeholder="YEAR" />
+        <Select value={data.dobD} onChange={e => set({ dobD: e.target.value })} options={days} placeholder={a.day} />
+        <Select value={data.dobM} onChange={e => set({ dobM: e.target.value })} options={months} placeholder={a.month} />
+        <Select value={data.dobY} onChange={e => set({ dobY: e.target.value })} options={years} placeholder={a.year} />
       </div>
-      <MiniLabel>Gender</MiniLabel>
+      <MiniLabel>{a.gender}</MiniLabel>
       <div style={{ display: 'flex', gap: 10, marginBottom: 8 }}>
-        {['Male', 'Female'].map(g => {
-          const on = data.gender === g;
+        {[{ v: 'Male', l: a.male }, { v: 'Female', l: a.female }].map(g => {
+          const on = data.gender === g.v;
           return (
-            <button key={g} type="button" onClick={() => set({ gender: g })}
+            <button key={g.v} type="button" onClick={() => set({ gender: g.v })}
               style={{ flex: 1, position: 'relative', background: on ? 'rgba(0,166,62,0.1)' : 'rgba(0,0,0,0.5)', border: `1px solid ${on ? G : 'rgba(255,255,255,0.1)'}`, boxShadow: on ? `0 0 18px ${GG}` : 'none', color: on ? '#fff' : 'rgba(255,255,255,0.6)', padding: '15px', fontFamily: 'monospace', fontSize: 12, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', cursor: 'pointer', transition: 'all 0.2s' }}>
               {on && <HudCorners size={9} color={G} />}
-              {g}
+              {g.l}
             </button>
           );
         })}
       </div>
-      <NavRow><WizBtn label="Continue" disabled={!valid} loading={loading} loadingLabel="CHECKING..." onClick={tryNext} /></NavRow>
+      <NavRow><WizBtn label={a.continue} disabled={!valid} loading={loading} loadingLabel={a.checking} onClick={tryNext} /></NavRow>
     </div>
   );
 }
 
 function StepAvatar({ data, set, next, back }) {
+  const { t } = useLang();
+  const a = t.auth.reg.avatar;
   return (
     <div>
-      <StepHead n={2} slug=".register.avatar_select" line1="PICK YOUR" line2="BATTLE FACE_"
-        sub="Choose an avatar that represents you in lobbies and leaderboards. You can change it later." />
+      <StepHead n={2} slug={a.slug} line1={a.line1} line2={a.line2}
+        sub={a.sub} />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
         {AVATARS.map((a, i) => {
           const on = data.avatar === i;
@@ -843,12 +870,12 @@ function StepAvatar({ data, set, next, back }) {
         })}
       </div>
       <div style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.12em', marginTop: 16, textAlign: 'center' }}>
-        {data.avatar != null ? `SELECTED · AVATAR_${String(data.avatar + 1).padStart(2, '0')}` : 'NO_SELECTION · A DEFAULT WILL BE ASSIGNED'}
+        {data.avatar != null ? fill(a.selectedTemplate, { n: String(data.avatar + 1).padStart(2, '0') }) : a.noSelection}
       </div>
       <NavRow>
-        <GhostBtn label="Back" onClick={back} />
-        <GhostBtn label="Skip" arrow={null} onClick={() => { set({ avatar: data.avatar == null ? 0 : data.avatar }); next(); }} />
-        <WizBtn label="Continue" onClick={next} />
+        <GhostBtn label={a.back} onClick={back} />
+        <GhostBtn label={a.skip} arrow={null} onClick={() => { set({ avatar: data.avatar == null ? 0 : data.avatar }); next(); }} />
+        <WizBtn label={a.continue} onClick={next} />
       </NavRow>
     </div>
   );
@@ -857,6 +884,8 @@ function StepAvatar({ data, set, next, back }) {
 const REGISTERED_PHONES = ['7001234567', '7701234567'];
 
 function StepPhone({ data, set, next, back }) {
+  const { t } = useLang();
+  const a = t.auth.reg.phone;
   const [loading, setLoading] = useState(false);
   const [focus, setFocus] = useState(false);
   const [phoneError, setPhoneError] = useState('');
@@ -867,7 +896,7 @@ function StepPhone({ data, set, next, back }) {
     setPhoneError('');
     const normalized = data.phone.replace(/\D/g, '');
     if (REGISTERED_PHONES.includes(normalized)) {
-      setPhoneError('PHONE_ALREADY_REGISTERED — An account with this number already exists. Try signing in instead.');
+      setPhoneError(a.alreadyReg);
       return;
     }
     setLoading(true);
@@ -876,9 +905,9 @@ function StepPhone({ data, set, next, back }) {
 
   return (
     <div>
-      <StepHead n={3} slug=".register.phone_link" line1="LINK YOUR" line2="NUMBER_"
-        sub="We'll send a one-time verification code to confirm it's really you. Standard rates may apply." />
-      <MiniLabel>Phone Number</MiniLabel>
+      <StepHead n={3} slug={a.slug} line1={a.line1} line2={a.line2}
+        sub={a.sub} />
+      <MiniLabel>{a.phoneLabel}</MiniLabel>
       <div style={{ display: 'flex', position: 'relative', background: phoneError ? 'rgba(255,50,50,0.06)' : (focus ? 'rgba(0,166,62,0.1)' : '#111'), border: `1px solid ${phoneError ? 'rgba(255,80,80,0.55)' : (focus ? G : 'rgba(255,255,255,0.25)')}`, boxShadow: phoneError ? '0 0 14px rgba(255,50,50,0.15)' : (focus ? `0 0 22px ${GG}` : 'none'), transition: 'all 0.2s' }}>
         <HudCorners size={10} color={phoneError ? 'rgba(255,80,80,0.5)' : (focus ? G : 'rgba(255,255,255,0.3)')} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '0 16px', borderRight: `1px solid ${phoneError ? 'rgba(255,80,80,0.3)' : 'rgba(255,255,255,0.2)'}`, flexShrink: 0 }}>
@@ -888,7 +917,7 @@ function StepPhone({ data, set, next, back }) {
         <input type="tel" value={data.phone} placeholder="7XX XXX XXXX" autoComplete="tel"
           onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}
           onChange={e => { set({ phone: e.target.value.replace(/[^\d ]/g, '') }); setPhoneError(''); }}
-          style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', padding: '16px 18px', fontFamily: 'Rajdhani, sans-serif', fontSize: 16, fontWeight: 500, color: '#fff', letterSpacing: '0.06em' }} />
+          style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', padding: '16px 18px', fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, fontWeight: 500, color: '#fff', letterSpacing: '0.06em' }} />
       </div>
       {phoneError && <ErrorMsg msg={phoneError} />}
       {!phoneError && (
@@ -897,14 +926,14 @@ function StepPhone({ data, set, next, back }) {
             <path d="M12 2a10 10 0 00-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1012 2z" stroke={G} strokeWidth="1.6" />
             <path d="M8.5 8.5c0 4 3 7 6.5 7" stroke={G} strokeWidth="1.6" strokeLinecap="round" />
           </svg>
-          <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 13.5, color: 'rgba(255,255,255,0.6)', lineHeight: 1.4 }}>
-            A 6-digit code will be sent via <span style={{ color: G, fontWeight: 700 }}>WhatsApp</span>.
+          <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13.5, color: 'rgba(255,255,255,0.6)', lineHeight: 1.4 }}>
+            {a.note}<span style={{ color: G, fontWeight: 700 }}>{a.whatsapp}</span>.
           </span>
         </div>
       )}
       <NavRow>
-        <GhostBtn label="Back" onClick={back} />
-        <WizBtn label="Send Code" disabled={!valid} loading={loading} loadingLabel="SENDING..." onClick={send} />
+        <GhostBtn label={a.back} onClick={back} />
+        <WizBtn label={a.sendCode} disabled={!valid} loading={loading} loadingLabel={a.sending} onClick={send} />
       </NavRow>
     </div>
   );
@@ -915,6 +944,9 @@ const OTP_LOCKOUT_SECS = 300;
 const CORRECT_OTP = '123456';
 
 function StepOTP({ data, set, next, back }) {
+  const { t } = useLang();
+  const { isMobile } = useResponsive();
+  const a = t.auth.reg.otp;
   const [digits, setDigits] = useState(['', '', '', '', '', '']);
   const [resendIn, setResendIn] = useState(60);
   const [loading, setLoading] = useState(false);
@@ -955,22 +987,23 @@ function StepOTP({ data, set, next, back }) {
       if (next_attempts >= MAX_OTP_ATTEMPTS) {
         setLocked(true);
       } else {
-        setOtpError(`INVALID_CODE — ${MAX_OTP_ATTEMPTS - next_attempts} attempt${MAX_OTP_ATTEMPTS - next_attempts === 1 ? '' : 's'} remaining.`);
+        const rem = MAX_OTP_ATTEMPTS - next_attempts;
+        setOtpError(fill(a.invalidTemplate, { n: rem, word: rem === 1 ? t.auth.attempt : t.auth.attempts }));
       }
     }, 900);
   };
 
   if (locked) return (
     <>
-      <StepHead n={4} slug=".register.otp_verify" line1="ENTER THE" line2="6-DIGIT CODE_" sub="" />
+      <StepHead n={4} slug={a.slug} line1={a.line1} line2={a.line2} sub="" />
       <Lockout cooldown={OTP_LOCKOUT_SECS} onRetry={() => { setLocked(false); setAttempts(0); setOtpError(''); setDigits(['', '', '', '', '', '']); }} />
     </>
   );
 
   return (
     <div>
-      <StepHead n={4} slug=".register.otp_verify" line1="ENTER THE" line2="6-DIGIT CODE_"
-        sub={`Sent via WhatsApp to IQ +964 ${data.phone || '7XX XXX XXXX'}. The code expires in 5 minutes.`} />
+      <StepHead n={4} slug={a.slug} line1={a.line1} line2={a.line2}
+        sub={fill(a.subTemplate, { phone: data.phone || '7XX XXX XXXX' })} />
       <div key={shakeKey} style={{ display: 'flex', gap: 10, justifyContent: 'space-between', animation: shakeKey > 0 ? 'shake 0.5s ease' : 'none' }}>
         {digits.map((d, i) => {
           const filled = d !== '';
@@ -978,7 +1011,7 @@ function StepOTP({ data, set, next, back }) {
           return (
             <input key={i} ref={el => refs.current[i] = el} value={d} inputMode="numeric" maxLength={1}
               onChange={e => onDigit(i, e.target.value)} onKeyDown={e => onKey(i, e)}
-              style={{ width: 52, height: 64, textAlign: 'center', background: filled ? 'rgba(0,166,62,0.12)' : '#111', border: `1px solid ${filled ? G : 'rgba(255,255,255,0.28)'}`, boxShadow: filled ? `0 0 16px ${GG}` : 'none', color: '#fff', fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: 24, outline: 'none', transition: 'all 0.2s', ...errStyle }}
+              style={{ width: isMobile ? 44 : 52, height: isMobile ? 56 : 64, textAlign: 'center', background: filled ? 'rgba(0,166,62,0.12)' : '#111', border: `1px solid ${filled ? G : 'rgba(255,255,255,0.28)'}`, boxShadow: filled ? `0 0 16px ${GG}` : 'none', color: '#fff', fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: isMobile ? 20 : 24, outline: 'none', transition: 'all 0.2s', ...errStyle }}
               onFocus={e => { if (!otpError) { e.target.style.borderColor = G; e.target.style.boxShadow = `0 0 22px ${GG}`; } }}
               onBlur={e => { if (!e.target.value && !otpError) { e.target.style.borderColor = 'rgba(255,255,255,0.28)'; e.target.style.boxShadow = 'none'; } }} />
           );
@@ -988,19 +1021,21 @@ function StepOTP({ data, set, next, back }) {
       <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', marginTop: 18 }}>
         <button type="button" onClick={() => { if (resendIn === 0) { setResendIn(60); setAttempts(0); setOtpError(''); } }} disabled={resendIn > 0}
           style={{ background: 'transparent', border: 'none', cursor: resendIn > 0 ? 'not-allowed' : 'pointer', fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.12em', color: resendIn > 0 ? 'rgba(255,255,255,0.3)' : G }}>
-          {resendIn > 0 ? `RESEND IN ${resendIn}s` : '↻ RESEND_CODE'}
+          {resendIn > 0 ? fill(a.resendInTemplate, { secs: resendIn }) : a.resend}
         </button>
       </div>
-      <div style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em', marginTop: 14 }}>◆ ON MOBILE, THE CODE IS READ AUTOMATICALLY.</div>
+      <div style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.1em', marginTop: 14 }}>{a.autoRead}</div>
       <NavRow>
-        <GhostBtn label="Back" onClick={back} />
-        <WizBtn label="Verify" disabled={!valid} loading={loading} loadingLabel="VERIFYING..." onClick={verify} />
+        <GhostBtn label={a.back} onClick={back} />
+        <WizBtn label={a.verify} disabled={!valid} loading={loading} loadingLabel={a.verifying} onClick={verify} />
       </NavRow>
     </div>
   );
 }
 
 function StepPassword({ data, set, next, back }) {
+  const { t } = useLang();
+  const a = t.auth.reg.password;
   const pw = data.pw, pw2 = data.pw2;
   const hasLen = pw.length >= 8, hasLetter = /[A-Za-z]/.test(pw), hasNum = /\d/.test(pw);
   const mismatch = pw2.length > 0 && pw !== pw2;
@@ -1015,61 +1050,51 @@ function StepPassword({ data, set, next, back }) {
 
   return (
     <div>
-      <StepHead n={5} slug=".register.set_password" line1="SECURE THE" line2="ACCOUNT_"
-        sub="Create a password you'll use to sign in. Minimum 8 characters, including a letter and a number." />
-      <FieldRow label="Password" type="password" autoComplete="new-password" placeholder="Create a strong password"
+      <StepHead n={5} slug={a.slug} line1={a.line1} line2={a.line2}
+        sub={a.sub} />
+      <FieldRow label={a.pw} type="password" autoComplete="new-password" placeholder={a.pwPlaceholder}
         value={pw} onChange={e => set({ pw: e.target.value })} />
       <StrengthBar pw={pw} />
-      <FieldRow label="Confirm Password" type="password" autoComplete="new-password" placeholder="Re-enter your password"
-        hint={mismatch ? <span style={{ color: '#ff5151' }}>NO MATCH</span> : (pw2 && !mismatch ? <span style={{ color: G }}>✓ MATCH</span> : null)}
+      <FieldRow label={a.confirm} type="password" autoComplete="new-password" placeholder={a.confirmPlaceholder}
+        hint={mismatch ? <span style={{ color: '#ff5151' }}>{t.auth.noMatch}</span> : (pw2 && !mismatch ? <span style={{ color: G }}>{t.auth.match}</span> : null)}
         value={pw2} onChange={e => set({ pw2: e.target.value })} />
       <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap', marginTop: -6 }}>
-        <Req ok={hasLen}>8+ CHARACTERS</Req>
-        <Req ok={hasLetter}>1 LETTER</Req>
-        <Req ok={hasNum}>1 NUMBER</Req>
+        <Req ok={hasLen}>{t.auth.reqs.len}</Req>
+        <Req ok={hasLetter}>{t.auth.reqs.letter}</Req>
+        <Req ok={hasNum}>{t.auth.reqs.num}</Req>
       </div>
       <NavRow>
-        <GhostBtn label="Back" onClick={back} />
-        <WizBtn label="Continue" disabled={!valid} onClick={next} />
+        <GhostBtn label={a.back} onClick={back} />
+        <WizBtn label={a.continue} disabled={!valid} onClick={next} />
       </NavRow>
     </div>
   );
 }
 
 function DocModal({ kind, onClose }) {
-  const title = kind === 'terms' ? 'TERMS & CONDITIONS' : 'PRIVACY POLICY';
-  const body = kind === 'terms'
-    ? [
-        ['01 · ELIGIBILITY', 'You must be at least 13 years old to register. Accounts found to be underage or fraudulent will be suspended without notice.'],
-        ['02 · FAIR PLAY', 'Cheating, smurfing, account-sharing, and match-fixing are strictly prohibited and result in permanent bans and prize forfeiture.'],
-        ['03 · CONDUCT', 'Harassment, hate speech, and toxic behaviour in chats, lobbies, or broadcasts will not be tolerated.'],
-        ['04 · PRIZES', 'Prize payouts are issued in IQD via verified bank transfer within 30 days of an event, subject to identity confirmation.'],
-      ]
-    : [
-        ['01 · WHAT WE COLLECT', 'We store your nickname, hashed password, phone number, date of birth, and gender to operate your account.'],
-        ['02 · WHAT OTHERS SEE', 'Only your nickname and avatar are public. Your real name, phone, date of birth and gender are never shown to other players.'],
-        ['03 · ADMIN ACCESS', 'Authorised admins may view your full details strictly for verification, payouts, and dispute resolution.'],
-        ['04 · YOUR RIGHTS', 'You may request export or deletion of your data at any time by contacting privacy@earthlink.gg.'],
-      ];
+  const { t } = useLang();
+  const doc = t.auth.doc;
+  const title = kind === 'terms' ? doc.termsTitle : doc.privacyTitle;
+  const body = kind === 'terms' ? doc.terms : doc.privacy;
   return (
     <div onClick={onClose} style={{ position: 'fixed', inset: 0, zIndex: 200, background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 32, animation: 'fadeUp 0.25s ease' }}>
       <div onClick={e => e.stopPropagation()} style={{ position: 'relative', width: '100%', maxWidth: 560, maxHeight: '80vh', overflowY: 'auto', background: '#080808', border: `1px solid ${G}`, boxShadow: `0 0 50px ${GG}`, padding: '36px 40px' }}>
         <HudCorners size={16} color={G} glow />
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
           <div>
-            <div style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.2em', marginBottom: 8 }}>/// .legal.document</div>
-            <div style={{ fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: 22, color: '#fff' }}>{title}</div>
+            <div style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.2em', marginBottom: 8 }}>/// {doc.legal}</div>
+            <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 22, color: '#fff' }}>{title}</div>
           </div>
           <button type="button" onClick={onClose} style={{ background: 'transparent', border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.6)', width: 32, height: 32, cursor: 'pointer', fontFamily: 'monospace', fontSize: 14 }}>✕</button>
         </div>
         {body.map(([h, p]) => (
           <div key={h} style={{ marginBottom: 20 }}>
             <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.14em', marginBottom: 8 }}>{h}</div>
-            <p style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 15, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65 }}>{p}</p>
+            <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 15, color: 'rgba(255,255,255,0.7)', lineHeight: 1.65 }}>{p}</p>
           </div>
         ))}
         <div style={{ fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.3)', letterSpacing: '0.12em', marginTop: 24, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-          v.2026.06 — EARTHLINK.ESPORTS
+          {doc.version}
         </div>
       </div>
     </div>
@@ -1077,27 +1102,29 @@ function DocModal({ kind, onClose }) {
 }
 
 function StepTerms({ data, set, finish, back, loading }) {
+  const { t } = useLang();
+  const a = t.auth.reg.terms;
   const [showDoc, setShowDoc] = useState(null);
   return (
     <div>
-      <StepHead n={6} slug=".register.final_handshake" line1="ONE LAST" line2="STEP_"
-        sub="Review and accept our terms to activate your account. You're almost on the roster." />
+      <StepHead n={6} slug={a.slug} line1={a.line1} line2={a.line2}
+        sub={a.sub} />
       <div onClick={() => set({ agree: !data.agree })}
         style={{ display: 'flex', gap: 12, alignItems: 'flex-start', cursor: 'pointer', padding: '14px 16px', background: data.agree ? 'rgba(0,166,62,0.06)' : 'transparent', border: `1px solid ${data.agree ? 'rgba(0,166,62,0.3)' : 'rgba(255,255,255,0.1)'}`, transition: 'all 0.2s' }}>
         <div style={{ width: 18, height: 18, flexShrink: 0, marginTop: 1, border: `1.5px solid ${data.agree ? G : 'rgba(255,255,255,0.3)'}`, background: data.agree ? G : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: data.agree ? `0 0 8px ${GG}` : 'none', transition: 'all 0.2s' }}>
           {data.agree && <span style={{ color: '#fff', fontSize: 12, fontWeight: 900, lineHeight: 1 }}>✓</span>}
         </div>
-        <span style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 14, color: 'rgba(255,255,255,0.75)', lineHeight: 1.5 }}>
-          I agree to the{' '}
-          <span onClick={e => { e.stopPropagation(); setShowDoc('terms'); }} style={{ color: G, fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: 2 }}>Terms &amp; Conditions</span>{' '}
-          and{' '}
-          <span onClick={e => { e.stopPropagation(); setShowDoc('privacy'); }} style={{ color: G, fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: 2 }}>Privacy Policy</span>{' '}
-          of this platform.
+        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.75)', lineHeight: 1.5 }}>
+          {a.agreePre}
+          <span onClick={e => { e.stopPropagation(); setShowDoc('terms'); }} style={{ color: G, fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: 2 }}>{a.termsLink}</span>
+          {a.and}
+          <span onClick={e => { e.stopPropagation(); setShowDoc('privacy'); }} style={{ color: G, fontWeight: 700, textDecoration: 'underline', textUnderlineOffset: 2 }}>{a.privacyLink}</span>
+          {a.agreePost}
         </span>
       </div>
       <NavRow>
-        <GhostBtn label="Back" onClick={back} />
-        <WizBtn label="Create Account" disabled={!data.agree} loading={loading} loadingLabel="CREATING..." arrow="→" onClick={finish} />
+        <GhostBtn label={a.back} onClick={back} />
+        <WizBtn label={a.create} disabled={!data.agree} loading={loading} loadingLabel={a.creating} arrow="→" onClick={finish} />
       </NavRow>
       {showDoc && <DocModal kind={showDoc} onClose={() => setShowDoc(null)} />}
     </div>
@@ -1105,27 +1132,30 @@ function StepTerms({ data, set, finish, back, loading }) {
 }
 
 function RegSuccess({ data, onHome }) {
+  const { t } = useLang();
+  const a = t.auth.reg.success;
   const av = data.avatar != null ? AVATARS[data.avatar] : AVATARS[0];
   return (
     <div style={{ textAlign: 'center' }}>
-      <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.22em', marginBottom: 18 }}>/// .register.complete</div>
+      <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.22em', marginBottom: 18 }}>/// {a.slug}</div>
       <div style={{ position: 'relative', width: 96, height: 96, margin: '0 auto 28px', border: `1px solid ${G}`, padding: 8, boxShadow: `0 0 30px ${GG}` }}>
         <HudCorners size={14} color={G} glow />
         <img src={av.url} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
       </div>
-      <GlitchH text="WELCOME," size={40} extra={{ marginBottom: 2 }} />
-      <GlitchH text={(data.nickname || 'PLAYER').toUpperCase() + '_'} color={G} size={40} extra={{ textShadow: `0 0 30px ${GG}`, marginBottom: 24 }} />
-      <p style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 16, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, maxWidth: 400, margin: '0 auto 28px' }}>
-        Your account is live. You're in the arena.
+      <GlitchH text={a.line1} size={40} extra={{ marginBottom: 2 }} />
+      <GlitchH text={(data.nickname || a.defaultNick).toUpperCase() + '_'} color={G} size={40} extra={{ textShadow: `0 0 30px ${GG}`, marginBottom: 24 }} />
+      <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 16, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, maxWidth: 400, margin: '0 auto 28px' }}>
+        {a.msg}
       </p>
       <div style={{ display: 'flex', gap: 12 }}>
-        <WizBtn label="Enter Platform" onClick={onHome} arrow="→" />
+        <WizBtn label={a.enter} onClick={onHome} arrow="→" />
       </div>
     </div>
   );
 }
 
 function RegisterWizard({ go, step, setStep, onHome }) {
+  const { t } = useLang();
   const [data, setData] = useState({
     fullName: '', nickname: '', dobD: '', dobM: '', dobY: '', gender: '',
     avatar: null, phone: '', pw: '', pw2: '', agree: false,
@@ -1155,9 +1185,9 @@ function RegisterWizard({ go, step, setStep, onHome }) {
         {step === 4 && <StepPassword data={data} set={set} next={next} back={back} />}
         {step === 5 && <StepTerms data={data} set={set} finish={finish} back={back} loading={finishing} />}
       </div>
-      <div style={{ textAlign: 'center', marginTop: 24, fontFamily: 'Rajdhani, sans-serif', fontSize: 14, color: 'rgba(255,255,255,0.5)' }}>
-        Already on the roster?{' '}
-        <a onClick={e => { e.preventDefault(); go('signin'); }} style={{ color: G, textDecoration: 'none', cursor: 'pointer', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: 13 }}>Sign in →</a>
+      <div style={{ textAlign: 'center', marginTop: 24, fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.5)' }}>
+        {t.auth.reg.rosterQ}{' '}
+        <a onClick={e => { e.preventDefault(); go('signin'); }} style={{ color: G, textDecoration: 'none', cursor: 'pointer', fontWeight: 700, letterSpacing: '0.04em', textTransform: 'uppercase', fontSize: 13 }}>{t.auth.reg.signinLink}</a>
       </div>
     </div>
   );
@@ -1165,16 +1195,9 @@ function RegisterWizard({ go, step, setStep, onHome }) {
 
 /* ─── SIDE PANEL ─── */
 function SidePanel({ view }) {
-  const headlines = {
-    signin: ['ENTER THE', 'ARENA_'],
-    forgot: ['SECURE', 'PROTOCOL_'],
-    create: ['BEGIN YOUR', 'JOURNEY_'],
-  };
-  const taglines = {
-    signin: 'Authenticate to resume your competitive run.',
-    forgot: 'Encrypted recovery — your data stays yours.',
-    create: 'Two minutes from rookie to roster member.',
-  };
+  const { t } = useLang();
+  const headlines = t.auth.side.headlines;
+  const taglines = t.auth.side.taglines;
   const [h1, h2] = headlines[view];
 
   return (
@@ -1191,10 +1214,10 @@ function SidePanel({ view }) {
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 'auto' }}>
           <div style={{ width: 40, height: 40, background: G, clipPath: 'polygon(0 0, 100% 0, 100% 70%, 70% 100%, 0 100%)', boxShadow: `0 0 16px ${GG}` }} />
           <div>
-            <div style={{ fontFamily: 'Orbitron, sans-serif', fontWeight: 900, fontSize: 18, color: '#fff', letterSpacing: '0.04em', lineHeight: 1 }}>
+            <div style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 18, color: '#fff', letterSpacing: '0.04em', lineHeight: 1 }}>
               EARTHLINK<span style={{ color: G }}>.ESPORTS</span>
             </div>
-            <div style={{ fontFamily: 'monospace', fontSize: 9, color: G, letterSpacing: '0.25em', marginTop: 4 }}>SEASON_2026 / ONLINE</div>
+            <div style={{ fontFamily: 'monospace', fontSize: 9, color: G, letterSpacing: '0.25em', marginTop: 4 }}>{t.auth.brandTag}</div>
           </div>
         </div>
 
@@ -1203,7 +1226,7 @@ function SidePanel({ view }) {
             <GlitchH text={h1} size={72} extra={{ marginBottom: 4 }} />
             <GlitchH text={h2} color={G} size={72} extra={{ textShadow: `0 0 50px ${GG}` }} />
           </div>
-          <p style={{ fontFamily: 'Rajdhani, sans-serif', fontSize: 18, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, marginTop: 24, maxWidth: 420, fontWeight: 500 }}>
+          <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 18, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6, marginTop: 24, maxWidth: 420, fontWeight: 500 }}>
             {taglines[view]}
           </p>
         </div>
@@ -1214,6 +1237,8 @@ function SidePanel({ view }) {
 
 /* ─── AUTH PAGE ROOT ─── */
 export default function AuthPage({ initialView = 'signin', onHome }) {
+  const { t } = useLang();
+  const { isMobile } = useResponsive();
   const [view, setView] = useState(initialView);
   const [regStep, setRegStep] = useState(0);
 
@@ -1222,11 +1247,11 @@ export default function AuthPage({ initialView = 'signin', onHome }) {
   return (
     <div style={{ minHeight: '100vh', background: '#050505' }}>
       <AuthBG />
-      <div style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'grid', gridTemplateColumns: '1.05fr 1fr' }}>
-        <SidePanel view={view} />
+      <div style={{ position: 'relative', zIndex: 2, minHeight: '100vh', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.05fr 1fr' }}>
+        {!isMobile && <SidePanel view={view} />}
 
         <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#0a0a0a' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px 56px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: isMobile ? '18px 20px' : '24px 56px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
             <button onClick={onHome} style={{
               background: 'transparent', border: 'none', cursor: 'pointer',
               fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.5)',
@@ -1234,11 +1259,11 @@ export default function AuthPage({ initialView = 'signin', onHome }) {
             }}
               onMouseEnter={e => e.currentTarget.style.color = G}
               onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}>
-              ← BACK_TO_HOME
+              {t.auth.backHome}
             </button>
           </div>
 
-          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 56px' }}>
+          <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '32px 20px' : '40px 56px' }}>
             <div key={view} style={{ width: '100%', maxWidth: view === 'create' ? 540 : 460, animation: 'fadeUp 0.5s cubic-bezier(0.16,1,0.3,1)' }}>
               {view === 'signin' && <SignIn go={goView} />}
               {view === 'forgot' && <Forgot go={goView} />}
@@ -1246,9 +1271,9 @@ export default function AuthPage({ initialView = 'signin', onHome }) {
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '20px 56px', borderTop: '1px solid rgba(255,255,255,0.05)', fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em' }}>
-            <span>© 2026 EARTHLINK.ESPORTS</span>
-            <span>PRIVACY · TERMS · HELP</span>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', padding: isMobile ? '16px 20px' : '20px 56px', borderTop: '1px solid rgba(255,255,255,0.05)', fontFamily: 'monospace', fontSize: 10, color: 'rgba(255,255,255,0.35)', letterSpacing: '0.1em' }}>
+            <span>{t.auth.footerCopyright}</span>
+            <span>{t.auth.footerLinks}</span>
           </div>
         </div>
       </div>

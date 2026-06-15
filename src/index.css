@@ -1,9 +1,36 @@
+@font-face {
+  font-family: 'CALVIN';
+  src: url('/fonts/calvin-bold.woff2') format('woff2'),
+       url('/fonts/calvin-bold.otf') format('opentype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Arabic title font */
+@font-face {
+  font-family: 'Lama Sans';
+  src: url('/fonts/lama-sans-bold-expanded.woff2') format('woff2'),
+       url('/fonts/lama-sans-bold-expanded.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Lama Sans';
+  src: url('/fonts/lama-sans-black-expanded.woff2') format('woff2'),
+       url('/fonts/lama-sans-black-expanded.ttf') format('truetype');
+  font-weight: 800 950;
+  font-style: normal;
+  font-display: swap;
+}
+
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
   background: #0a0a0a;
   color: #fff;
-  font-family: 'Rajdhani', sans-serif;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
   overflow-x: hidden;
   cursor: none;
 }
@@ -88,7 +115,7 @@ body * { cursor: none !important; }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 @keyframes shake { 0%,100%{transform:translateX(0)} 15%{transform:translateX(-8px)} 30%{transform:translateX(8px)} 45%{transform:translateX(-6px)} 60%{transform:translateX(6px)} 75%{transform:translateX(-3px)} 90%{transform:translateX(3px)} }
 
-input::placeholder { color: rgba(255,255,255,0.45); font-family: 'Rajdhani', sans-serif; font-weight: 400; }
+input::placeholder { color: rgba(255,255,255,0.45); font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 400; }
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
@@ -118,3 +145,14 @@ select option { background: #0a0a0a; color: #fff; }
 /* News row hover */
 .news-row { transition: background 0.2s; }
 .news-row:hover { background: rgba(0,166,62,0.03) !important; }
+
+/* On touch / small screens, restore the native cursor and hide the custom one */
+@media (hover: none), (max-width: 768px) {
+  body, body * { cursor: auto !important; }
+  #cursor, #cursor-trail { display: none !important; }
+}
+
+/* Never let any element force horizontal scroll on mobile */
+@media (max-width: 768px) {
+  html, body { max-width: 100%; overflow-x: hidden; }
+}

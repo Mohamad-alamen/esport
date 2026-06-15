@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { G, GG } from '../constants';
+import { useLang } from '../LanguageContext';
+import { useResponsive } from '../hooks/useResponsive';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
 import { Scanlines, HudButton } from './ui';
 
@@ -189,10 +191,13 @@ function CTABg() {
 }
 
 export default function CTA({ onJoin }) {
+  const { t } = useLang();
+  const { isMobile } = useResponsive();
+  const titleSize = isMobile ? 'clamp(34px, 9.5vw, 60px)' : 'clamp(48px, 7vw, 100px)';
   const [ref, visible] = useReveal(0.15);
 
   return (
-    <section ref={ref} style={{ position: 'relative', padding: '160px 80px', background: '#050505', overflow: 'hidden' }}>
+    <section ref={ref} style={{ position: 'relative', padding: isMobile ? '80px 20px' : '160px 80px', background: '#050505', overflow: 'hidden' }}>
       {/* Animated canvas background */}
       <CTABg />
       <Scanlines />
@@ -203,16 +208,16 @@ export default function CTA({ onJoin }) {
 
       <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 2, ...fadeStyle(visible, 0, 'scale') }}>
 
-        <div className="glitch-text" data-text="READY TO" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(48px, 7vw, 100px)', color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', marginBottom: 8 }}>READY TO</div>
-        <div className="glitch-text" data-text="LEVEL UP?" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(48px, 7vw, 100px)', color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 60px ${GG}, 0 0 120px rgba(0,166,62,0.2)`, marginBottom: 48 }}>LEVEL UP?</div>
+        <div className="glitch-text" data-text={t.cta.line1} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', marginBottom: 8 }}>{t.cta.line1}</div>
+        <div className="glitch-text" data-text={t.cta.line2} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 60px ${GG}, 0 0 120px rgba(0,166,62,0.2)`, marginBottom: 48 }}>{t.cta.line2}</div>
 
-        <p style={{ fontFamily: 'Rajdhani', fontSize: 21, color: 'rgba(255,255,255,0.4)', lineHeight: 1.65, maxWidth: 600, margin: '0 auto 48px' }}>
-          Join Earthlink Esports — train with pros, compete in tournaments, earn your place among champions.
+        <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: isMobile ? 16 : 21, color: 'rgba(255,255,255,0.4)', lineHeight: 1.65, maxWidth: 600, margin: '0 auto 48px' }}>
+          {t.cta.desc}
         </p>
 
-        <div style={{ display: 'flex', gap: 20, justifyContent: 'center' }}>
-          <HudButton label="REGISTER_NOW" onClick={onJoin} size="lg" variant="primary" />
-          <HudButton label="LEARN_MORE" href="#" size="lg" />
+        <div style={{ display: 'flex', gap: isMobile ? 12 : 20, justifyContent: 'center', flexWrap: 'wrap' }}>
+          <HudButton label={t.cta.register} onClick={onJoin} size="lg" variant="primary" />
+          <HudButton label={t.cta.learnMore} href="#" size="lg" />
         </div>
       </div>
     </section>

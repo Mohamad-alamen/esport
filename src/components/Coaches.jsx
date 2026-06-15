@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { G, GG, COACHES } from '../constants';
+import { useLang } from '../LanguageContext';
+import { useResponsive } from '../hooks/useResponsive';
 import { useReveal, fadeStyle } from '../hooks/useReveal';
 import { Scanlines } from './ui';
 
@@ -67,7 +69,7 @@ function CoachCard({ coach, index, visible }) {
       {/* Info */}
       <div style={{ padding: '18px 20px 22px' }}>
         <div style={{
-          fontFamily: 'Orbitron', fontWeight: 900, fontSize: 16,
+          fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: 16,
           color: G,
           letterSpacing: '0.01em', marginBottom: 6,
           textTransform: 'uppercase',
@@ -77,7 +79,7 @@ function CoachCard({ coach, index, visible }) {
           {coach.name}
         </div>
         <div style={{
-          fontFamily: 'Rajdhani', fontSize: 14,
+          fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 14,
           color: 'rgba(255,255,255,0.5)',
           letterSpacing: '0.04em',
         }}>
@@ -89,34 +91,37 @@ function CoachCard({ coach, index, visible }) {
 }
 
 export default function Coaches() {
+  const { t } = useLang();
+  const { isMobile, isCompact } = useResponsive();
+  const titleSize = isMobile ? 'clamp(26px, 7.5vw, 40px)' : 'clamp(36px, 4.5vw, 64px)';
   const [ref, visible] = useReveal();
 
   return (
-    <section ref={ref} style={{ padding: '120px 80px', background: '#080808', position: 'relative', overflow: 'hidden' }}>
+    <section ref={ref} style={{ padding: isMobile ? '64px 20px' : '120px 80px', background: '#080808', position: 'relative', overflow: 'hidden' }}>
       <Scanlines />
 
       <div style={{ maxWidth: 1280, margin: '0 auto', position: 'relative', zIndex: 2 }}>
 
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 56, ...fadeStyle(visible, 0) }}>
+        <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', gap: isMobile ? 16 : 0, justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', marginBottom: isMobile ? 36 : 56, ...fadeStyle(visible, 0) }}>
           <div>
             <div style={{ fontFamily: 'monospace', fontSize: 11, color: G, letterSpacing: '0.18em', textTransform: 'uppercase', marginBottom: 16 }}>
-              /// .coaching.roster
+              {t.coaches.kicker}
             </div>
-            <div style={{ display: 'flex', gap: 12, alignItems: 'baseline' }}>
-              <div className="glitch-text" data-text="PRO" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}>PRO</div>
-              <div className="glitch-text" data-text="COACHES_" style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(36px, 4.5vw, 64px)', color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>COACHES_</div>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'baseline', flexWrap: 'wrap' }}>
+              <div className="glitch-text" data-text={t.coaches.title1} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}>{t.coaches.title1}</div>
+              <div className="glitch-text" data-text={t.coaches.title2} style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: titleSize, color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 40px ${GG}` }}>{t.coaches.title2}</div>
             </div>
           </div>
-          <p style={{ fontFamily: 'Rajdhani', fontSize: 17, color: 'rgba(255,255,255,0.65)', maxWidth: 360, lineHeight: 1.6, textAlign: 'right' }}>
-            Learn from professional players with years of competitive experience across multiple titles
+          <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: isMobile ? 15 : 17, color: 'rgba(255,255,255,0.65)', maxWidth: isMobile ? '100%' : 360, lineHeight: 1.6, textAlign: isMobile ? 'start' : 'end' }}>
+            {t.coaches.desc}
           </p>
         </div>
 
         {/* Card grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : (isCompact ? 'repeat(3, 1fr)' : 'repeat(4, 1fr)'), gap: isMobile ? 12 : 16 }}>
           {COACHES.map((coach, i) => (
-            <CoachCard key={i} coach={coach} index={i} visible={visible} />
+            <CoachCard key={i} coach={{ ...coach, ...t.coaches.items[i] }} index={i} visible={visible} />
           ))}
         </div>
 

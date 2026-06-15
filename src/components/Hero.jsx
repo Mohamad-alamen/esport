@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { G, GG, TICKER_ITEMS } from '../constants';
+import { G, GG } from '../constants';
+import { useLang } from '../LanguageContext';
+import { useResponsive } from '../hooks/useResponsive';
 import { Scanlines, HudButton } from './ui';
 
 function HeroBG() {
@@ -176,6 +178,11 @@ function HeroBG() {
 }
 
 export default function Hero({ onJoin }) {
+  const { t, lang } = useLang();
+  const { isMobile } = useResponsive();
+  const headingSize = lang === 'ar'
+    ? (isMobile ? 'clamp(34px, 9vw, 60px)' : 'clamp(44px, 6.4vw, 88px)')
+    : (isMobile ? 'clamp(40px, 12vw, 72px)' : 'clamp(64px, 9vw, 120px)');
   const [loaded, setLoaded] = useState(false);
   useEffect(() => { setTimeout(() => setLoaded(true), 80); }, []);
 
@@ -198,49 +205,49 @@ export default function Hero({ onJoin }) {
         position: 'relative', zIndex: 3, height: '100%',
         display: 'flex', flexDirection: 'column',
         justifyContent: 'center', alignItems: 'center',
-        textAlign: 'center', padding: '80px 40px 48px',
+        textAlign: 'center', padding: isMobile ? '80px 20px 56px' : '80px 40px 48px',
       }}>
         {/* Live badge */}
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '6px 18px', border: '1px solid rgba(0,166,62,0.35)', marginBottom: 44, ...f(0) }}>
           <span style={{ width: 6, height: 6, borderRadius: '50%', background: G, boxShadow: `0 0 8px ${G}`, animation: 'glowPulse 2s infinite' }} />
-          <span style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.18em' }}>SYS.ONLINE // SEASON_2026</span>
+          <span style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.18em' }}>{t.hero.badge}</span>
         </div>
 
         {/* Headings */}
         <div style={{ marginBottom: 4, ...f(0.1) }}>
           <div
             className="glitch-text"
-            data-text="EARTHLINK"
-            style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(64px, 9vw, 120px)', color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}
+            data-text={t.hero.line1}
+            style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: headingSize, color: '#fff', lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative' }}
           >
-            EARTHLINK
+            {t.hero.line1}
           </div>
         </div>
         <div style={{ marginBottom: 44, ...f(0.18) }}>
           <div
             className="glitch-text"
-            data-text="ESPORTS"
-            style={{ fontFamily: 'Orbitron', fontWeight: 900, fontSize: 'clamp(64px, 9vw, 120px)', color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 60px ${GG}, 0 0 120px rgba(0,166,62,0.2)` }}
+            data-text={t.hero.line2}
+            style={{ fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900, fontSize: headingSize, color: G, lineHeight: 0.92, letterSpacing: '-0.02em', position: 'relative', textShadow: `0 0 60px ${GG}, 0 0 120px rgba(0,166,62,0.2)` }}
           >
-            ESPORTS
+            {t.hero.line2}
           </div>
         </div>
 
         {/* Tagline */}
-        <p style={{ fontFamily: 'Rajdhani', fontSize: 20, color: 'rgba(255,255,255,0.5)', maxWidth: 560, lineHeight: 1.7, marginBottom: 48, ...f(0.28) }}>
-          The region's premier esports platform — professional training, competitive tournaments, and a thriving gaming community.
+        <p style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: isMobile ? 16 : 20, color: 'rgba(255,255,255,0.5)', maxWidth: 560, lineHeight: 1.7, marginBottom: 48, ...f(0.28) }}>
+          {t.hero.tagline}
         </p>
 
         {/* Buttons */}
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginBottom: 56, ...f(0.36) }}>
-          <HudButton label="GET_STARTED" onClick={onJoin} size="lg" variant="primary" />
+          <HudButton label={t.hero.getStarted} onClick={onJoin} size="lg" variant="primary" />
         </div>
 
       </div>
 
       {/* Scroll hint */}
       <div style={{ position: 'absolute', bottom: 44, left: '50%', transform: 'translateX(-50%)', zIndex: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-        <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.2)', letterSpacing: '0.2em' }}>SCROLL</span>
+        <span style={{ fontFamily: 'monospace', fontSize: 9, color: 'rgba(255,255,255,0.2)', letterSpacing: '0.2em' }}>{t.hero.scroll}</span>
         <div style={{ width: 1, height: 28, background: `linear-gradient(to bottom, ${G}, transparent)`, animation: 'floatUp 2s ease-in-out infinite' }} />
       </div>
 
@@ -253,7 +260,7 @@ export default function Hero({ onJoin }) {
         <div style={{ display: 'flex', animation: 'ticker 30s linear infinite', whiteSpace: 'nowrap', willChange: 'transform' }}>
           {[1, 2].map(k => (
             <span key={k} style={{ fontFamily: 'monospace', fontSize: 10, color: G, letterSpacing: '0.2em' }}>
-              {TICKER_ITEMS.map(item => (
+              {t.hero.ticker.map(item => (
                 <span key={item}>&nbsp;&nbsp;&nbsp;◆&nbsp;{item}</span>
               ))}
             </span>

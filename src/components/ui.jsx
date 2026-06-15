@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { G, GG, GD } from '../constants';
+import { useLang } from '../LanguageContext';
 
 export function Scanlines() {
   return (
@@ -17,7 +18,7 @@ export function GlitchH({ children, size = 80, color = '#fff', style = {} }) {
       className="glitch-text"
       data-text={children}
       style={{
-        fontFamily: 'Orbitron', fontWeight: 900,
+        fontFamily: "CALVIN, 'Lama Sans', sans-serif", fontWeight: 900,
         fontSize: size, color,
         lineHeight: 0.92, letterSpacing: '-0.02em',
         position: 'relative', ...style,
@@ -33,7 +34,7 @@ export function SLabel({ text, sub }) {
     <div style={{ marginBottom: 16 }}>
       <span style={{
         display: 'inline-block',
-        fontFamily: 'Rajdhani', fontSize: 13, fontWeight: 700,
+        fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 13, fontWeight: 700,
         color: G, background: 'rgba(0,166,62,0.1)',
         border: '1px solid rgba(0,166,62,0.2)',
         padding: '5px 14px', borderRadius: 9999,
@@ -42,7 +43,7 @@ export function SLabel({ text, sub }) {
         {text}
       </span>
       {sub && (
-        <span style={{ fontFamily: 'Rajdhani', fontSize: 12, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.08em', marginLeft: 12 }}>
+        <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.45)', letterSpacing: '0.08em', marginLeft: 12 }}>
           {sub}
         </span>
       )}
@@ -51,6 +52,7 @@ export function SLabel({ text, sub }) {
 }
 
 export function HudButton({ label, href, onClick, size = 'md', variant = 'outline', style: ext = {} }) {
+  const { lang } = useLang();
   const [hov, setHov] = useState(false);
 
   const pad = { sm: '9px 18px',  md: '12px 24px', lg: '15px 32px' }[size];
@@ -59,7 +61,7 @@ export function HudButton({ label, href, onClick, size = 'md', variant = 'outlin
   const iw  = { sm: 10,          md: 12,           lg: 14          }[size];
 
   const ChevronIcon = ({ color }) => (
-    <svg width={iw} height={iw} viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0 }}>
+    <svg width={iw} height={iw} viewBox="0 0 12 12" fill="none" style={{ flexShrink: 0, transform: lang === 'ar' ? 'scaleX(-1)' : 'none' }}>
       <polyline points="3,1 9,6 3,11" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
@@ -139,7 +141,7 @@ export function HudButton({ label, href, onClick, size = 'md', variant = 'outlin
 export function Btn({ children, outline, style = {}, onClick }) {
   const [hov, setHov] = useState(false);
   const base = {
-    fontFamily: 'Rajdhani', fontWeight: 700, fontSize: 14,
+    fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontWeight: 700, fontSize: 14,
     letterSpacing: '0.06em', padding: '13px 32px', borderRadius: 8,
     border: 'none', cursor: 'pointer', transition: 'all 0.2s',
     textTransform: 'uppercase',
