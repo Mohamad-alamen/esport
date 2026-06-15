@@ -13,7 +13,7 @@ function HeroBG() {
     const ctx = canvas.getContext('2d');
     let W = (canvas.width = window.innerWidth);
     let H = (canvas.height = window.innerHeight);
-    let raf, t = 0, paused = false;
+    let raf = 0, t = 0, visible = true;
 
     const TYPES = ['triangle', 'square', 'circle', 'cross'];
 
@@ -92,7 +92,6 @@ function HeroBG() {
     }));
 
     function draw() {
-      if (paused) return;
       t += 0.006;
       ctx.fillStyle = '#050505';
       ctx.fillRect(0, 0, W, H);
@@ -146,14 +145,21 @@ function HeroBG() {
         ctx.fill();
       });
 
-      raf = requestAnimationFrame(draw);
     }
 
-    draw();
+    function loop() {
+      draw();
+      raf = visible ? requestAnimationFrame(loop) : 0;
+    }
+
+    loop();
 
     const io = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && paused) { paused = false; draw(); }
-      else { paused = true; cancelAnimationFrame(raf); }
+      visible = entry.isIntersecting;
+      // Restart the loop whenever the section becomes visible again
+      // (and it had stopped). Guarantees the canvas paints on first
+      // mobile load even if the initial intersection check is delayed.
+      if (visible && !raf) loop();
     }, { threshold: 0 });
     io.observe(canvas);
 
