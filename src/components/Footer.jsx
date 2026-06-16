@@ -13,7 +13,7 @@ const SOCIALS = [
   { label: 'X (Twitter)', url: 'https://x.com/' },
 ];
 
-export default function Footer() {
+export default function Footer({ onTerms, onPrivacy }) {
   const { t } = useLang();
   const { isMobile } = useResponsive();
   const [ref, visible] = useReveal(0.05);
@@ -95,10 +95,20 @@ export default function Footer() {
             {t.footer.copyright}
           </span>
           <div style={{ display: 'flex', gap: 24 }}>
-            <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.45)', }}>
+            <span
+              onClick={onPrivacy}
+              style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.45)', cursor: 'pointer', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = G}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.45)'}
+            >
               {t.footer.privacy}
             </span>
-            <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.45)', }}>
+            <span
+              onClick={onTerms}
+              style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.45)', cursor: 'pointer', transition: 'color 0.2s' }}
+              onMouseEnter={e => e.currentTarget.style.color = G}
+              onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.45)'}
+            >
               {t.footer.terms}
             </span>
             <span style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif", fontSize: 10, color: 'rgba(255,255,255,0.45)', }}>

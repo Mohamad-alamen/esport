@@ -12,10 +12,26 @@ import Partners from './components/Partners';
 import CTA from './components/CTA';
 import Footer from './components/Footer';
 import AuthPage from './pages/AuthPage';
+import LegalPage from './pages/LegalPage';
 import Cursor from './components/Cursor';
+import { useLang } from './LanguageContext';
 
 export default function App() {
-  const [page, setPage] = useState('home'); // 'home' | 'signin' | 'register'
+  const { t } = useLang();
+  const [page, setPage] = useState('home'); // 'home' | 'signin' | 'register' | 'terms' | 'privacy'
+
+  if (page === 'terms' || page === 'privacy') {
+    return (
+      <>
+        <Cursor />
+        <LegalPage
+          data={page === 'terms' ? t.termsPage : t.privacyPage}
+          copyright={t.footer.copyright}
+          onHome={() => setPage('home')}
+        />
+      </>
+    );
+  }
 
   if (page === 'signin') {
     return (
@@ -48,7 +64,7 @@ export default function App() {
       <NewsSection />
       <Partners />
       <CTA onJoin={() => setPage('register')} />
-      <Footer />
+      <Footer onTerms={() => setPage('terms')} onPrivacy={() => setPage('privacy')} />
     </>
   );
 }
